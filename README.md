@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Coding LMS Front-end
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React front-end for the BNTA coding LMS.
 
 ## Available Scripts
 
