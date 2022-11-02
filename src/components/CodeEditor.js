@@ -10,6 +10,7 @@ function onLoad(evt) {
 const CodeEditor = ({lang, value, onEditorValueChange}) => {
 console.log('language: ', lang, ' value: ', value);
 return (
+    <>
     <AceEditor
     mode={lang}
     theme="monokai"
@@ -27,6 +28,8 @@ return (
     enableSnippets: false,
     showLineNumbers: true,
     tabSize: 2,    }}/>
+    
+    </>
 );
 };
 

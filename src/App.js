@@ -1,11 +1,20 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import CodeEditorContainer from './containers/CodeEditorContainer';
+import TopBar from './components/TopBar';
+import PlaygroundContainer from './containers/PlaygroundContainer';
 
-function App() {
+const App = () => {
   return (
+    <BrowserRouter>
     <div>
-      <CodeEditorContainer />
+      <TopBar />
+      <Routes>
+        <Route path="/playground" component={PlaygroundContainer} />
+      </Routes>
+      <PlaygroundContainer />
     </div>
+
+    </BrowserRouter>
   );
 }
 

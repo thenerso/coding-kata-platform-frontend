@@ -1,13 +1,13 @@
 import { useState } from "react";
 import CodeEditor from "../components/CodeEditor";
-import LangSelector from "../components/LangSelector";
+import EditorTools from "../components/EditorTools";
 
 
-const CodeEditorContainer = ()=> {
+const CodeEditorContainer = (onSubmit, submitButtonTitle)=> {
     const [langs] = useState(['java', 'javascript', 'python']);
     const [langIndex, setLangIndex] = useState(0);
     const [editorValues, setEditorValues] = useState({
-        java: "public class Main \{\n//write your solution here\n\n\}",
+        java: "public class Main {\n//write your solution here\n\n}",
         javascript: "// write your solution here",
         python: "# write your solution here "
     });
@@ -29,7 +29,8 @@ const CodeEditorContainer = ()=> {
         <CodeEditor onEditorValueChange={editorValueChange} 
         lang={langs[langIndex]} value ={editorValues[langs[langIndex]]}/>
 
-        <LangSelector options={langs} onSelectionChange={changeLang} />
+        <EditorTools langs={langs} changeLang={changeLang} onSubmit={onSubmit}
+        submitButtonTitle = {submitButtonTitle} />
         </>
     );
 }
