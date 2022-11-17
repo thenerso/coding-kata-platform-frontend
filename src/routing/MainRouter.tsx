@@ -2,9 +2,14 @@ import { Grid } from "@mui/material";
 import React, { Suspense } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import EmptyState from "../components/EmptyState";
-import Home from "../pages/auth/Home";
+import Home from "../pages/Home";
 import routes from "./routes";
 
+/**
+ * Handles Routing for the application
+ *
+ * @returns {React.FC}
+ */
 const MainRouter = () => {
   const [isAuthed, setIsAuthed] = React.useState(false);
   //   const jwt = auth.isAuthenticated();
@@ -13,28 +18,24 @@ const MainRouter = () => {
   return (
     <React.Fragment>
       {/* <Header isAuthed={isAuthed} setIsAuthed={setIsAuthed} history={history} /> */}
-      <Grid
-        container
-        justify="center"
-        style={{ marginTop: "20px", marginBottom: "20px" }}
-      >
+      <Grid container style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Grid item xs={11}>
           <Suspense fallback={<p>Loading</p>}>
             <Routes>
-              <Route exact path="/" element={<Home />} />
+              <Route path="/" element={<Home />} />
 
               {routes.map(({ link, Component, authed }, i) => {
                 if (authed && !isAuthed)
                   return (
                     <Route
                       key={`${i}-${link}`}
-                      render={() => (
+                      element={
                         <EmptyState
                           message="You need to be logged in to view this page"
                           action={() => navigate("/login")}
                           actionLabel={"Login"}
                         />
-                      )}
+                      }
                     />
                   );
 

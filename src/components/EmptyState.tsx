@@ -1,6 +1,15 @@
 import { Button } from "@mui/material";
 
-const EmptyState = ({ message, action, actionLabel }) => {
+/**
+ * Componenet Types
+ */
+type IProps = {
+  message?: string;
+  action?: () => void;
+  actionLabel?: string;
+};
+
+const EmptyState = ({ message, action, actionLabel }: IProps) => {
   return (
     <>
       <p>{message}</p>

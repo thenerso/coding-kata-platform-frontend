@@ -1,6 +1,17 @@
+import React from "react";
 import Login from "./../pages/auth/Login";
 
-const routes = [
+/**
+ * Route Types
+ */
+export type IRouteType = {
+  name: string;
+  link: string;
+  Component: React.FC;
+  authed: boolean;
+};
+
+const routes: IRouteType[] = [
   /**
    * Auth
    */
