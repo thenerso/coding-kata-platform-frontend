@@ -1,18 +1,20 @@
-//@ts-nocheck
-//@TODO - convert this file to TS
-// Has the single responsibility of configuring origins, to keep the service classes DRY
-const GlobalConfig = {
-  inProduction: false,
-  PROTOCOL: "http",
-  DOMAIN_NAME: "http://bntechacademy.com",
-  LOCALHSOT: "http://localhost",
-  API_PORT: "8080",
-  FRONTEND_PORT: "80",
+/**
+ * Config types
+ */
+type IGlobalConfig = {
+  [key: string]: any;
+  env: string;
+  server_url: string;
+};
 
-  getFrontendOrigin: () =>
-    this.inProduction ? this.DOMAIN_NAME : this.LOCALHSOT,
-  getApiOrigin: () =>
-    this.inProduction ? this.DOMAIN_NAME : this.LOCALHSOT + this.API_PORT,
+/**
+ * Load in environment variables from the .env and export them
+ * Has the single responsibility of configuring origins, to keep the service classes DRY
+ */
+const GlobalConfig: IGlobalConfig = {
+  env: process.env.NODE_ENV || "development",
+  server_url: process.env.REACT_APP_SERVER_URL || "http://localhost:8080",
+  ga_id: process.env.REACT_APP_GOOGLE_ANALYTICS,
 };
 
 export default GlobalConfig;
