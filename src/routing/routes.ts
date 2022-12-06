@@ -2,7 +2,14 @@ import React from "react";
 import Signup from "../pages/auth/Signup";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
+import ListUsers from "../pages/user/ListUsers";
 import Login from "./../pages/auth/Login";
+
+export enum UserRoles {
+  UNAUTHED,
+  USER,
+  ADMIN,
+}
 
 /**
  * Route Types
@@ -11,7 +18,8 @@ export type IRouteType = {
   name: string;
   link: string;
   Component: React.FC;
-  authed: boolean;
+  authed: UserRoles;
+  showInMenuFor: UserRoles;
 };
 
 const routes: IRouteType[] = [
@@ -22,26 +30,37 @@ const routes: IRouteType[] = [
     name: "Login",
     link: "/login",
     Component: Login,
-    authed: false,
+    authed: UserRoles.UNAUTHED,
+    showInMenuFor: UserRoles.UNAUTHED,
   },
   {
     name: "Signup",
     link: "/signup",
     Component: Signup,
-    authed: false,
+    authed: UserRoles.UNAUTHED,
+    showInMenuFor: UserRoles.UNAUTHED,
   },
 
   {
     name: "Dashboard",
     link: "/dashboard",
     Component: Dashboard,
-    authed: true,
+    authed: UserRoles.USER,
+    showInMenuFor: UserRoles.USER,
   },
   {
     name: "Profile",
     link: "/profile",
     Component: Profile,
-    authed: true,
+    authed: UserRoles.USER,
+    showInMenuFor: UserRoles.USER,
+  },
+  {
+    name: "Users",
+    link: "/users",
+    Component: ListUsers,
+    authed: UserRoles.ADMIN,
+    showInMenuFor: UserRoles.ADMIN,
   },
 
   // /**

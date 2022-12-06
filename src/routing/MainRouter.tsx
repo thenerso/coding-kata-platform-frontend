@@ -1,11 +1,12 @@
-import { Button, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import React, { Suspense, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import EmptyState from "../components/EmptyState";
 import Loading from "../components/global/Loading";
+import Header from "../components/Header";
 import Home from "../pages/Home";
 import authService from "../services/authService";
-import routes from "./routes";
+import routes, { UserRoles } from "./routes";
 
 /**
  * Handles Routing for the application
@@ -14,13 +15,26 @@ import routes from "./routes";
  */
 const MainRouter = () => {
   const [isAuthed, setIsAuthed] = React.useState(false);
-  const [role, setRole] = React.useState("");
+  const [role, setRole] = React.useState<UserRoles>(UserRoles.UNAUTHED);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   // Runs when route updates
   useEffect(() => {
+    const determineUserRole = (role: string) => {
+      switch (role) {
+        case "ADMIN":
+          setRole(UserRoles.ADMIN);
+          break;
+        case "USER":
+          setRole(UserRoles.USER);
+          break;
+        default:
+          setRole(UserRoles.UNAUTHED);
+          break;
+      }
+    };
     // check if the user is authenticated
 
     /**
@@ -33,25 +47,35 @@ const MainRouter = () => {
     const user = authService.getUser();
 
     if (user && user?.roles) {
-      console.log(user);
       setIsAuthed(() => new Date(user.exp as number) < new Date());
-      setRole(user.roles[0]);
+      determineUserRole(user.roles[0]);
     }
   }, [location]);
 
-  const logout = () => {
-    authService.logout();
-    setIsAuthed(false);
-    setRole("");
-    navigate("/");
+  const displayAuthState = (index: number, link: string, message: string) => {
+    return (
+      <Route
+        key={`${index}-${link}`}
+        path={link}
+        element={
+          <EmptyState
+            message={message}
+            action={() => navigate("/login")}
+            actionLabel={"Login"}
+          />
+        }
+      />
+    );
   };
 
   return (
     <React.Fragment>
-      <p>Authed: {isAuthed ? "true" : "false"}</p>
-      <p>Role: {role}</p>
-      {isAuthed && <Button onClick={logout}>Logout</Button>}
-      {/* <Header isAuthed={isAuthed} setIsAuthed={setIsAuthed} history={history} /> */}
+      <Header
+        isAuthed={isAuthed}
+        role={role}
+        setRole={setRole}
+        setIsAuthed={setIsAuthed}
+      />
       <Grid container style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Grid item xs={11}>
           <Suspense fallback={<Loading />}>
@@ -59,20 +83,20 @@ const MainRouter = () => {
               <Route path="/" element={<Home />} />
 
               {routes.map(({ link, Component, authed }, i) => {
-                if (authed && !isAuthed)
-                  return (
-                    <Route
-                      key={`${i}-${link}`}
-                      path={link}
-                      element={
-                        <EmptyState
-                          message="You need to be logged in to view this page"
-                          action={() => navigate("/login")}
-                          actionLabel={"Login"}
-                        />
-                      }
-                    />
+                if (authed !== UserRoles.UNAUTHED && !isAuthed) {
+                  return displayAuthState(
+                    i,
+                    link,
+                    "You need to be logged in to view this page"
                   );
+                }
+                if (authed === UserRoles.ADMIN && role !== UserRoles.ADMIN) {
+                  return displayAuthState(
+                    i,
+                    link,
+                    "You need admin access to view this page"
+                  );
+                }
 
                 return <Route path={link} element={<Component />} key={i} />;
               })}
