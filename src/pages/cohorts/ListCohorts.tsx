@@ -1,3 +1,4 @@
+import { Add } from "@mui/icons-material";
 import {
   TableContainer,
   Paper,
@@ -7,6 +8,7 @@ import {
   TableCell,
   TableBody,
   Typography,
+  Fab,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,17 +17,27 @@ import Loading from "../../components/global/Loading";
 import { ICohort } from "../../interfaces/cohort";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
+import styled from "@emotion/styled";
 
-export interface Member {
-  id: number;
-  username: string;
-  email: string;
-  roles: string[];
-  score: number;
-  joinDate: Date;
-  solutions: any[];
-  completedProblems: any[];
-}
+// export interface Member {
+//   id: number;
+//   username: string;
+//   email: string;
+//   roles: string[];
+//   score: number;
+//   joinDate: Date;
+//   solutions: any[];
+//   completedProblems: any[];
+// }
+
+/**
+ * Injected styles
+ *
+ */
+const TitleWrapper = styled("div")`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const ListCohorts = () => {
   const [cohorts, setCohorts] = useState<ICohort[]>([]);
@@ -65,8 +77,16 @@ const ListCohorts = () => {
   if (error) return <EmptyState message={error} />;
   return (
     <>
-      <Typography variant="h1">Cohorts</Typography>
-
+      <TitleWrapper>
+        <Typography variant="h1">Cohorts</Typography>
+        <Fab
+          color="primary"
+          aria-label="Add a cohort"
+          onClick={() => navigate("/cohorts/new")}
+        >
+          <Add />
+        </Fab>
+      </TitleWrapper>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

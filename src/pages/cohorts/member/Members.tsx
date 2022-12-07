@@ -1,24 +1,62 @@
+import {
+  Typography,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
 import { IUser } from "../../../interfaces/user";
-
-import CreateMember from "./CreateMember";
 
 interface IMemberProps {
   members: IUser[];
-  setMembers: (member: IUser[]) => void;
+  displayScore: boolean;
 }
 
-const Members = ({ members, setMembers }: IMemberProps) => {
+const Members = ({ members, displayScore }: IMemberProps) => {
+  const tableFields = ["ID", "Name", "Email", "Start Date"];
+  if (displayScore) tableFields.push("Score");
+  // const navigate = useNavigate();
+
   return (
     <div>
-      <CreateMember members={members} setMembers={setMembers} />
-      <h2>Members</h2>
-      {members.map((member) => {
-        return (
-          <div key={member.username}>
-            <p>{member.username}</p>
-          </div>
-        );
-      })}
+      <Typography variant="h2">Members</Typography>
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              {tableFields.map((cell, index) => (
+                <TableCell key={`${index}-${cell}`}>{cell}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {members.length === 0 ? (
+              <TableRow>
+                <TableCell>No members added yet</TableCell>
+              </TableRow>
+            ) : (
+              members.map((row) => (
+                <TableRow
+                  key={`${row.id}-${row.username}`}
+                  // hover
+                  // onClick={() => navigate(`/users/${row.id}`)}
+                  // style={{ cursor: "pointer" }}
+                >
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.username}</TableCell>
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>{row.joinDate}</TableCell>
+                  {displayScore && <TableCell>{row.score}</TableCell>}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };

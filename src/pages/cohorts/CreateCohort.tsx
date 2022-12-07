@@ -1,10 +1,13 @@
 import { Check } from "@mui/icons-material";
 import {
-  Box,
   TextField,
   Typography,
   Button,
   CircularProgress,
+  Card,
+  CardHeader,
+  CardContent,
+  Grid,
 } from "@mui/material";
 
 import dayjs, { Dayjs } from "dayjs";
@@ -13,12 +16,19 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import Members from "./member/Members";
 import { ICohort } from "../../interfaces/cohort";
 import { IUser } from "../../interfaces/user";
+import CreateMember from "./member/CreateMember";
+import styled from "@emotion/styled";
+
+const StyledCardContent = styled(CardContent)`
+  display: flex;
+  flex-direction: column;
+`;
 
 const CreateCohort = () => {
   const [name, setName] = useState("");
@@ -27,7 +37,6 @@ const CreateCohort = () => {
   const [members, setMembers] = useState<IUser[]>([]);
 
   const [nameError, setNameError] = useState("");
-  // const [startDateError, setStartDateError] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -41,8 +50,6 @@ const CreateCohort = () => {
       setNameError("Name cannot be blank");
       passed = false;
     } else setNameError("");
-
-    // Some start date validation? Maybe not necessary
 
     return passed;
   };
@@ -81,55 +88,68 @@ const CreateCohort = () => {
 
   return (
     <>
-      <p>Create</p>
-      <Box component="form">
-        <TextField
-          name="name"
-          label="Name"
-          autoFocus={true}
-          margin="normal"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && submit()}
-          error={nameError !== ""}
-          helperText={nameError}
-        />
-        <br />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DesktopDatePicker
-            label="Start Date"
-            inputFormat="DD/MM/YYYY"
-            value={startDate}
-            onChange={(e: Dayjs | null) => setStartDate(e)}
-            renderInput={(params) => (
+      <Typography variant="h1">Create a Cohort</Typography>
+      <Grid container spacing={5}>
+        <Grid item md={6}>
+          <Card>
+            <CardHeader title="Cohort details" />
+            <StyledCardContent>
               <TextField
-                {...params}
-                // error={startDateError !== ""}
-                // helperText={startDateError}
+                variant="standard"
+                name="name"
+                label="Name"
+                autoFocus={true}
+                margin="normal"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && submit()}
+                error={nameError !== ""}
+                helperText={nameError}
               />
-            )}
-          />
-        </LocalizationProvider>
-        <br />
+              <br />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DesktopDatePicker
+                  label="Start Date"
+                  inputFormat="DD/MM/YYYY"
+                  value={startDate}
+                  onChange={(e: Dayjs | null) => setStartDate(e)}
+                  renderInput={(params) => (
+                    <TextField variant="standard" {...params} />
+                  )}
+                />
+              </LocalizationProvider>
+            </StyledCardContent>
+          </Card>
+        </Grid>
+        <Grid item md={6}>
+          {/* <Card>
+            <CardHeader title="Add a member" />
+            <StyledCardContent> */}
+          <CreateMember members={members} setMembers={setMembers} />
+          {/* </StyledCardContent> */}
+          {/* </Card> */}
+        </Grid>
+        <Grid item md={12}>
+          <Members members={members} displayScore={false} />
+        </Grid>
 
-        <Members members={members} setMembers={setMembers} />
-
-        <Typography variant="caption" color="error">
-          {error}
-        </Typography>
-        <br />
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={submit}
-          disabled={loading}
-          endIcon={loading ? <CircularProgress size={18} /> : <Check />}
-        >
-          Create
-        </Button>
-        <br />
-        <Link to="/cohorts">Back</Link>
-      </Box>
+        <Grid item md={12}>
+          <Typography variant="caption" color="error">
+            {error}
+          </Typography>
+          <br />
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={submit}
+            disabled={loading}
+            endIcon={loading ? <CircularProgress size={18} /> : <Check />}
+          >
+            Create
+          </Button>
+        </Grid>
+      </Grid>
+      {/* </Box> */}
     </>
   );
 };

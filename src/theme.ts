@@ -9,6 +9,11 @@ const theme = createTheme({
       fontSize: "3rem",
       marginBottom: "20px",
     },
+    h2: {
+      fontWeight: 600,
+      fontSize: "1.6rem",
+      marginBottom: "20px",
+    },
   },
 });
 

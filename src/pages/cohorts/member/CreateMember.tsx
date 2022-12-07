@@ -1,4 +1,12 @@
-import { Box, Button, CircularProgress, TextField } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
 
 import { IUser } from "../../../interfaces/user";
@@ -8,11 +16,17 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { Check } from "@mui/icons-material";
+import styled from "@emotion/styled";
 
 interface ICreateMemberProps {
   members: IUser[];
   setMembers: (member: IUser[]) => void;
 }
+
+const StyledCardContent = styled(CardContent)`
+  display: flex;
+  flex-direction: column;
+`;
 
 const CreateMember = ({ members, setMembers }: ICreateMemberProps) => {
   const [username, setUsername] = useState("");
@@ -65,10 +79,11 @@ const CreateMember = ({ members, setMembers }: ICreateMemberProps) => {
   };
 
   return (
-    <div>
-      <h2>New Member</h2>
-      <Box>
+    <Card>
+      <CardHeader title="Add a member" />
+      <StyledCardContent>
         <TextField
+          variant="standard"
           name="username"
           label="Username"
           autoFocus={true}
@@ -79,7 +94,10 @@ const CreateMember = ({ members, setMembers }: ICreateMemberProps) => {
           error={usernameError !== ""}
           helperText={usernameError}
         />
+        <br />
+
         <TextField
+          variant="standard"
           name="email"
           label="Email"
           autoFocus={true}
@@ -97,10 +115,13 @@ const CreateMember = ({ members, setMembers }: ICreateMemberProps) => {
             inputFormat="DD/MM/YYYY"
             value={joinDate}
             onChange={(e: Dayjs | null) => setStartDate(e)}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => (
+              <TextField variant="standard" {...params} />
+            )}
           />
         </LocalizationProvider>
-        <br />
+      </StyledCardContent>
+      <CardActions>
         <Button
           color="secondary"
           variant="contained"
@@ -110,8 +131,8 @@ const CreateMember = ({ members, setMembers }: ICreateMemberProps) => {
         >
           Add
         </Button>
-      </Box>
-    </div>
+      </CardActions>
+    </Card>
   );
 };
 export default CreateMember;
