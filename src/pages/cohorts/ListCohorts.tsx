@@ -2,15 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
 import Loading from "../../components/global/Loading";
+import { ICohort } from "../../interfaces/cohort";
 import authService from "../../services/authService";
-import CohortServices from "../../services/cohortService";
-
-export interface ICohort {
-  id?: number;
-  name: string;
-  startDate: string;
-  members: Member[];
-}
+import cohortServices from "../../services/cohortService";
 
 export interface Member {
   id: number;
@@ -35,7 +29,8 @@ const ListCohorts = () => {
       if (cohorts.length === 0) {
         setError("");
         setLoading(true);
-        CohortServices.getAll(token)
+        cohortServices
+          .getAll(token)
           .then((result) => {
             setCohorts(result);
             setLoading(false);
@@ -60,12 +55,12 @@ const ListCohorts = () => {
       <Link to="/cohorts/new">Create</Link>
       {cohorts.map((cohort) => {
         return (
-          <>
-            <Link key={cohort.name} to={`/cohorts/${cohort.id}`}>
+          <div key={cohort.name}>
+            <Link to={`/cohorts/${cohort.id}`}>
               {cohort.name} - {cohort.members.length} members
             </Link>
             <br />
-          </>
+          </div>
         );
       })}
     </>

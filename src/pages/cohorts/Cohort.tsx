@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
 import Loading from "../../components/global/Loading";
+import { ICohort } from "../../interfaces/cohort";
 import authService from "../../services/authService";
-import CohortServices from "../../services/cohortService";
-import { ICohort } from "./ListCohorts";
+import cohortServices from "../../services/cohortService";
 
 const Cohort = () => {
   const [cohort, setCohort] = useState<ICohort>();
@@ -13,8 +13,6 @@ const Cohort = () => {
 
   const { id } = useParams();
 
-  console.log(id);
-
   useEffect(() => {
     const token = authService.getAccessToken();
 
@@ -22,7 +20,8 @@ const Cohort = () => {
       if (!cohort && id) {
         setError("");
         setLoading(true);
-        CohortServices.getById(token, id)
+        cohortServices
+          .getById(token, id)
           .then((result) => {
             setCohort(result);
             setLoading(false);

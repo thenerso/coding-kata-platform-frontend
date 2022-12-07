@@ -1,8 +1,8 @@
 import axios from "axios";
 import GlobalConfig from "../config/GlobalConfig";
-import { ICohort } from "../pages/cohorts/ListCohorts";
+import { ICohort } from "../interfaces/cohort";
 
-const CohortServices = {
+const cohortServices = {
   getAll: async (token: string) => {
     const res = await axios.get(GlobalConfig.server_url + "/user/cohorts/", {
       headers: {
@@ -36,4 +36,4 @@ const CohortServices = {
   },
 };
 
-export default CohortServices;
+export default cohortServices;
