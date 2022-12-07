@@ -34,8 +34,6 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
    */
   // ReactGA.initialize(config.ga_id);
 
-  console.log("role", UserRoles.USER === role);
-
   const [message, setMessage] = React.useState("");
   const navigate = useNavigate();
 

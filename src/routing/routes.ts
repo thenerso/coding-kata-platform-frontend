@@ -1,5 +1,8 @@
 import React from "react";
 import Signup from "../pages/auth/Signup";
+import Cohort from "../pages/cohorts/Cohort";
+import CreateCohort from "../pages/cohorts/CreateCohort";
+import ListCohorts from "../pages/cohorts/ListCohorts";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import ListUsers from "../pages/user/ListUsers";
@@ -19,7 +22,7 @@ export type IRouteType = {
   link: string;
   Component: React.FC;
   authed: UserRoles;
-  showInMenuFor: UserRoles;
+  showInMenuFor?: UserRoles;
 };
 
 const routes: IRouteType[] = [
@@ -41,6 +44,9 @@ const routes: IRouteType[] = [
     showInMenuFor: UserRoles.UNAUTHED,
   },
 
+  /**
+   * General
+   */
   {
     name: "Dashboard",
     link: "/dashboard",
@@ -55,12 +61,38 @@ const routes: IRouteType[] = [
     authed: UserRoles.USER,
     showInMenuFor: UserRoles.USER,
   },
+  /**
+   * User
+   */
   {
     name: "Users",
     link: "/users",
     Component: ListUsers,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
+  },
+
+  /**
+   * Cohort
+   */
+  {
+    name: "Create Cohort",
+    link: "/cohorts/new",
+    Component: CreateCohort,
+    authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Cohorts",
+    link: "/cohorts",
+    Component: ListCohorts,
+    authed: UserRoles.ADMIN,
+    showInMenuFor: UserRoles.ADMIN,
+  },
+  {
+    name: "Cohort",
+    link: "/cohorts/:id",
+    Component: Cohort,
+    authed: UserRoles.ADMIN,
   },
 
   // /**

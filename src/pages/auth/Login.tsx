@@ -46,7 +46,6 @@ const Login = () => {
       setLoading(true);
       try {
         const response = await authService.signin(username, password);
-        console.log("result in slogin", response);
 
         if (response?.userId) {
           navigate("/profile");
@@ -55,7 +54,7 @@ const Login = () => {
         setError(response.message ? response.message : "Server Error");
         setLoading(false);
       } catch (err: any) {
-        setError(err.message ? err.message : "ssssServer Error");
+        setError(err.message ? err.message : "Server Error");
         setLoading(false);
       }
     }
