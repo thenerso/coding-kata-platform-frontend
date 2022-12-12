@@ -80,17 +80,9 @@ const ResetPassword = () => {
         newPassword: password,
       };
       try {
-        const response = await authService.resetPassword(body);
+        await authService.resetPassword(body);
 
-        console.log("response!", response);
-        // BUG FOUND in backend needs to be fixed
-        // return
-        // if (response?.userId) {
-        //   navigate("/profile");
-        //   return;
-        // }
-        // setError(response.message ? response.message : "Server Error");
-        // setLoading(false);
+        navigate("/login");
       } catch (err: any) {
         setError(err.message ? err.message : "Server Error");
         setLoading(false);

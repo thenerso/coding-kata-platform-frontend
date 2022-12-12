@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import {
   Button,
@@ -16,36 +15,37 @@ import styled from "@emotion/styled";
 
 import authService from "../../services/authService";
 import { Link } from "react-router-dom";
+import EmptyState from "../../components/EmptyState";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
   flex-direction: column;
 `;
 
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const ForgetPassword = () => {
+  const [email, setEmail] = useState("");
 
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleValidation = () => {
     let passed = true;
 
-    if (username.length < 3) {
-      setUsernameError("Username must be at least 3 characters");
-      passed = false;
-    } else setUsernameError("");
+    if (email === "") {
+      setEmailError("Email cannot be blank");
+      return false;
+    }
 
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
-      passed = false;
-    } else setPasswordError("");
+    if (!email.includes("@") || !email.includes(".")) {
+      setEmailError("Please enter a valid email");
+      return false;
+    }
+
+    setEmailError("");
 
     return passed;
   };
@@ -55,9 +55,10 @@ const Login = () => {
       setError("");
       setLoading(true);
       try {
-        await authService.signin(username, password);
+        const response = await authService.forgetPassword(email);
 
-        navigate("/profile");
+        setSuccessMessage(response.message);
+        setLoading(false);
       } catch (err: any) {
         setError(err.message ? err.message : "Server Error");
         setLoading(false);
@@ -65,46 +66,32 @@ const Login = () => {
     }
   };
 
+  if (successMessage) return <EmptyState message={successMessage} />;
   return (
     <>
       <Card>
-        <CardHeader title="Sign in" />
+        <CardHeader title="Enter your email" />
         <StyledCardContent>
           <TextField
             variant="standard"
-            name="username"
-            label="Username"
+            name="email"
+            label="Email"
             autoFocus={true}
             margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && submit()}
-            error={usernameError !== ""}
-            helperText={usernameError}
+            error={emailError !== ""}
+            helperText={emailError}
           />
           <br />
-          <TextField
-            variant="standard"
-            name="password"
-            label="Password"
-            type="password"
-            margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && submit()}
-            error={passwordError !== ""}
-            helperText={passwordError}
-          />
-
-          <br />
-
-          <Typography variant="caption" color="error">
-            {error}
-          </Typography>
 
           <Typography variant="caption">
-            Don't remember your password?{" "}
-            <Link to={"/forget-password"}>Forgot Password</Link>
+            Remember your password? <Link to={"/login"}>Sign in</Link>
+          </Typography>
+          <br />
+          <Typography variant="caption" color="error">
+            {error}
           </Typography>
         </StyledCardContent>
         <CardActions>
@@ -115,7 +102,7 @@ const Login = () => {
             disabled={loading}
             endIcon={loading ? <CircularProgress size={18} /> : <Check />}
           >
-            Login
+            Send
           </Button>
         </CardActions>
       </Card>
@@ -123,4 +110,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgetPassword;

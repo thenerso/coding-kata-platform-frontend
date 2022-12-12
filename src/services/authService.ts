@@ -41,29 +41,55 @@ const authService = {
     } catch (err: any) {
       // If we get an axios error, we can assume the server down
       if (err?.code === "ERR_NETWORK") {
-        return { message: "Server error, please try again later" };
+        throw new Error("Server error, please try again later");
       }
 
       // If not, assuming it's incorrect credientials
-      return { message: "Incorrect username or password" };
+      throw new Error("Incorrect username or password");
     }
   },
+  async forgetPassword(email: string) {
+    try {
+      const response = await axios.get(
+        `${GlobalConfig.server_url}/password/forgot/${email}`
+      );
 
+      if (response.status === 200) {
+        return { message: response.data };
+      }
+
+      throw AxiosError;
+    } catch (err: any) {
+      // If we get an axios error, we can assume the server down
+      if (err?.code === "ERR_NETWORK") {
+        throw new Error("Server error, please try again later");
+      }
+      throw new Error("The email you entered does not exist");
+    }
+  },
   async resetPassword(body: {
     secret: string;
     userId: string | undefined;
     newPassword: string;
   }) {
-    const res = await axios.post(
-      GlobalConfig.server_url + "/user/users/password/reset",
-      body
-      // {
-      //   headers: {
-      //     Authorization: "Bearer " + token,
-      //   },
-      // }
-    );
-    return res.data;
+    try {
+      const response = await axios.post(
+        GlobalConfig.server_url + "/password/reset",
+        body
+      );
+
+      if (response.status === 200) {
+        return { message: response.data };
+      }
+
+      throw AxiosError;
+    } catch (err: any) {
+      // If we get an axios error, we can assume the server down
+      if (err?.code === "ERR_NETWORK") {
+        throw new Error("Server error, please try again later");
+      }
+      throw new Error("The email you entered does not exist");
+    }
   },
 
   logout() {
