@@ -5,6 +5,7 @@ import Signup from "../pages/auth/Signup";
 import Cohort from "../pages/cohorts/Cohort";
 import CreateCohort from "../pages/cohorts/CreateCohort";
 import ListCohorts from "../pages/cohorts/ListCohorts";
+import UpdateCohort from "../pages/cohorts/UpdateCohort";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import ListUsers from "../pages/user/ListUsers";
@@ -105,6 +106,12 @@ const routes: IRouteType[] = [
     name: "Cohort",
     link: "/cohorts/:id",
     Component: Cohort,
+    authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Update Cohort",
+    link: "/cohorts/edit/:id",
+    Component: UpdateCohort,
     authed: UserRoles.ADMIN,
   },
 

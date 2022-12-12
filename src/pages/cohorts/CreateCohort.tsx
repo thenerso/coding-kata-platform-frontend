@@ -16,7 +16,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import Members from "./member/Members";
@@ -24,7 +24,7 @@ import { ICohort } from "../../interfaces/cohort";
 import { IUser } from "../../interfaces/user";
 import CreateMember from "./member/CreateMember";
 import styled from "@emotion/styled";
-import EditMember from "./member/EditMember";
+import EditMember from "./member/UpdateMember";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -71,12 +71,12 @@ const CreateCohort = () => {
         try {
           const response = await cohortServices.create(token, body);
 
-          if (response?.id) {
-            navigate(`/cohorts/${response?.id}`);
-            return;
-          }
-          setError(response.message ? response.message : "Server Error");
-          setLoading(false);
+          // if (response?.id) {
+          navigate(`/cohorts/${response?.id}`);
+          // return;
+          // }
+          // setError(response.message ? response.message : "Server Error");
+          // setLoading(false);
         } catch (err: any) {
           setError(err.message ? err.message : "Server Error");
           setLoading(false);
@@ -89,10 +89,12 @@ const CreateCohort = () => {
   };
 
   const updateEditedMember = (newMember: IUser) => {
+    console.log(newMember.username);
+
     setMembers(
       members.map((member, index) => {
         if (index === memberEditIndex) {
-          return { ...member, newMember };
+          return newMember;
         }
         return member;
       })
@@ -102,6 +104,14 @@ const CreateCohort = () => {
 
   return (
     <>
+      <Button
+        color="info"
+        component={Link}
+        to="/cohorts"
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button>
       <Typography variant="h1">Create a Cohort</Typography>
       <Grid container spacing={5}>
         <Grid item md={6}>
@@ -148,6 +158,7 @@ const CreateCohort = () => {
               memberIndex={memberEditIndex}
               editMember={updateEditedMember}
               startDate={startDate}
+              setMemberEditIndex={setMemberEditIndex}
             />
           )}
         </Grid>
@@ -155,6 +166,7 @@ const CreateCohort = () => {
           <Members
             members={members}
             displayScore={false}
+            displayEmptyCell={true}
             setMemberEditIndex={setMemberEditIndex}
           />
         </Grid>
@@ -167,14 +179,7 @@ const CreateCohort = () => {
         </Grid>
         <Grid item md={12}>
           <Button
-            color="info"
-            onClick={() => navigate("/cohorts")}
-            startIcon={<ArrowBack />}
-          >
-            Back
-          </Button>
-          <Button
-            color="secondary"
+            color="primary"
             variant="contained"
             onClick={submit}
             disabled={loading}

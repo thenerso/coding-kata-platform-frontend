@@ -15,8 +15,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import Members from "./member/Members";
@@ -24,6 +24,8 @@ import { ICohort } from "../../interfaces/cohort";
 import { IUser } from "../../interfaces/user";
 import CreateMember from "./member/CreateMember";
 import styled from "@emotion/styled";
+
+import UpdateMember from "./member/UpdateMember";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -35,13 +37,43 @@ const UpdateCohort = () => {
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 
   const [members, setMembers] = useState<IUser[]>([]);
+  const [memberEditIndex, setMemberEditIndex] = useState(-1);
 
   const [nameError, setNameError] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const token = authService.getAccessToken();
+
+    if (token) {
+      if (id) {
+        setError("");
+        setLoading(true);
+        cohortServices
+          .getById(token, id)
+          .then((result) => {
+            setName(result.name);
+            setStartDate(dayjs(result.startDate));
+            setMembers(result.members);
+
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log("Error getting cohorts", err);
+            setError("Error fetching data");
+            setLoading(false);
+          });
+      }
+    } else {
+      setError("Authentication error, please log in again");
+      setLoading(false);
+    }
+  }, [id]);
 
   const handleValidation = () => {
     let passed = true;
@@ -57,9 +89,10 @@ const UpdateCohort = () => {
   const submit = async () => {
     const token = authService.getAccessToken();
 
-    if (token) {
+    if (token && id) {
       if (handleValidation()) {
         const body: ICohort = {
+          id: parseInt(id),
           name,
           startDate: dayjs(startDate).format("YYYY-MM-DD"),
           members,
@@ -67,14 +100,14 @@ const UpdateCohort = () => {
         setError("");
         setLoading(true);
         try {
-          const response = await cohortServices.create(token, body);
+          await cohortServices.update(token, body);
 
-          if (response?.id) {
-            navigate(`/cohorts/${response?.id}`);
-            return;
-          }
-          setError(response.message ? response.message : "Server Error");
-          setLoading(false);
+          // if (response?.id) {
+          navigate(`/cohorts/${id}`);
+          // return;
+          // }
+          // setError(response.message ? response.message : "Server Error");
+          // setLoading(false);
         } catch (err: any) {
           setError(err.message ? err.message : "Server Error");
           setLoading(false);
@@ -86,9 +119,31 @@ const UpdateCohort = () => {
     }
   };
 
+  const updateEditedMember = (newMember: IUser) => {
+    console.log(newMember.username);
+
+    setMembers(
+      members.map((member, index) => {
+        if (index === memberEditIndex) {
+          return newMember;
+        }
+        return member;
+      })
+    );
+    setMemberEditIndex(-1);
+  };
+
   return (
     <>
-      <Typography variant="h1">Create a Cohort</Typography>
+      <Button
+        color="info"
+        component={Link}
+        to="/cohorts"
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button>
+      <Typography variant="h1">Update Cohort</Typography>
       <Grid container spacing={5}>
         <Grid item md={6}>
           <Card>
@@ -122,10 +177,29 @@ const UpdateCohort = () => {
           </Card>
         </Grid>
         <Grid item md={6}>
-          {/* <CreateMember members={members} setMembers={setMembers} /> */}
+          {memberEditIndex === -1 ? (
+            <CreateMember
+              members={members}
+              setMembers={setMembers}
+              startDate={startDate}
+            />
+          ) : (
+            <UpdateMember
+              members={members}
+              memberIndex={memberEditIndex}
+              editMember={updateEditedMember}
+              startDate={startDate}
+              setMemberEditIndex={setMemberEditIndex}
+            />
+          )}
         </Grid>
         <Grid item md={12}>
-          <Members members={members} displayScore={false} />
+          <Members
+            members={members}
+            displayScore={false}
+            displayEmptyCell={true}
+            setMemberEditIndex={setMemberEditIndex}
+          />
         </Grid>
 
         <Grid item md={12}>
@@ -133,23 +207,14 @@ const UpdateCohort = () => {
             {error}
           </Typography>
           <br />
-        </Grid>
-        <Grid item md={12}>
           <Button
-            color="info"
-            onClick={() => navigate("/cohorts")}
-            startIcon={<ArrowBack />}
-          >
-            Back
-          </Button>
-          <Button
-            color="secondary"
+            color="primary"
             variant="contained"
             onClick={submit}
             disabled={loading}
             endIcon={loading ? <CircularProgress size={18} /> : <Check />}
           >
-            Create
+            Update
           </Button>
         </Grid>
       </Grid>

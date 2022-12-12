@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   FormGroup,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 
@@ -18,14 +19,15 @@ import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { Check } from "@mui/icons-material";
+import { Check, Close } from "@mui/icons-material";
 import styled from "@emotion/styled";
 
-interface IEditMemberProps {
+interface IUpdateMemberProps {
   memberIndex: number;
   members: IUser[];
-  editMember: (member: IUser) => void;
   startDate: Dayjs | null;
+  editMember: (member: IUser) => void;
+  setMemberEditIndex: (index: number) => void;
 }
 
 const StyledCardContent = styled(CardContent)`
@@ -33,12 +35,13 @@ const StyledCardContent = styled(CardContent)`
   flex-direction: column;
 `;
 
-const EditMember = ({
+const UpdateMember = ({
   memberIndex,
   members,
-  editMember,
   startDate,
-}: IEditMemberProps) => {
+  editMember,
+  setMemberEditIndex,
+}: IUpdateMemberProps) => {
   const [username, setUsername] = useState(members[memberIndex].username);
   const [email, setEmail] = useState(members[memberIndex].email);
 
@@ -51,6 +54,7 @@ const EditMember = ({
   const [emailError, setEmailError] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleValidation = () => {
     let passed = true;
@@ -70,7 +74,17 @@ const EditMember = ({
       passed = false;
     } else setEmailError("");
 
-    // Some start date validation? Maybe not necessary
+    const editedMemberIndex = members.findIndex((member, index) => {
+      return (
+        index !== memberIndex &&
+        (member.username === username || member.email === email)
+      );
+    });
+
+    if (editedMemberIndex !== -1) {
+      setError("Member username and email must be unique");
+      passed = false;
+    } else setError("");
 
     return passed;
   };
@@ -79,12 +93,12 @@ const EditMember = ({
     if (handleValidation()) {
       setLoading(true);
       const newMember = {
+        ...members[memberIndex],
         username,
         email,
         joinDate: customJoinDate
           ? startDate?.format("YYYY-MM-DD")
           : dayjs(joinDate).format("YYYY-MM-DD"),
-        roles: ["USER"],
       };
 
       editMember(newMember);
@@ -114,7 +128,6 @@ const EditMember = ({
           variant="standard"
           name="email"
           label="Email"
-          autoFocus={true}
           margin="normal"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -144,19 +157,34 @@ const EditMember = ({
             label="Same start date as Cohort"
           />
         </FormGroup>
+
+        <br />
+
+        <Typography variant="caption" color="error">
+          {error}
+        </Typography>
       </StyledCardContent>
       <CardActions>
         <Button
           color="secondary"
           variant="contained"
+          onClick={() => setMemberEditIndex(-1)}
+          disabled={loading}
+          endIcon={loading ? <CircularProgress size={18} /> : <Close />}
+        >
+          Cancel
+        </Button>
+        <Button
+          color="primary"
+          variant="contained"
           onClick={submit}
           disabled={loading}
           endIcon={loading ? <CircularProgress size={18} /> : <Check />}
         >
-          Add
+          Save
         </Button>
       </CardActions>
     </Card>
   );
 };
-export default EditMember;
+export default UpdateMember;

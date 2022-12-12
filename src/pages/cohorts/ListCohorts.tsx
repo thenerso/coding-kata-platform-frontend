@@ -11,24 +11,13 @@ import {
   Fab,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
 import Loading from "../../components/global/Loading";
 import { ICohort } from "../../interfaces/cohort";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import styled from "@emotion/styled";
-
-// export interface Member {
-//   id: number;
-//   username: string;
-//   email: string;
-//   roles: string[];
-//   score: number;
-//   joinDate: Date;
-//   solutions: any[];
-//   completedProblems: any[];
-// }
 
 /**
  * Injected styles
@@ -82,7 +71,8 @@ const ListCohorts = () => {
         <Fab
           color="primary"
           aria-label="Add a cohort"
-          onClick={() => navigate("/cohorts/new")}
+          component={Link}
+          to="/cohorts/new"
         >
           <Add />
         </Fab>

@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   FormGroup,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 
@@ -47,6 +48,7 @@ const CreateMember = ({
   const [emailError, setEmailError] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleValidation = () => {
     let passed = true;
@@ -66,7 +68,14 @@ const CreateMember = ({
       passed = false;
     } else setEmailError("");
 
-    // Some start date validation? Maybe not necessary
+    const memberIndex = members.findIndex((member) => {
+      return member.username === username || member.email === email;
+    });
+
+    if (memberIndex !== -1) {
+      setError("Member username and email must be unique");
+      passed = false;
+    } else setError("");
 
     return passed;
   };
@@ -98,7 +107,6 @@ const CreateMember = ({
           variant="standard"
           name="username"
           label="Username"
-          autoFocus={true}
           margin="normal"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -112,7 +120,6 @@ const CreateMember = ({
           variant="standard"
           name="email"
           label="Email"
-          autoFocus={true}
           margin="normal"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -142,10 +149,16 @@ const CreateMember = ({
             label="Same start date as Cohort"
           />
         </FormGroup>
+
+        <br />
+
+        <Typography variant="caption" color="error">
+          {error}
+        </Typography>
       </StyledCardContent>
       <CardActions>
         <Button
-          color="secondary"
+          color="primary"
           variant="contained"
           onClick={submit}
           disabled={loading}
