@@ -1,4 +1,4 @@
-import { Add, ArrowBack, Edit } from "@mui/icons-material";
+import { Add, ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { Button, Fab, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import Members from "./member/Members";
 import styled from "@emotion/styled";
+import DeleteCohort from "./DeleteCohort";
 
 /**
  * Injected styles
@@ -19,14 +20,18 @@ const TitleWrapper = styled("div")`
   justify-content: space-between;
 `;
 
+const TitleActionWrapper = styled("div")`
+  a {
+    margin: 0 5px;
+  }
+`;
+
 const Cohort = () => {
   const [cohort, setCohort] = useState<ICohort>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   const { id } = useParams();
-
-  // const navigate = useNavigate();
 
   useEffect(() => {
     const token = authService.getAccessToken();
@@ -67,14 +72,18 @@ const Cohort = () => {
       </Button>
       <TitleWrapper>
         <Typography variant="h1">{cohort.name}</Typography>
-        <Fab
-          color="primary"
-          aria-label="Edit cohort"
-          component={Link}
-          to={`/cohorts/edit/${cohort.id}`}
-        >
-          <Edit />
-        </Fab>
+        <TitleActionWrapper>
+          <Fab
+            color="primary"
+            aria-label="Edit cohort"
+            component={Link}
+            to={`/cohorts/edit/${cohort.id}`}
+          >
+            <Edit />
+          </Fab>
+
+          {cohort.id && <DeleteCohort id={cohort.id} />}
+        </TitleActionWrapper>
       </TitleWrapper>
       <Typography variant="caption">{cohort.startDate}</Typography>
 
