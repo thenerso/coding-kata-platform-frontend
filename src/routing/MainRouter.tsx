@@ -4,6 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import EmptyState from "../components/EmptyState";
 import Loading from "../components/global/Loading";
 import Header from "../components/Header";
+import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import authService from "../services/authService";
 import routes, { UserRoles } from "./routes";
@@ -85,7 +86,7 @@ const MainRouter = () => {
         <Grid item xs={11}>
           <Suspense fallback={<Loading />}>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={isAuthed ? <Dashboard /> : <Home />} />
 
               {routes.map(({ link, Component, authed }, i) => {
                 if (authed !== UserRoles.UNAUTHED && !isAuthed) {

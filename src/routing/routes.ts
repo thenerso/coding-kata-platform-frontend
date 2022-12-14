@@ -1,12 +1,12 @@
 import React from "react";
 import ForgetPassword from "../pages/auth/ForgetPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
-import Signup from "../pages/auth/Signup";
 import Cohort from "../pages/cohorts/Cohort";
 import CreateCohort from "../pages/cohorts/CreateCohort";
 import ListCohorts from "../pages/cohorts/ListCohorts";
 import UpdateCohort from "../pages/cohorts/UpdateCohort";
 import Dashboard from "../pages/Dashboard";
+import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import ListUsers from "../pages/user/ListUsers";
 import Login from "./../pages/auth/Login";
@@ -34,15 +34,8 @@ const routes: IRouteType[] = [
    */
   {
     name: "Login",
-    link: "/login",
-    Component: Login,
-    authed: UserRoles.UNAUTHED,
-    showInMenuFor: UserRoles.UNAUTHED,
-  },
-  {
-    name: "Signup",
-    link: "/signup",
-    Component: Signup,
+    link: "/",
+    Component: Home,
     authed: UserRoles.UNAUTHED,
     showInMenuFor: UserRoles.UNAUTHED,
   },
