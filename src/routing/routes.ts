@@ -9,7 +9,6 @@ import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import ListUsers from "../pages/user/ListUsers";
-import Login from "./../pages/auth/Login";
 
 export enum UserRoles {
   UNAUTHED,

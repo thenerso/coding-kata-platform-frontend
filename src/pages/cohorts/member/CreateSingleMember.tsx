@@ -1,9 +1,7 @@
 import {
   Button,
-  Card,
   CardActions,
   CardContent,
-  CardHeader,
   Checkbox,
   CircularProgress,
   FormControlLabel,
@@ -13,31 +11,24 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import { IUser } from "../../../interfaces/user";
-
 import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { Check } from "@mui/icons-material";
 import styled from "@emotion/styled";
-
-interface ICreateMemberProps {
-  members: IUser[];
-  setMembers: (member: IUser[]) => void;
-  startDate: Dayjs | null;
-}
+import { ICreateBulkMember } from "./CreateMemberWrapper";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
   flex-direction: column;
 `;
 
-const CreateMember = ({
+const CreateSingleMember = ({
   members,
   setMembers,
   startDate,
-}: ICreateMemberProps) => {
+}: ICreateBulkMember) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
@@ -100,8 +91,7 @@ const CreateMember = ({
   };
 
   return (
-    <Card>
-      <CardHeader title="Add a member" />
+    <>
       <StyledCardContent>
         <TextField
           variant="standard"
@@ -167,7 +157,7 @@ const CreateMember = ({
           Add
         </Button>
       </CardActions>
-    </Card>
+    </>
   );
 };
-export default CreateMember;
+export default CreateSingleMember;

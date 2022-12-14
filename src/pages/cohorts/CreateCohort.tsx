@@ -22,9 +22,9 @@ import cohortServices from "../../services/cohortService";
 import Members from "./member/Members";
 import { ICohort } from "../../interfaces/cohort";
 import { IUser } from "../../interfaces/user";
-import CreateMember from "./member/CreateMember";
 import styled from "@emotion/styled";
 import EditMember from "./member/UpdateMember";
+import CreateMemberWrapper from "./member/CreateMemberWrapper";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -147,7 +147,7 @@ const CreateCohort = () => {
         </Grid>
         <Grid item md={6}>
           {memberEditIndex === -1 ? (
-            <CreateMember
+            <CreateMemberWrapper
               members={members}
               setMembers={setMembers}
               startDate={startDate}

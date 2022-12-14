@@ -22,7 +22,7 @@ import cohortServices from "../../services/cohortService";
 import Members from "./member/Members";
 import { ICohort } from "../../interfaces/cohort";
 import { IUser } from "../../interfaces/user";
-import CreateMember from "./member/CreateMember";
+import CreateMember from "./member/CreateSingleMember";
 import styled from "@emotion/styled";
 
 import UpdateMember from "./member/UpdateMember";
