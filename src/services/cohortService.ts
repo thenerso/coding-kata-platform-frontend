@@ -68,6 +68,28 @@ const cohortServices = {
       throw new Error("Could not update Cohort");
     }
   },
+  delete: async (token: string, id: string) => {
+    try {
+      const response = await axios.get(
+        `${GlobalConfig.server_url}/admin/cohorts/${id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.status === 200) {
+        return { message: "Cohort deleted" };
+      }
+      throw AxiosError;
+    } catch (err: any) {
+      // If we get an axios error, we can assume the server down
+      if (err?.code === "ERR_NETWORK") {
+        throw new Error("Server error, please try again later");
+      }
+      throw new Error("Could not delete Cohort");
+    }
+  },
 };
 
 export default cohortServices;

@@ -7,7 +7,6 @@ import { Dayjs } from "dayjs";
 import { Group, Person } from "@mui/icons-material";
 import CreateSingleMember from "./CreateSingleMember";
 import CreateBulkMember from "./CreateBulkMember";
-import { SnackbarProvider } from "notistack";
 import { Card } from "@mui/material";
 
 interface TabPanelProps {
@@ -56,40 +55,38 @@ const CreateMemberWrapper = ({
   };
 
   return (
-    <SnackbarProvider maxSnack={6}>
-      <Card>
-        {/* <CardHeader> */}
-        <Box
-        // sx={{ borderBottom: 1, borderColor: "divider" }}
+    <Card>
+      {/* <CardHeader> */}
+      <Box
+      // sx={{ borderBottom: 1, borderColor: "divider" }}
+      >
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
         >
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab icon={<Person />} label="Single Member" {...a11yProps(0)} />
-            <Tab icon={<Group />} label="Bulk Create" {...a11yProps(1)} />
-          </Tabs>
-        </Box>
-        {/* </CardHeader> */}
-        {/* <CardContent> */}
-        <TabPanel value={value} index={0}>
-          <CreateSingleMember
-            members={members}
-            setMembers={setMembers}
-            startDate={startDate}
-          />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <CreateBulkMember
-            members={members}
-            setMembers={setMembers}
-            startDate={startDate}
-          />
-        </TabPanel>
-        {/* </CardContent> */}
-      </Card>
-    </SnackbarProvider>
+          <Tab icon={<Person />} label="Single Member" {...a11yProps(0)} />
+          <Tab icon={<Group />} label="Bulk Create" {...a11yProps(1)} />
+        </Tabs>
+      </Box>
+      {/* </CardHeader> */}
+      {/* <CardContent> */}
+      <TabPanel value={value} index={0}>
+        <CreateSingleMember
+          members={members}
+          setMembers={setMembers}
+          startDate={startDate}
+        />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <CreateBulkMember
+          members={members}
+          setMembers={setMembers}
+          startDate={startDate}
+        />
+      </TabPanel>
+      {/* </CardContent> */}
+    </Card>
   );
 };
 

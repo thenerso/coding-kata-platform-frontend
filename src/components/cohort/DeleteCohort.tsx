@@ -1,6 +1,7 @@
 import { Delete } from "@mui/icons-material";
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -12,8 +13,7 @@ import { useState } from "react";
 
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
-
-import styled from "@emotion/styled";
+import { useSnackbar } from "notistack";
 
 interface IDeleteCohortProps {
   id: number;
@@ -22,8 +22,39 @@ interface IDeleteCohortProps {
 const DeleteCohort = ({ id }: IDeleteCohortProps) => {
   const [open, setOpen] = useState(false);
 
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const submit = () => {
+    const token = authService.getAccessToken();
+    if (token) {
+      if (id) {
+        setLoading(true);
+        cohortServices
+          .delete(token, id.toString())
+          .then((result) => {
+            enqueueSnackbar(`Cohort deleted`, {
+              variant: "success",
+            });
+            setOpen(false);
+            setLoading(false);
+          })
+          .catch((err) => {
+            enqueueSnackbar(err.message, {
+              variant: "error",
+            });
+            setLoading(false);
+            setOpen(false);
+          });
+      }
+    } else {
+      enqueueSnackbar(`Authentication error, please log in again`, {
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -50,7 +81,14 @@ const DeleteCohort = ({ id }: IDeleteCohortProps) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={() => setOpen(false)} autoFocus>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={submit}
+            autoFocus
+            disabled={loading}
+            endIcon={loading ? <CircularProgress size={18} /> : <></>}
+          >
             Delete
           </Button>
         </DialogActions>
