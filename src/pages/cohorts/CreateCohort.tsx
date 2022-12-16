@@ -44,6 +44,9 @@ const CreateCohort = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // const { cohorts } = useAppContext();
+  // console.log("here yeah!!", cohorts);
+
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 

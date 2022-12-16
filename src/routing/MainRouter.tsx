@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
@@ -8,25 +8,44 @@ import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import authService from "../services/authService";
 import routes, { UserRoles } from "./routes";
+import { AppContext, IAppContext } from "../context/AppContext";
+import userService from "../services/userService";
+import cohortServices from "../services/cohortService";
 
 /**
  * Handles Routing for the application
  *
- * @returns {React.FC}
+ * @returns {JSX.Element}
  */
-const MainRouter = () => {
-  const [isAuthed, setIsAuthed] = React.useState(false);
-  const [role, setRole] = React.useState<UserRoles>(UserRoles.UNAUTHED);
+const MainRouter = (): JSX.Element => {
+  const [isAuthed, setIsAuthed] = useState(false);
+  const [role, setRole] = useState<UserRoles>(UserRoles.UNAUTHED);
+  const { members, setNewMembers, setNewCohorts } = React.useContext(
+    AppContext
+  ) as IAppContext;
 
   const navigate = useNavigate();
   const location = useLocation();
 
   // Runs when route updates
   useEffect(() => {
+    const getUsersAndCohorts = () => {
+      const token = authService.getAccessToken();
+      if (token && members.length === 0) {
+        userService.getAll(token).then((result) => {
+          setNewMembers(result);
+        });
+        cohortServices.getAll(token).then((result) => {
+          setNewCohorts(result);
+        });
+      }
+    };
+
     const determineUserRole = (role: string) => {
       switch (role) {
         case "ADMIN":
           setRole(UserRoles.ADMIN);
+          getUsersAndCohorts();
           break;
         case "USER":
           setRole(UserRoles.USER);
@@ -51,7 +70,7 @@ const MainRouter = () => {
       setIsAuthed(() => new Date(user.exp as number) < new Date());
       determineUserRole(user.roles[0]);
     }
-  }, [location]);
+  }, [location, members.length, setNewCohorts, setNewMembers]);
 
   const displayAuthState = (index: number, link: string, message: string) => {
     return (
@@ -70,7 +89,7 @@ const MainRouter = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Header
         isAuthed={isAuthed}
         role={role}
@@ -120,7 +139,7 @@ const MainRouter = () => {
           </Suspense>
         </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 };
 

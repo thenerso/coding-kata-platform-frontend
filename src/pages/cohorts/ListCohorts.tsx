@@ -10,15 +10,15 @@ import {
   Typography,
   Fab,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
-import { ICohort } from "../../interfaces/cohort";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import styled from "@emotion/styled";
 import dayjs from "dayjs";
+import { AppContext, IAppContext } from "../../context/AppContext";
 
 /**
  * Injected styles
@@ -30,41 +30,12 @@ const TitleWrapper = styled("div")`
 `;
 
 const ListCohorts = () => {
-  const [cohorts, setCohorts] = useState<ICohort[]>([]);
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const { cohorts } = useContext(AppContext) as IAppContext;
 
   const tableFields = ["ID", "Name", "Start Date", "# Members"];
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = authService.getAccessToken();
-
-    if (token) {
-      if (cohorts.length === 0) {
-        setError("");
-        setLoading(true);
-        cohortServices
-          .getAll(token)
-          .then((result) => {
-            setCohorts(result);
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log("Error getting cohorts", err);
-            setError("Error fetching data");
-            setLoading(false);
-          });
-      }
-    } else {
-      setError("Authentication error, please log in again");
-      setLoading(false);
-    }
-  }, [cohorts.length]);
-
-  if (loading) return <Loading />;
-  if (error) return <EmptyState message={error} />;
   return (
     <>
       <TitleWrapper>

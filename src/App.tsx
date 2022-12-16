@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 import MainRouter from "./routing/MainRouter";
 import { SnackbarProvider } from "notistack";
+import AppProvider from "./context/AppContext";
 
 /**
  * Entry point for the application
@@ -16,7 +17,9 @@ const App = (): JSX.Element => {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <SnackbarProvider maxSnack={6}>
-            <MainRouter />
+            <AppProvider>
+              <MainRouter />
+            </AppProvider>
           </SnackbarProvider>
         </ThemeProvider>
       </BrowserRouter>

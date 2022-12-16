@@ -1,7 +1,7 @@
 import axios from "axios";
 import GlobalConfig from "../config/GlobalConfig";
 
-const UserService = {
+const userService = {
   getAll: async (token: string) => {
     const res = await axios.get(GlobalConfig.server_url + "/admin/users/", {
       headers: {
@@ -20,4 +20,4 @@ const UserService = {
   },
 };
 
-export default UserService;
+export default userService;
