@@ -144,7 +144,7 @@ const UpdateCohort = () => {
       </Button>
       <Typography variant="h1">Update Cohort</Typography>
       <Grid container spacing={5}>
-        <Grid item md={6}>
+        <Grid item md={6} xs={12}>
           <Card>
             <CardHeader title="Cohort details" />
             <StyledCardContent>
@@ -175,7 +175,7 @@ const UpdateCohort = () => {
             </StyledCardContent>
           </Card>
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={6} xs={12}>
           {memberEditIndex === -1 ? (
             <Card>
               <CardHeader title="Add a member" />
@@ -195,7 +195,7 @@ const UpdateCohort = () => {
             />
           )}
         </Grid>
-        <Grid item md={12}>
+        <Grid item md={12} xs={12}>
           <Members
             members={members}
             displayScore={false}
@@ -205,7 +205,7 @@ const UpdateCohort = () => {
           />
         </Grid>
 
-        <Grid item md={12}>
+        <Grid item md={12} xs={12}>
           <Typography variant="caption" color="error">
             {error}
           </Typography>

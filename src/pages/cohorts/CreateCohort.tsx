@@ -131,7 +131,7 @@ const CreateCohort = () => {
       </Button>
       <Typography variant="h1">Create a Cohort</Typography>
       <Grid container spacing={5}>
-        <Grid item sm={12} md={6}>
+        <Grid item sm={12} md={6} xs={12}>
           <Card>
             <CardHeader title="Cohort details" />
             <StyledCardContent>
@@ -162,7 +162,7 @@ const CreateCohort = () => {
             </StyledCardContent>
           </Card>
         </Grid>
-        <Grid item sm={12} md={6}>
+        <Grid item sm={12} md={6} xs={12}>
           {memberEditIndex === -1 ? (
             <CreateMemberWrapper
               members={members}
@@ -179,7 +179,7 @@ const CreateCohort = () => {
             />
           )}
         </Grid>
-        <Grid item md={12}>
+        <Grid item md={12} xs={12}>
           <Members
             members={members}
             displayScore={false}
@@ -189,7 +189,7 @@ const CreateCohort = () => {
           />
         </Grid>
 
-        <Grid item md={12}>
+        <Grid item md={12} xs={12}>
           <Button
             color="primary"
             variant="contained"
