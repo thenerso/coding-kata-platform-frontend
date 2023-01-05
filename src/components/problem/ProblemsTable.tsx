@@ -1,4 +1,3 @@
-import { Delete, Edit } from "@mui/icons-material";
 import {
   Typography,
   TableContainer,
@@ -8,28 +7,18 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  IconButton,
   Chip,
 } from "@mui/material";
-import dayjs from "dayjs";
+
+import { useNavigate } from "react-router-dom";
 import { IProblem } from "../../interfaces/problemSet";
 import DifficultyChip from "./DifficultyChip";
 
 interface IProblemProps {
   problems: IProblem[];
-  //   displayScore: boolean;
-  //   displayEmptyCell?: boolean;
-  //   setProblemEditIndex?: (index: number) => void;
-  //   deleteProblem?: (index: number) => void;
 }
 
-const Problems = ({
-  problems,
-}: //   displayScore,
-//   displayEmptyCell = false,
-//   setProblemEditIndex,
-//   deleteProblem,
-IProblemProps) => {
+const ProblemsTable = ({ problems }: IProblemProps) => {
   const tableFields = ["Title", "Difficulty", "Tags"];
 
   return (
@@ -57,10 +46,6 @@ IProblemProps) => {
                 <RenderTableRow
                   key={`${row.id ? row.id : index}-${row.title}`}
                   row={row}
-                  //   index={index}
-                  //   setProblemEditIndex={setProblemEditIndex}
-                  //   deleteProblem={deleteProblem}
-                  //   displayScore={displayScore}
                 />
               ))
             )}
@@ -73,21 +58,17 @@ IProblemProps) => {
 
 interface IRenderTableRowProps {
   row: IProblem;
-  //   index: number;
-  //   displayScore: boolean;
-  //   setProblemEditIndex?: (index: number) => void;
-  //   deleteProblem?: (index: number) => void;
 }
 
-const RenderTableRow = ({
-  row,
-}: //   index,
-//   displayScore,
-//   setProblemEditIndex,
-//   deleteProblem,
-IRenderTableRowProps) => {
+const RenderTableRow = ({ row }: IRenderTableRowProps) => {
+  const navigate = useNavigate();
+
   return (
-    <TableRow>
+    <TableRow
+      hover
+      onClick={() => navigate(`/problems/${row.id}`)}
+      style={{ cursor: "pointer" }}
+    >
       <TableCell>{row.title}</TableCell>
       <TableCell>
         <DifficultyChip label={row.difficulty || ""} />
@@ -98,21 +79,8 @@ IRenderTableRowProps) => {
           <Chip label={tag} key={`${i}-${tag}`} />
         ))}
       </TableCell>
-      {/* {setProblemEditIndex && deleteProblem && (
-        <>
-          <TableCell>
-            <IconButton onClick={() => setProblemEditIndex(index)}>
-              <Edit />
-            </IconButton>
-
-            <IconButton onClick={() => deleteProblem(index)}>
-              <Delete />
-            </IconButton>
-          </TableCell>
-        </>
-      )} */}
     </TableRow>
   );
 };
 
-export default Problems;
+export default ProblemsTable;

@@ -1,15 +1,14 @@
 import styled from "@emotion/styled";
 import { ArrowBack, Edit } from "@mui/icons-material";
-import { Button, Typography, Fab, Divider, Chip, Box } from "@mui/material";
-import dayjs from "dayjs";
+import { Button, Typography, Fab, Divider, Chip } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Members from "../../components/cohort/member/Members";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 import DeleteProblemSet from "../../components/problem/DeleteProblemSet";
 import DifficultyChip from "../../components/problem/DifficultyChip";
-import Problems from "../../components/problem/Problems";
+import ProblemsTable from "../../components/problem/ProblemsTable";
+import Tags from "../../components/problem/Tags";
 import { IProblemSet } from "../../interfaces/problemSet";
 import authService from "../../services/authService";
 import problemSetServices from "../../services/problemSetService";
@@ -100,14 +99,13 @@ const ProblemSet = () => {
       <ChipWrapper>
         <DifficultyChip label={problemSet.difficulty || ""} />
         <Divider orientation="vertical" flexItem />
-        {problemSet.tags?.map((tag, i) => (
-          <Chip label={tag} key={`${i}-${tag}`} />
-        ))}
+
+        <Tags tags={problemSet.tags} />
       </ChipWrapper>
       <Typography variant="subtitle1">{problemSet.description}</Typography>
 
       <br />
-      <Problems problems={problemSet.problems} />
+      <ProblemsTable problems={problemSet.problems} />
     </>
   );
 };

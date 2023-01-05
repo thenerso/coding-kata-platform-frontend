@@ -1,0 +1,150 @@
+import styled from "@emotion/styled";
+import { ArrowBack, Edit } from "@mui/icons-material";
+import {
+  Button,
+  Typography,
+  Fab,
+  Divider,
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  List,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import EmptyState from "../../components/global/EmptyState";
+import Loading from "../../components/global/Loading";
+// import DeleteProblem from "../../components/problem/DeleteProblem";
+import DifficultyChip from "../../components/problem/DifficultyChip";
+
+import Tags from "../../components/problem/Tags";
+import TestCases from "../../components/problem/TestCases";
+import { IProblem } from "../../interfaces/problemSet";
+
+import authService from "../../services/authService";
+import problemServices from "../../services/problemService";
+
+/**
+ * Injected styles
+ *
+ */
+const TitleWrapper = styled("div")`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const TitleActionWrapper = styled("div")`
+  a {
+    margin: 0 5px;
+  }
+`;
+
+const ChipWrapper = styled("div")`
+  display: flex;
+  align-items: center;
+  div {
+    margin: 0 10px;
+  }
+  margin: 15px 0;
+`;
+
+const Problem = () => {
+  const [problem, setProblem] = useState<IProblem>();
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = authService.getAccessToken();
+
+    if (token) {
+      if (!problem && id) {
+        setError("");
+        setLoading(true);
+        problemServices
+          .getById(token, id)
+          .then((result) => {
+            setProblem(result);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log("Error getting problem sets", err);
+            setError("Error fetching data");
+            setLoading(false);
+          });
+      }
+    } else {
+      setError("Authentication error, please log in again");
+      setLoading(false);
+    }
+  }, [problem, id]);
+
+  if (loading) return <Loading />;
+  if (error || !problem) return <EmptyState message={error} />;
+  return (
+    <>
+      <Button
+        color="info"
+        onClick={() => navigate(-1)}
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button>
+      <ChipWrapper>
+        <DifficultyChip label={problem.difficulty || ""} />
+        <Divider orientation="vertical" flexItem />
+        <Tags tags={problem.tags} />
+      </ChipWrapper>
+      <TitleWrapper>
+        <Typography variant="h1">{problem.title}</Typography>
+        <TitleActionWrapper>
+          <Fab
+            color="primary"
+            aria-label="Edit problem set"
+            component={Link}
+            to={`/problem-sets/edit/${problem.id}`}
+          >
+            <Edit />
+          </Fab>
+
+          {/* {problem.id && <DeleteProblem id={problem.id} />} */}
+        </TitleActionWrapper>
+      </TitleWrapper>
+
+      <Typography variant="subtitle1">{problem.description}</Typography>
+
+      <br />
+      <Grid container spacing={5}>
+        <Grid item sm={6}>
+          <Card>
+            <CardHeader title="Public Test Cases" />
+            <CardContent>
+              <List>
+                {problem.testSuite?.publicCases?.map((item, index) => {
+                  return <TestCases testCase={item} />;
+                })}
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item sm={6}>
+          <Card>
+            <CardHeader title="Private Test Cases" />
+            <CardContent>
+              <List>
+                {problem.testSuite?.privateCases?.map((item, index) => {
+                  return <TestCases testCase={item} />;
+                })}
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </>
+  );
+};
+
+export default Problem;

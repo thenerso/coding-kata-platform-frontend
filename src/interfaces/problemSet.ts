@@ -25,8 +25,8 @@ export interface StartCode {
 }
 
 export interface TestSuite {
-  publicCases?: Case[];
-  privateCases?: Case[];
+  publicCases: Case[];
+  privateCases: Case[];
 }
 
 export interface Case {
