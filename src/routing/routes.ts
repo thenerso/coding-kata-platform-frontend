@@ -9,7 +9,7 @@ import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 // import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
 import ListProblemSets from "../pages/problem-sets/ListProblemSets";
-// import ProblemSet from "../pages/problem-sets/ProblemSet";
+import ProblemSet from "../pages/problem-sets/ProblemSet";
 // import UpdateProblemSet from "../pages/problem-sets/UpdateProblemSet";
 import Profile from "../pages/Profile";
 import ListUsers from "../pages/user/ListUsers";
@@ -116,7 +116,7 @@ const routes: IRouteType[] = [
    */
   // {
   //   name: "Create Problem Set",
-  //   link: "/problems-sets/new",
+  //   link: "/problem-sets/new",
   //   Component: CreateProblemSet,
   //   authed: UserRoles.ADMIN,
   // },
@@ -127,12 +127,12 @@ const routes: IRouteType[] = [
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
   },
-  // {
-  //   name: "Problem Set",
-  //   link: "/problem-sets/:id",
-  //   Component: ProblemSet,
-  //   authed: UserRoles.ADMIN,
-  // },
+  {
+    name: "Problem Set",
+    link: "/problem-sets/:id",
+    Component: ProblemSet,
+    authed: UserRoles.ADMIN,
+  },
   // {
   //   name: "Update Problem Set",
   //   link: "/problem-sets/edit/:id",

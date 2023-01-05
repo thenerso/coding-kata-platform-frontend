@@ -1,85 +1,115 @@
-// import { ArrowBack, Edit } from "@mui/icons-material";
-// import { Button, Fab, Typography } from "@mui/material";
-// import { useContext, useEffect, useState } from "react";
-// import { Link, useParams } from "react-router-dom";
-// import EmptyState from "../../components/global/EmptyState";
-// import Loading from "../../components/global/Loading";
-// import { IProblemSet } from "../../interfaces/problemSet";
-// import authService from "../../services/authService";
-// import problemSetServices from "../../services/problemSetService";
-// import Members from "../../components/problemSet/member/Members";
-// import styled from "@emotion/styled";
-// import DeleteProblemSet from "../../components/problemSet/DeleteProblemSet";
-// import dayjs from "dayjs";
-// import { AppContext, IAppContext } from "../../context/AppContext";
+import styled from "@emotion/styled";
+import { ArrowBack, Edit } from "@mui/icons-material";
+import { Button, Typography, Fab, Divider, Chip, Box } from "@mui/material";
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Members from "../../components/cohort/member/Members";
+import EmptyState from "../../components/global/EmptyState";
+import Loading from "../../components/global/Loading";
+import DeleteProblemSet from "../../components/problem/DeleteProblemSet";
+import DifficultyChip from "../../components/problem/DifficultyChip";
+import Problems from "../../components/problem/Problems";
+import { IProblemSet } from "../../interfaces/problemSet";
+import authService from "../../services/authService";
+import problemSetServices from "../../services/problemSetService";
 
-// /**
-//  * Injected styles
-//  *
-//  */
-// const TitleWrapper = styled("div")`
-//   display: flex;
-//   justify-content: space-between;
-// `;
+/**
+ * Injected styles
+ *
+ */
+const TitleWrapper = styled("div")`
+  display: flex;
+  justify-content: space-between;
+`;
 
-// const TitleActionWrapper = styled("div")`
-//   a {
-//     margin: 0 5px;
-//   }
-// `;
+const TitleActionWrapper = styled("div")`
+  a {
+    margin: 0 5px;
+  }
+`;
+
+const ChipWrapper = styled("div")`
+  display: flex;
+  align-items: center;
+  div {
+    margin: 0 10px;
+  }
+  margin-bottom: 10px;
+`;
 
 const ProblemSet = () => {
-  //   const { problemSets } = useContext(AppContext) as IAppContext;
+  const [problemSet, setProblemSet] = useState<IProblemSet>();
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
-  //   const [problemSet, setProblemSet] = useState<IProblemSet>();
-  //   const [error, setError] = useState<string>("");
+  const { id } = useParams();
 
-  //   const { id } = useParams();
+  useEffect(() => {
+    const token = authService.getAccessToken();
 
-  //   useEffect(() => {
-  //     const problemSet = problemSets.find(
-  //       (problemSet) => problemSet.id === parseInt(id as string)
-  //     );
-  //     if (problemSet) {
-  //       setProblemSet(problemSet);
-  //     } else {
-  //       setError("Could not find problemSet");
-  //     }
-  //   }, [problemSets, id]);
+    if (token) {
+      if (!problemSet && id) {
+        setError("");
+        setLoading(true);
+        problemSetServices
+          .getById(token, id)
+          .then((result) => {
+            setProblemSet(result);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log("Error getting problem sets", err);
+            setError("Error fetching data");
+            setLoading(false);
+          });
+      }
+    } else {
+      setError("Authentication error, please log in again");
+      setLoading(false);
+    }
+  }, [problemSet, id]);
 
-  //   if (error || !problemSet) return <EmptyState message={error} />;
-  return <></>;
-  //       <Button
-  //         color="info"
-  //         component={Link}
-  //         to="/problemSets"
-  //         startIcon={<ArrowBack />}
-  //       >
-  //         Back
-  //       </Button>
-  //       <TitleWrapper>
-  //         <Typography variant="h1">{problemSet.name}</Typography>
-  //         <TitleActionWrapper>
-  //           <Fab
-  //             color="primary"
-  //             aria-label="Edit problemSet"
-  //             component={Link}
-  //             to={`/problemSets/edit/${problemSet.id}`}
-  //           >
-  //             <Edit />
-  //           </Fab>
+  if (loading) return <Loading />;
+  if (error || !problemSet) return <EmptyState message={error} />;
+  return (
+    <>
+      <Button
+        color="info"
+        component={Link}
+        to="/problem-sets"
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button>
+      <TitleWrapper>
+        <Typography variant="h1">{problemSet.title}</Typography>
+        <TitleActionWrapper>
+          <Fab
+            color="primary"
+            aria-label="Edit problem set"
+            component={Link}
+            to={`/problem-sets/edit/${problemSet.id}`}
+          >
+            <Edit />
+          </Fab>
 
-  //           {problemSet.id && <DeleteProblemSet id={problemSet.id} />}
-  //         </TitleActionWrapper>
-  //       </TitleWrapper>
-  //       <Typography variant="caption">
-  //         {dayjs(problemSet.startDate).format("MMM D, YYYY")}
-  //       </Typography>
+          {problemSet.id && <DeleteProblemSet id={problemSet.id} />}
+        </TitleActionWrapper>
+      </TitleWrapper>
+      <ChipWrapper>
+        <DifficultyChip label={problemSet.difficulty || ""} />
+        <Divider orientation="vertical" flexItem />
+        {problemSet.tags?.map((tag, i) => (
+          <Chip label={tag} key={`${i}-${tag}`} />
+        ))}
+      </ChipWrapper>
+      <Typography variant="subtitle1">{problemSet.description}</Typography>
 
-  //       <br />
-  //       <Members members={problemSet.members} displayScore={true} />
-  //     </>
-  //   );
+      <br />
+      <Problems problems={problemSet.problems} />
+    </>
+  );
 };
 
 export default ProblemSet;

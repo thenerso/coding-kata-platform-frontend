@@ -3,11 +3,11 @@ export interface IProblemSet {
   title?: string;
   description?: string;
   difficulty?: string;
-  tags?: string[];
-  problems?: Problem[];
+  tags: string[];
+  problems: IProblem[];
 }
 
-export interface Problem {
+export interface IProblem {
   id?: number;
   title?: string;
   description?: string;
