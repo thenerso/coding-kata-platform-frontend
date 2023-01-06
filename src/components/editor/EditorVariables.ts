@@ -13,6 +13,12 @@ interface ILanguageOptions {
   java: string;
 }
 
+export const languagePlaceholders: ILanguageOptions = {
+  java: "public class Main {\n//write your solution here\n\n}",
+  javascript: "// write your solution here",
+  python: "# write your solution here",
+};
+
 export const languageOptions: ILanguageOptions = {
   javascript: "js",
   python: "py",
