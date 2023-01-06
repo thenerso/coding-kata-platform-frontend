@@ -124,7 +124,7 @@ const Problem = () => {
 
       <br />
       <Grid container spacing={5}>
-        <Grid item sm={6}>
+        <Grid item md={6} sm={12} xs={12}>
           <Card>
             <CardHeader title="Test Cases" />
             <CardContent>
@@ -151,14 +151,8 @@ const Problem = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item sm={6}>
-          <CodeEditorContainer startCode={problem.startCode} />
-          {/* <CodeEditor
-            lang="javascript"
-            value={problem.startCode?.js || ""}
-            onEditorValueChange={() => {}}
-            readOnly
-          /> */}
+        <Grid item md={6} sm={12} xs={12}>
+          <CodeEditorContainer startCode={problem.startCode} readOnly />
         </Grid>
       </Grid>
     </>

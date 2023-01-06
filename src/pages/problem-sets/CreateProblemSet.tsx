@@ -146,7 +146,7 @@ const CreateProblemSet = () => {
 
               <FormControl>
                 <InputLabel variant="standard" id="difficulty-label">
-                  Font Size
+                  Difficulty
                 </InputLabel>
                 <Select
                   variant="standard"

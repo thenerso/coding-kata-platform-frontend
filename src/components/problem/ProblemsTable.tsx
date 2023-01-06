@@ -7,12 +7,12 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Chip,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 import { IProblem } from "../../interfaces/problemSet";
 import DifficultyChip from "./DifficultyChip";
+import Tags from "./Tags";
 
 interface IProblemProps {
   problems: IProblem[];
@@ -75,9 +75,7 @@ const RenderTableRow = ({ row }: IRenderTableRowProps) => {
       </TableCell>
 
       <TableCell>
-        {row.tags?.map((tag, i) => (
-          <Chip label={tag} key={`${i}-${tag}`} />
-        ))}
+        <Tags tags={row.tags} />
       </TableCell>
     </TableRow>
   );

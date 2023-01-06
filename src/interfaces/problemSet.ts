@@ -43,8 +43,14 @@ export interface Put {
 }
 
 export enum DataType {
-  Int = "INT",
-  IntArray = "INT_ARRAY",
+  INT = "INT",
+  INT_ARRAY = "INT_ARRAY",
+  STRING = "STRING",
+  STRING_ARRAY = "STRING_ARRAY",
+  FLOAT = "FLOAT",
+  FLOAT_ARRAY = "FLOAT_ARRAY",
+  BOOLEAN = "BOOLEAN",
+  BOOLEAN_ARRAY = "BOOLEAN_ARRAY",
 }
 
 export enum Difficulty {

@@ -16,69 +16,40 @@ import {
   FormControl,
 } from "@mui/material";
 
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
-import problemSetServices from "../../services/problemSetService";
 
-import { Difficulty, IProblem, IProblemSet } from "../../interfaces/problemSet";
 import styled from "@emotion/styled";
 
 import { useSnackbar } from "notistack";
-import Loading from "../../components/global/Loading";
-import EmptyState from "../../components/global/EmptyState";
-import ProblemsTable from "../../components/problem/ProblemsTable";
+import { Difficulty, Put } from "../../interfaces/problemSet";
+import CreateTestCase from "../../components/problem/CreateTestCase";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
   flex-direction: column;
 `;
 
-const UpdateProblemSet = () => {
+const CreateProblem = () => {
   const [title, setTitle] = useState<string>("");
   const [titleError, setTitleError] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [descriptionError, setDescriptionError] = useState<string>("");
   const [difficulty, setDifficulty] = useState<string>("EASY");
   const [tags, setTags] = useState<string[]>([]);
-  const [problems, setProblems] = useState<IProblem[]>([]);
+  const [publicCases, setPublicCases] = useState([]);
+  const [privateCases, setPrivateCases] = useState([]);
+  const [startCode, setStartCode] = useState({
+    js: "",
+    py: "",
+    java: "",
+  });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = authService.getAccessToken();
-
-    if (token) {
-      if (id) {
-        setError("");
-        setLoading(true);
-        problemSetServices
-          .getById(token, id)
-          .then((result) => {
-            setTitle(result.title);
-            setDescription(result.description);
-            setDifficulty(result.difficulty);
-            setTags(result.tags);
-            setProblems(result.problems);
-
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log("Error getting cohorts", err);
-            setError("Error fetching data");
-            setLoading(false);
-          });
-      }
-    } else {
-      setError("Authentication error, please log in again");
-      setLoading(false);
-    }
-  }, [id]);
 
   const handleValidation = () => {
     let passed = true;
@@ -99,47 +70,45 @@ const UpdateProblemSet = () => {
   const submit = async () => {
     const token = authService.getAccessToken();
 
-    if (token) {
-      if (handleValidation()) {
-        const body: IProblemSet = {
-          id: parseInt(id as string),
-          title,
-          description,
-          tags,
-          difficulty,
-          problems,
-        };
-        setLoading(true);
-        try {
-          await problemSetServices.update(token, body);
+    // if (token) {
+    //   if (handleValidation()) {
+    //     const body: IProblem = {
+    //       title,
+    //       description,
+    //       tags,
+    //       difficulty
+    //     };
+    //     setLoading(true);
+    //     try {
+    //       const response = await problemServices.create(token, body);
 
-          enqueueSnackbar(`Problem Set updated`, {
-            variant: "success",
-          });
+    //       enqueueSnackbar(`Problem Set created`, {
+    //         variant: "success",
+    //       });
 
-          navigate(`/problem-sets/${id}`);
-        } catch (err: any) {
-          enqueueSnackbar(err.message, {
-            variant: "error",
-          });
+    //       navigate(`/problem-sets/${response?.id}`);
+    //     } catch (err: any) {
+    //       enqueueSnackbar(err.message, {
+    //         variant: "error",
+    //       });
 
-          setLoading(false);
-        }
-      }
-    } else {
-      enqueueSnackbar("Authentication error, please log in again", {
-        variant: "error",
-      });
-      setLoading(false);
-    }
+    //       setLoading(false);
+    //     }
+    //   }
+    // } else {
+    //   enqueueSnackbar("Authentication error, please log in again", {
+    //     variant: "error",
+    //   });
+    //   setLoading(false);
+    // }
   };
 
-  const updateTags = (event: any, values: any, reason: any, details: any) => {
-    setTags(values);
+  const updateTags = (event: any) => {
+    setTags([...tags, event.target.value]);
   };
 
-  if (loading) return <Loading />;
-  if (error) return <EmptyState message={error} />;
+  const addTestCase = (name: string, data: Put) => {};
+
   return (
     <>
       <Button
@@ -150,11 +119,11 @@ const UpdateProblemSet = () => {
       >
         Back
       </Button>
-      <Typography variant="h1">Update Problem Set</Typography>
+      <Typography variant="h1">Create a Problem</Typography>
       <Grid container spacing={5}>
-        <Grid item sm={12} md={12} xs={12}>
+        <Grid item sm={12} md={6} xs={12}>
           <Card>
-            <CardHeader title="Problem Set details" />
+            <CardHeader title="Problem details" />
             <StyledCardContent>
               <TextField
                 variant="standard"
@@ -173,6 +142,8 @@ const UpdateProblemSet = () => {
                 variant="standard"
                 name="description"
                 label="Description"
+                multiline
+                rows={3}
                 margin="normal"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -185,7 +156,7 @@ const UpdateProblemSet = () => {
 
               <FormControl>
                 <InputLabel variant="standard" id="difficulty-label">
-                  Font Size
+                  Difficulty
                 </InputLabel>
                 <Select
                   variant="standard"
@@ -230,8 +201,13 @@ const UpdateProblemSet = () => {
           </Card>
         </Grid>
 
-        <Grid item md={12}>
-          <ProblemsTable problems={problems} />
+        <Grid item sm={12} md={6} xs={12}>
+          <Card>
+            <CardHeader title="Problem details" />
+            <StyledCardContent>
+              <CreateTestCase setTestCase={addTestCase} />
+            </StyledCardContent>
+          </Card>
         </Grid>
 
         <Grid item md={12} xs={12}>
@@ -250,4 +226,4 @@ const UpdateProblemSet = () => {
   );
 };
 
-export default UpdateProblemSet;
+export default CreateProblem;

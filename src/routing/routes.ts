@@ -11,6 +11,8 @@ import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
 import ListProblemSets from "../pages/problem-sets/ListProblemSets";
 import ProblemSet from "../pages/problem-sets/ProblemSet";
 import UpdateProblemSet from "../pages/problem-sets/UpdateProblemSet";
+import CreateProblem from "../pages/problems/CreateProblem";
+import ListProblems from "../pages/problems/ListProblems";
 import Problem from "../pages/problems/Problem";
 import Profile from "../pages/Profile";
 import ListUsers from "../pages/user/ListUsers";
@@ -144,19 +146,19 @@ const routes: IRouteType[] = [
   /**
    * Problem
    */
-  // {
-  //   name: "Create Problem",
-  //   link: "/problems/new",
-  //   Component: CreateProblem,
-  //   authed: UserRoles.ADMIN,
-  // },
-  // {
-  //   name: "Problems",
-  //   link: "/problems",
-  //   Component: ListProblems,
-  //   authed: UserRoles.ADMIN,
-  //   showInMenuFor: UserRoles.ADMIN,
-  // },
+  {
+    name: "Create Problem",
+    link: "/problems/new",
+    Component: CreateProblem,
+    authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Problems",
+    link: "/problems",
+    Component: ListProblems,
+    authed: UserRoles.ADMIN,
+    showInMenuFor: UserRoles.ADMIN,
+  },
   {
     name: "Problem",
     link: "/problems/:id",
