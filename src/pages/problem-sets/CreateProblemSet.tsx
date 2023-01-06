@@ -1,109 +1,106 @@
-// import { ArrowBack, Check } from "@mui/icons-material";
-// import {
-//   TextField,
-//   Typography,
-//   Button,
-//   CircularProgress,
-//   Card,
-//   CardHeader,
-//   CardContent,
-//   Grid,
-// } from "@mui/material";
+import { ArrowBack, Check } from "@mui/icons-material";
+import {
+  TextField,
+  Typography,
+  Button,
+  CircularProgress,
+  Card,
+  CardHeader,
+  CardContent,
+  Grid,
+  Autocomplete,
+  Chip,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormControl,
+} from "@mui/material";
 
-// import dayjs, { Dayjs } from "dayjs";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../../services/authService";
+import problemSetServices from "../../services/problemSetService";
 
-// import { useContext, useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import authService from "../../services/authService";
-// import problemSetServices from "../../services/problemSetService";
-// import Members from "../../components/problemSet/member/Members";
-// import { IProblemSet } from "../../interfaces/problemSet";
-// import { IUser } from "../../interfaces/user";
-// import styled from "@emotion/styled";
-// import EditMember from "../../components/problemSet/member/UpdateMember";
-// import CreateMemberWrapper from "../../components/problemSet/member/CreateMemberWrapper";
-// import { useSnackbar } from "notistack";
-// import { AppContext, IAppContext } from "../../context/AppContext";
+import { Difficulty, IProblem, IProblemSet } from "../../interfaces/problemSet";
+import styled from "@emotion/styled";
 
-// const StyledCardContent = styled(CardContent)`
-//   display: flex;
-//   flex-direction: column;
-// `;
+import { useSnackbar } from "notistack";
+
+const StyledCardContent = styled(CardContent)`
+  display: flex;
+  flex-direction: column;
+`;
 
 const CreateProblemSet = () => {
   //   const { problemSets, setNewProblemSets } = useContext(
   //     AppContext
   //   ) as IAppContext;
 
-  //   const [name, setName] = useState("");
-  //   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
+  const [title, setTitle] = useState<string>("");
+  const [titleError, setTitleError] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [descriptionError, setDescriptionError] = useState<string>("");
+  const [difficulty, setDifficulty] = useState<string>("EASY");
+  const [tags, setTags] = useState<string[]>([]);
+  const [problems, setProblems] = useState<IProblem[]>([]);
 
-  //   const [members, setMembers] = useState<IUser[]>([]);
-  //   const [memberEditIndex, setMemberEditIndex] = useState(-1);
+  const [loading, setLoading] = useState(false);
 
-  //   const [nameError, setNameError] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
-  //   const [loading, setLoading] = useState(false);
+  const handleValidation = () => {
+    let passed = true;
 
-  //   const { enqueueSnackbar } = useSnackbar();
-  //   const navigate = useNavigate();
+    if (title === "") {
+      setTitleError("Title cannot be blank");
+      passed = false;
+    } else setTitleError("");
 
-  //   const handleValidation = () => {
-  //     let passed = true;
+    if (description === "") {
+      setDescriptionError("Description cannot be blank");
+      passed = false;
+    } else setDescriptionError("");
 
-  //     if (name === "") {
-  //       setNameError("Name cannot be blank");
-  //       passed = false;
-  //     } else setNameError("");
+    return passed;
+  };
 
-  //     if (
-  //       problemSets.findIndex((problemSet) => problemSet.name === name) !== -1
-  //     ) {
-  //       setNameError(`A problemSet with the name ${name} already exists`);
-  //       passed = false;
-  //     } else setNameError("");
+  const submit = async () => {
+    const token = authService.getAccessToken();
 
-  //     return passed;
-  //   };
+    if (token) {
+      if (handleValidation()) {
+        const body: IProblemSet = {
+          title,
+          description,
+          tags,
+          difficulty,
+          problems,
+        };
+        setLoading(true);
+        try {
+          const response = await problemSetServices.create(token, body);
 
-  //   const submit = async () => {
-  //     const token = authService.getAccessToken();
+          enqueueSnackbar(`Problem Set created`, {
+            variant: "success",
+          });
 
-  //     if (token) {
-  //       if (handleValidation()) {
-  //         const body: IProblemSet = {
-  //           name,
-  //           startDate: dayjs(startDate).format("YYYY-MM-DD"),
-  //           members,
-  //         };
-  //         setLoading(true);
-  //         try {
-  //           const response = await problemSetServices.create(token, body);
+          navigate(`/problem-sets/${response?.id}`);
+        } catch (err: any) {
+          enqueueSnackbar(err.message, {
+            variant: "error",
+          });
 
-  //           enqueueSnackbar(`ProblemSet created`, {
-  //             variant: "success",
-  //           });
-
-  //           setNewProblemSets([...problemSets, response as IProblemSet]);
-  //           navigate(`/problemSets/${response?.id}`);
-  //         } catch (err: any) {
-  //           enqueueSnackbar(err.message, {
-  //             variant: "error",
-  //           });
-
-  //           setLoading(false);
-  //         }
-  //       }
-  //     } else {
-  //       enqueueSnackbar("Authentication error, please log in again", {
-  //         variant: "error",
-  //       });
-  //       setLoading(false);
-  //     }
-  //   };
+          setLoading(false);
+        }
+      }
+    } else {
+      enqueueSnackbar("Authentication error, please log in again", {
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
 
   //   const updateEditedMember = (newMember: IUser) => {
   //     console.log(newMember.username);
@@ -123,90 +120,140 @@ const CreateProblemSet = () => {
   //     setMembers(members.filter((member, index) => index !== memberIndex));
   //   };
 
-  return <></>;
-};
-//       <Button
-//         color="info"
-//         component={Link}
-//         to="/problemSets"
-//         startIcon={<ArrowBack />}
-//       >
-//         Back
-//       </Button>
-//       <Typography variant="h1">Create a ProblemSet</Typography>
-//       <Grid container spacing={5}>
-//         <Grid item sm={12} md={6} xs={12}>
-//           <Card>
-//             <CardHeader title="ProblemSet details" />
-//             <StyledCardContent>
-//               <TextField
-//                 variant="standard"
-//                 name="name"
-//                 label="Name"
-//                 autoFocus={true}
-//                 margin="normal"
-//                 value={name}
-//                 onChange={(e) => setName(e.target.value)}
-//                 onKeyDown={(e) => e.key === "Enter" && submit()}
-//                 error={nameError !== ""}
-//                 helperText={nameError}
-//               />
-//               <br />
-//               <LocalizationProvider dateAdapter={AdapterDayjs}>
-//                 <DesktopDatePicker
-//                   label="Start Date"
-//                   inputFormat="DD/MM/YYYY"
-//                   value={startDate}
-//                   onChange={(e: Dayjs | null) => setStartDate(e)}
-//                   renderInput={(params) => (
-//                     <TextField variant="standard" {...params} />
-//                   )}
-//                 />
-//               </LocalizationProvider>
-//             </StyledCardContent>
-//           </Card>
-//         </Grid>
-//         <Grid item sm={12} md={6} xs={12}>
-//           {memberEditIndex === -1 ? (
-//             <CreateMemberWrapper
-//               members={members}
-//               setMembers={setMembers}
-//               startDate={startDate}
-//             />
-//           ) : (
-//             <EditMember
-//               members={members}
-//               memberIndex={memberEditIndex}
-//               editMember={updateEditedMember}
-//               startDate={startDate}
-//               setMemberEditIndex={setMemberEditIndex}
-//             />
-//           )}
-//         </Grid>
-//         <Grid item md={12} xs={12}>
-//           <Members
-//             members={members}
-//             displayScore={false}
-//             displayEmptyCell={true}
-//             setMemberEditIndex={setMemberEditIndex}
-//             deleteMember={deleteMember}
-//           />
-//         </Grid>
+  const updateTags = (event: any) => {
+    setTags([...tags, event.target.value]);
+  };
 
-//         <Grid item md={12} xs={12}>
-//           <Button
-//             color="primary"
-//             variant="contained"
-//             onClick={submit}
-//             disabled={loading}
-//             endIcon={loading ? <CircularProgress size={18} /> : <Check />}
-//           >
-//             Create
-//           </Button>
-//         </Grid>
-//       </Grid>
-//     </>
-//   );
-// };
+  return (
+    <>
+      <Button
+        color="info"
+        component={Link}
+        to="/problem-sets"
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button>
+      <Typography variant="h1">Create a Problem Set</Typography>
+      <Grid container spacing={5}>
+        <Grid item sm={12} md={6} xs={12}>
+          <Card>
+            <CardHeader title="Problem Set details" />
+            <StyledCardContent>
+              <TextField
+                variant="standard"
+                name="title"
+                label="Title"
+                autoFocus={true}
+                margin="normal"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && submit()}
+                error={titleError !== ""}
+                helperText={titleError}
+              />
+              <br />
+              <TextField
+                variant="standard"
+                name="description"
+                label="Description"
+                margin="normal"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && submit()}
+                error={descriptionError !== ""}
+                helperText={descriptionError}
+              />
+
+              <br />
+
+              <FormControl>
+                <InputLabel variant="standard" id="difficulty-label">
+                  Font Size
+                </InputLabel>
+                <Select
+                  variant="standard"
+                  labelId="difficulty-label"
+                  value={difficulty}
+                  label="Difficulty"
+                  onChange={(e) => setDifficulty(e.target.value as Difficulty)}
+                >
+                  {Object.keys(Difficulty).map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item.replace("_", " ").toLowerCase()}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <br />
+
+              <Autocomplete
+                multiple
+                id="problem-tags"
+                options={[]}
+                defaultValue={[]}
+                freeSolo
+                value={tags}
+                onChange={updateTags}
+                renderTags={(value: readonly string[], getTagProps) =>
+                  value.map((option: string, index: number) => (
+                    <Chip label={option} {...getTagProps({ index })} />
+                  ))
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Add tags"
+                    placeholder="Tags"
+                  />
+                )}
+              />
+            </StyledCardContent>
+          </Card>
+        </Grid>
+        <Grid item sm={12} md={6} xs={12}>
+          {/* {memberEditIndex === -1 ? (
+            <CreateMemberWrapper
+              members={members}
+              setMembers={setMembers}
+              startDate={startDate}
+            />
+          ) : (
+            <EditMember
+              members={members}
+              memberIndex={memberEditIndex}
+              editMember={updateEditedMember}
+              startDate={startDate}
+              setMemberEditIndex={setMemberEditIndex}
+            />
+          )} */}
+        </Grid>
+        <Grid item md={12} xs={12}>
+          {/* <Members
+            members={members}
+            displayScore={false}
+            displayEmptyCell={true}
+            setMemberEditIndex={setMemberEditIndex}
+            deleteMember={deleteMember}
+          /> */}
+        </Grid>
+
+        <Grid item md={12} xs={12}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={submit}
+            disabled={loading}
+            endIcon={loading ? <CircularProgress size={18} /> : <Check />}
+          >
+            Create
+          </Button>
+        </Grid>
+      </Grid>
+    </>
+  );
+};
 
 export default CreateProblemSet;

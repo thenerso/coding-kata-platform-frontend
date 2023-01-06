@@ -7,7 +7,7 @@ import ListCohorts from "../pages/cohorts/ListCohorts";
 import UpdateCohort from "../pages/cohorts/UpdateCohort";
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
-// import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
+import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
 import ListProblemSets from "../pages/problem-sets/ListProblemSets";
 import ProblemSet from "../pages/problem-sets/ProblemSet";
 import Problem from "../pages/problems/Problem";
@@ -115,12 +115,12 @@ const routes: IRouteType[] = [
   /**
    * Problem Set
    */
-  // {
-  //   name: "Create Problem Set",
-  //   link: "/problem-sets/new",
-  //   Component: CreateProblemSet,
-  //   authed: UserRoles.ADMIN,
-  // },
+  {
+    name: "Create Problem Set",
+    link: "/problem-sets/new",
+    Component: CreateProblemSet,
+    authed: UserRoles.ADMIN,
+  },
   {
     name: "Problem Sets",
     link: "/problem-sets",
