@@ -1,231 +1,247 @@
-// import { ArrowBack, Check } from "@mui/icons-material";
-// import {
-//   TextField,
-//   Typography,
-//   Button,
-//   CircularProgress,
-//   Card,
-//   CardHeader,
-//   CardContent,
-//   Grid,
-// } from "@mui/material";
+import { ArrowBack, Check } from "@mui/icons-material";
+import {
+  TextField,
+  Typography,
+  Button,
+  CircularProgress,
+  Card,
+  CardHeader,
+  CardContent,
+  Grid,
+  Autocomplete,
+  Chip,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormControl,
+} from "@mui/material";
 
-// import dayjs, { Dayjs } from "dayjs";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import authService from "../../services/authService";
+import problemSetServices from "../../services/problemSetService";
 
-// import { useContext, useEffect, useState } from "react";
-// import { Link, useNavigate, useParams } from "react-router-dom";
-// import authService from "../../services/authService";
-// import problemSetServices from "../../services/problemSetService";
-// import Members from "../../components/problemSet/member/Members";
-// import { IProblemSet } from "../../interfaces/problemSet";
-// import { IUser } from "../../interfaces/user";
-// import CreateMember from "../../components/problemSet/member/CreateSingleMember";
-// import styled from "@emotion/styled";
+import { Difficulty, IProblem, IProblemSet } from "../../interfaces/problemSet";
+import styled from "@emotion/styled";
 
-// import UpdateMember from "../../components/problemSet/member/UpdateMember";
-// import { useSnackbar } from "notistack";
-// import { AppContext, IAppContext } from "../../context/AppContext";
+import { useSnackbar } from "notistack";
+import Loading from "../../components/global/Loading";
+import EmptyState from "../../components/global/EmptyState";
 
-// const StyledCardContent = styled(CardContent)`
-//   display: flex;
-//   flex-direction: column;
-// `;
+const StyledCardContent = styled(CardContent)`
+  display: flex;
+  flex-direction: column;
+`;
 
 const UpdateProblemSet = () => {
-  //   const { problemSets, updateProblemSet } = useContext(
-  //     AppContext
-  //   ) as IAppContext;
+  const [title, setTitle] = useState<string>("");
+  const [titleError, setTitleError] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [descriptionError, setDescriptionError] = useState<string>("");
+  const [difficulty, setDifficulty] = useState<string>("EASY");
+  const [tags, setTags] = useState<string[]>([]);
+  const [problems, setProblems] = useState<IProblem[]>([]);
 
-  //   const [name, setName] = useState("");
-  //   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  //   const [members, setMembers] = useState<IUser[]>([]);
-  //   const [memberEditIndex, setMemberEditIndex] = useState(-1);
+  const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
-  //   const [nameError, setNameError] = useState("");
+  useEffect(() => {
+    const token = authService.getAccessToken();
 
-  //   const [loading, setLoading] = useState(false);
-  //   const [error, setError] = useState("");
+    if (token) {
+      if (id) {
+        setError("");
+        setLoading(true);
+        problemSetServices
+          .getById(token, id)
+          .then((result) => {
+            setTitle(result.title);
+            setDescription(result.description);
+            setDifficulty(result.difficulty);
+            setTags(result.tags);
 
-  //   const navigate = useNavigate();
-  //   const { id } = useParams();
-  //   const { enqueueSnackbar } = useSnackbar();
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log("Error getting cohorts", err);
+            setError("Error fetching data");
+            setLoading(false);
+          });
+      }
+    } else {
+      setError("Authentication error, please log in again");
+      setLoading(false);
+    }
+  }, [id]);
 
-  //   useEffect(() => {
-  //     const problemSet = problemSets.find(
-  //       (problemSet) => problemSet.id === parseInt(id as string)
-  //     );
-  //     if (problemSet) {
-  //       setName(problemSet.name);
-  //       setStartDate(dayjs(problemSet.startDate));
-  //       setMembers(problemSet.members);
-  //     } else {
-  //       setError("Could not find problemSet");
-  //     }
-  //   }, [problemSets, id]);
+  const handleValidation = () => {
+    let passed = true;
 
-  //   const handleValidation = () => {
-  //     let passed = true;
+    if (title === "") {
+      setTitleError("Title cannot be blank");
+      passed = false;
+    } else setTitleError("");
 
-  //     if (name === "") {
-  //       setNameError("Name cannot be blank");
-  //       passed = false;
-  //     } else setNameError("");
+    if (description === "") {
+      setDescriptionError("Description cannot be blank");
+      passed = false;
+    } else setDescriptionError("");
 
-  //     const problemSetIndex = problemSets.findIndex((problemSet) => {
-  //       return (
-  //         problemSet.name === name && problemSet.id !== parseInt(id as string)
-  //       );
-  //     });
-  //     if (problemSetIndex !== -1) {
-  //       setNameError(`A problemSet with the name ${name} already exists`);
-  //       passed = false;
-  //     } else setNameError("");
+    return passed;
+  };
 
-  //     return passed;
-  //   };
+  const submit = async () => {
+    const token = authService.getAccessToken();
 
-  //   const submit = async () => {
-  //     const token = authService.getAccessToken();
+    if (token) {
+      if (handleValidation()) {
+        const body: IProblemSet = {
+          id: parseInt(id as string),
+          title,
+          description,
+          tags,
+          difficulty,
+          problems,
+        };
+        setLoading(true);
+        try {
+          await problemSetServices.update(token, body);
 
-  //     if (token && id) {
-  //       if (handleValidation()) {
-  //         const body: IProblemSet = {
-  //           id: parseInt(id),
-  //           name,
-  //           startDate: dayjs(startDate).format("YYYY-MM-DD"),
-  //           members,
-  //         };
-  //         setError("");
-  //         setLoading(true);
-  //         try {
-  //           await problemSetServices.update(token, body);
+          enqueueSnackbar(`Problem Set updated`, {
+            variant: "success",
+          });
 
-  //           updateProblemSet(body);
-  //           enqueueSnackbar(`ProblemSet updated`, {
-  //             variant: "success",
-  //           });
-  //           navigate(`/problemSets/${id}`);
-  //         } catch (err: any) {
-  //           setError(err.message ? err.message : "Server Error");
-  //           setLoading(false);
-  //         }
-  //       }
-  //     } else {
-  //       setError("Authentication error, please log in again");
-  //       setLoading(false);
-  //     }
-  //   };
+          navigate(`/problem-sets/${id}`);
+        } catch (err: any) {
+          enqueueSnackbar(err.message, {
+            variant: "error",
+          });
 
-  //   const updateEditedMember = (newMember: IUser) => {
-  //     setMembers(
-  //       members.map((member, index) => {
-  //         if (index === memberEditIndex) {
-  //           return newMember;
-  //         }
-  //         return member;
-  //       })
-  //     );
-  //     setMemberEditIndex(-1);
-  //   };
+          setLoading(false);
+        }
+      }
+    } else {
+      enqueueSnackbar("Authentication error, please log in again", {
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
 
-  //   const deleteMember = (memberIndex: number) => {
-  //     setMembers(members.filter((member, index) => index !== memberIndex));
-  //   };
+  const updateTags = (event: any) => {
+    setTags([...tags, event.target.value]);
+  };
 
-  return <></>;
-  //       <Button
-  //         color="info"
-  //         component={Link}
-  //         to="/problemSets"
-  //         startIcon={<ArrowBack />}
-  //       >
-  //         Back
-  //       </Button>
-  //       <Typography variant="h1">Update ProblemSet</Typography>
-  //       <Grid container spacing={5}>
-  //         <Grid item md={6} xs={12}>
-  //           <Card>
-  //             <CardHeader title="ProblemSet details" />
-  //             <StyledCardContent>
-  //               <TextField
-  //                 variant="standard"
-  //                 name="name"
-  //                 label="Name"
-  //                 autoFocus={true}
-  //                 margin="normal"
-  //                 value={name}
-  //                 onChange={(e) => setName(e.target.value)}
-  //                 onKeyDown={(e) => e.key === "Enter" && submit()}
-  //                 error={nameError !== ""}
-  //                 helperText={nameError}
-  //               />
-  //               <br />
-  //               <LocalizationProvider dateAdapter={AdapterDayjs}>
-  //                 <DesktopDatePicker
-  //                   label="Start Date"
-  //                   inputFormat="DD/MM/YYYY"
-  //                   value={startDate}
-  //                   onChange={(e: Dayjs | null) => setStartDate(e)}
-  //                   renderInput={(params) => (
-  //                     <TextField variant="standard" {...params} />
-  //                   )}
-  //                 />
-  //               </LocalizationProvider>
-  //             </StyledCardContent>
-  //           </Card>
-  //         </Grid>
-  //         <Grid item md={6} xs={12}>
-  //           {memberEditIndex === -1 ? (
-  //             <Card>
-  //               <CardHeader title="Add a member" />
-  //               <CreateMember
-  //                 members={members}
-  //                 setMembers={setMembers}
-  //                 startDate={startDate}
-  //               />
-  //             </Card>
-  //           ) : (
-  //             <UpdateMember
-  //               members={members}
-  //               memberIndex={memberEditIndex}
-  //               editMember={updateEditedMember}
-  //               startDate={startDate}
-  //               setMemberEditIndex={setMemberEditIndex}
-  //             />
-  //           )}
-  //         </Grid>
-  //         <Grid item md={12} xs={12}>
-  //           <Members
-  //             members={members}
-  //             displayScore={false}
-  //             displayEmptyCell={true}
-  //             setMemberEditIndex={setMemberEditIndex}
-  //             deleteMember={deleteMember}
-  //           />
-  //         </Grid>
+  if (loading) return <Loading />;
+  if (error) return <EmptyState message={error} />;
+  return (
+    <>
+      <Button
+        color="info"
+        component={Link}
+        to="/problem-sets"
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button>
+      <Typography variant="h1">Update a Problem Set</Typography>
+      <Grid container spacing={5}>
+        <Grid item sm={12} md={6} xs={12}>
+          <Card>
+            <CardHeader title="Problem Set details" />
+            <StyledCardContent>
+              <TextField
+                variant="standard"
+                name="title"
+                label="Title"
+                autoFocus={true}
+                margin="normal"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && submit()}
+                error={titleError !== ""}
+                helperText={titleError}
+              />
+              <br />
+              <TextField
+                variant="standard"
+                name="description"
+                label="Description"
+                margin="normal"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && submit()}
+                error={descriptionError !== ""}
+                helperText={descriptionError}
+              />
 
-  //         <Grid item md={12} xs={12}>
-  //           <Typography variant="caption" color="error">
-  //             {error}
-  //           </Typography>
-  //           <br />
-  //           <Button
-  //             color="primary"
-  //             variant="contained"
-  //             onClick={submit}
-  //             disabled={loading}
-  //             endIcon={loading ? <CircularProgress size={18} /> : <Check />}
-  //           >
-  //             Update
-  //           </Button>
-  //         </Grid>
-  //       </Grid>
-  //     </>
-  //   );
+              <br />
+
+              <FormControl>
+                <InputLabel variant="standard" id="difficulty-label">
+                  Font Size
+                </InputLabel>
+                <Select
+                  variant="standard"
+                  labelId="difficulty-label"
+                  value={difficulty}
+                  label="Difficulty"
+                  onChange={(e) => setDifficulty(e.target.value as Difficulty)}
+                >
+                  {Object.keys(Difficulty).map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item.replace("_", " ").toLowerCase()}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <br />
+
+              <Autocomplete
+                multiple
+                id="problem-tags"
+                options={[]}
+                defaultValue={[]}
+                freeSolo
+                value={tags}
+                onChange={updateTags}
+                renderTags={(value: readonly string[], getTagProps) =>
+                  value.map((option: string, index: number) => (
+                    <Chip label={option} {...getTagProps({ index })} />
+                  ))
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Add tags"
+                    placeholder="Tags"
+                  />
+                )}
+              />
+            </StyledCardContent>
+          </Card>
+        </Grid>
+
+        <Grid item md={12} xs={12}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={submit}
+            disabled={loading}
+            endIcon={loading ? <CircularProgress size={18} /> : <Check />}
+          >
+            Save
+          </Button>
+        </Grid>
+      </Grid>
+    </>
+  );
 };
 
 export default UpdateProblemSet;

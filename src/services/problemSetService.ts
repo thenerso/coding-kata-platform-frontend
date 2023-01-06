@@ -15,15 +15,29 @@ const problemSetServices = {
     return res.data;
   },
   getById: async (token: string, id: string): Promise<IProblemSet> => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/user/problems/sets/${id}`,
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
+    try {
+      const response = await axios.get(
+        `${GlobalConfig.server_url}/user/problems/sets/${id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response?.data.id) {
+        return response.data;
       }
-    );
-    return res.data;
+      throw AxiosError;
+    } catch (err: any) {
+      // If we get an axios error, we can assume the server down
+      if (err?.code === "ERR_NETWORK") {
+        throw new Error("Server error, please try again later");
+      }
+      if (typeof err.response.data === "string") {
+        throw new Error(err.response.data);
+      }
+      throw new Error("Could not find Problem Set");
+    }
   },
   create: async (token: string, body: IProblemSet) => {
     try {

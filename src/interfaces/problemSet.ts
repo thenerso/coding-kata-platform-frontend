@@ -1,8 +1,8 @@
 export interface IProblemSet {
   id?: number;
-  title?: string;
-  description?: string;
-  difficulty?: string;
+  title: string;
+  description: string;
+  difficulty: string;
   tags: string[];
   problems: IProblem[];
 }

@@ -21,7 +21,7 @@ import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 import problemSetServices from "../../services/problemSetService";
 
-import { Difficulty, IProblem, IProblemSet } from "../../interfaces/problemSet";
+import { Difficulty, IProblemSet } from "../../interfaces/problemSet";
 import styled from "@emotion/styled";
 
 import { useSnackbar } from "notistack";
@@ -32,17 +32,12 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 const CreateProblemSet = () => {
-  //   const { problemSets, setNewProblemSets } = useContext(
-  //     AppContext
-  //   ) as IAppContext;
-
   const [title, setTitle] = useState<string>("");
   const [titleError, setTitleError] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [descriptionError, setDescriptionError] = useState<string>("");
   const [difficulty, setDifficulty] = useState<string>("EASY");
   const [tags, setTags] = useState<string[]>([]);
-  const [problems, setProblems] = useState<IProblem[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -75,7 +70,7 @@ const CreateProblemSet = () => {
           description,
           tags,
           difficulty,
-          problems,
+          problems: [],
         };
         setLoading(true);
         try {
@@ -101,24 +96,6 @@ const CreateProblemSet = () => {
       setLoading(false);
     }
   };
-
-  //   const updateEditedMember = (newMember: IUser) => {
-  //     console.log(newMember.username);
-
-  //     setMembers(
-  //       members.map((member, index) => {
-  //         if (index === memberEditIndex) {
-  //           return newMember;
-  //         }
-  //         return member;
-  //       })
-  //     );
-  //     setMemberEditIndex(-1);
-  //   };
-
-  //   const deleteMember = (memberIndex: number) => {
-  //     setMembers(members.filter((member, index) => index !== memberIndex));
-  //   };
 
   const updateTags = (event: any) => {
     setTags([...tags, event.target.value]);
@@ -213,32 +190,6 @@ const CreateProblemSet = () => {
             </StyledCardContent>
           </Card>
         </Grid>
-        <Grid item sm={12} md={6} xs={12}>
-          {/* {memberEditIndex === -1 ? (
-            <CreateMemberWrapper
-              members={members}
-              setMembers={setMembers}
-              startDate={startDate}
-            />
-          ) : (
-            <EditMember
-              members={members}
-              memberIndex={memberEditIndex}
-              editMember={updateEditedMember}
-              startDate={startDate}
-              setMemberEditIndex={setMemberEditIndex}
-            />
-          )} */}
-        </Grid>
-        <Grid item md={12} xs={12}>
-          {/* <Members
-            members={members}
-            displayScore={false}
-            displayEmptyCell={true}
-            setMemberEditIndex={setMemberEditIndex}
-            deleteMember={deleteMember}
-          /> */}
-        </Grid>
 
         <Grid item md={12} xs={12}>
           <Button
@@ -248,7 +199,7 @@ const CreateProblemSet = () => {
             disabled={loading}
             endIcon={loading ? <CircularProgress size={18} /> : <Check />}
           >
-            Create
+            Save
           </Button>
         </Grid>
       </Grid>
