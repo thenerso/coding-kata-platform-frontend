@@ -9,13 +9,12 @@ import {
   DialogTitle,
   Fab,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import authService from "../../services/authService";
 import problemSetServices from "../../services/problemSetService";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import { AppContext, IAppContext } from "../../context/AppContext";
 
 interface IDeleteProblemSetProps {
   id: number;

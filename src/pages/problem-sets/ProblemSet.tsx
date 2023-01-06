@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { ArrowBack, Edit } from "@mui/icons-material";
-import { Button, Typography, Fab, Divider, Chip } from "@mui/material";
+import { Button, Typography, Fab, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";

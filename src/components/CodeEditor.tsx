@@ -1,10 +1,17 @@
 import styled from "@emotion/styled";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
-import AceEditor from "react-ace-builds";
-import "react-ace-builds/webpack-resolver-min";
 
-function onLoad(evt: any) {}
+import AceEditor from "react-ace";
+
+import "ace-builds/src-noconflict/mode-java";
+
+import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-terminal";
+import "ace-builds/src-noconflict/theme-solarized_light";
+
+import "ace-builds/src-noconflict/ext-language_tools";
 
 const StyledFormControl = styled(FormControl)`
   flex: 2;
@@ -13,7 +20,7 @@ const StyledFormControl = styled(FormControl)`
 
 const OptionsWrapper = styled("div")`
   display: flex;
-  & div:first-child {
+  & div:first-of-type {
     flex: 1;
   }
   margin-bottom: 10px;
@@ -39,12 +46,12 @@ const CodeEditor: React.FC<ICodeEditor> = ({
   const themeOptions = [
     "monokai",
     "github",
-    "tomorrow",
-    "kuroir",
-    "twilight",
-    "xcode",
-    "textmate",
-    "solarized_dark",
+    // "tomorrow",
+    // "kuroir",
+    // "twilight",
+    // "xcode",
+    // "textmate",
+    // "solarized_dark",
     "solarized_light",
     "terminal",
   ];
@@ -86,8 +93,7 @@ const CodeEditor: React.FC<ICodeEditor> = ({
         readOnly={readOnly}
         mode={lang}
         theme={theme}
-        name="blah2"
-        onLoad={onLoad}
+        name="code-editor"
         onChange={onEditorValueChange}
         fontSize={fontSize}
         showPrintMargin={true}

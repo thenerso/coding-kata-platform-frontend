@@ -22,7 +22,6 @@ import DifficultyChip from "../../components/problem/DifficultyChip";
 
 import Tags from "../../components/problem/Tags";
 import TestCases from "../../components/problem/TestCases";
-import CodeEditorContainer from "../../containers/CodeEditorContainer";
 import { IProblem } from "../../interfaces/problemSet";
 
 import authService from "../../services/authService";
@@ -132,13 +131,21 @@ const Problem = () => {
               <List>
                 <StyledChip label="Public" color="success" />
                 {problem.testSuite?.publicCases?.map((item, index) => {
-                  return <TestCases testCase={item} defaultOpen />;
+                  return (
+                    <TestCases
+                      key={`${index}-${item.id}`}
+                      testCase={item}
+                      defaultOpen
+                    />
+                  );
                 })}
                 <Divider />
                 <StyledChip label="Private" color="warning" />
 
                 {problem.testSuite?.privateCases?.map((item, index) => {
-                  return <TestCases testCase={item} />;
+                  return (
+                    <TestCases key={`${index}-${item.id}`} testCase={item} />
+                  );
                 })}
               </List>
             </CardContent>
