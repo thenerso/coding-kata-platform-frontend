@@ -1,16 +1,19 @@
 import { createTheme } from "@mui/material/styles";
-
+// import { createTheme } from '@material-ui/core/styles';
 const theme = createTheme({
   //custom theme will go herec
-  components: {
-    MuiAppBar: {
-      styleOverrides: {
-        
-      }
-    }
-  },
+  // components: {
+  //   MuiAppBar: {
+  //     overrides: {
+  //       color: '#225D61'
+  //     }
+  //   }
+  // },
   palette: {
     mode: 'light',
+    background: {
+      default: '#225D61',
+    },
     primary: {
       main: '#ff8f00',
     },
