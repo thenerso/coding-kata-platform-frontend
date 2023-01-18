@@ -15,6 +15,7 @@ import CreateProblem from "../pages/problems/CreateProblem";
 import ListProblems from "../pages/problems/ListProblems";
 import Problem from "../pages/problems/Problem";
 import Profile from "../pages/Profile";
+import ListSolutions from "../pages/solutions/ListAllSolutions";
 import ListUsers from "../pages/user/ListUsers";
 
 export enum UserRoles {
@@ -74,6 +75,7 @@ const routes: IRouteType[] = [
     Component: Profile,
     authed: UserRoles.USER,
   },
+
   /**
    * User
    */
@@ -164,6 +166,13 @@ const routes: IRouteType[] = [
     link: "/problems/:id",
     Component: Problem,
     authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Solutions",
+    link: "/solutions",
+    Component: ListSolutions,
+    authed: UserRoles.ADMIN,
+    showInMenuFor: UserRoles.ADMIN
   },
   // {
   //   name: "Update Problem",
