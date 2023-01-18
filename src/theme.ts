@@ -1,7 +1,23 @@
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
-  //custom theme will go here
+  //custom theme will go herec
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        
+      }
+    }
+  },
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#ff8f00',
+    },
+    secondary: {
+      main: '#225D61',
+    },
+  },
   typography: {
     fontFamily: "Roboto, sans-serif",
     h1: {
@@ -13,7 +29,7 @@ const theme = createTheme({
       fontWeight: 600,
       fontSize: "1.6rem",
       marginBottom: "20px",
-    },
+    }
   },
 });
 

@@ -7,6 +7,7 @@ import {
   MenuItem,
   Snackbar,
   Button,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 
@@ -70,7 +71,7 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
   return (
     <React.Fragment>
       <AppBar position="sticky">
-        <Toolbar style={{ justifyContent: "space-between" }}>
+        <Toolbar  style={{ justifyContent: "space-between" }}>
           <Link to="/">
             <Box
               component="img"
