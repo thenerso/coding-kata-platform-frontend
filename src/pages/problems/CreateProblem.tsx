@@ -46,6 +46,9 @@ const CreateProblem = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [publicCases, setPublicCases] = useState<Case[]>([]);
   const [privateCases, setPrivateCases] = useState<Case[]>([]);
+
+  const [existingTestCase, setExistingTestCase] = useState<Case | null>(null);
+
   const [startCode, setStartCode] = useState({
     js: "",
     py: "",
@@ -120,6 +123,34 @@ const CreateProblem = () => {
       setPublicCases([...publicCases, { inputs: inputs, output }]);
     } else {
       setPrivateCases([...privateCases, { inputs: inputs, output }]);
+    }
+  };
+
+  const updateExistingTestCase = (testCase: Case) => {
+    const newTestCases = testCase.isPublic
+      ? [...publicCases]
+      : [...privateCases];
+    newTestCases[testCase.id || 0] = {
+      inputs: testCase.inputs,
+      output: testCase.output,
+    };
+    testCase.isPublic
+      ? setPublicCases(newTestCases)
+      : setPrivateCases(newTestCases);
+  };
+
+  const testCaseAction = (isPublic: boolean, action: string, index: number) => {
+    if (action === "edit") {
+      const testCaseToEdit = isPublic
+        ? publicCases[index]
+        : privateCases[index];
+      testCaseToEdit.isPublic = isPublic;
+      testCaseToEdit.id = index;
+      setExistingTestCase(testCaseToEdit);
+    } else {
+      let newTestCases = [...(isPublic ? publicCases : privateCases)];
+      newTestCases.splice(index, 1);
+      isPublic ? setPublicCases(newTestCases) : setPrivateCases(newTestCases);
     }
   };
 
@@ -218,7 +249,13 @@ const CreateProblem = () => {
         <Grid item sm={12} md={6} xs={12}>
           <Card>
             <StyledCardContent>
-              <CreateTestCase setTestCase={addTestCase} />
+              <CreateTestCase
+                functionName={title || "functionName"}
+                existingTestCase={existingTestCase}
+                setExistingTestCase={setExistingTestCase}
+                updateExistingTestCase={updateExistingTestCase}
+                setTestCase={addTestCase}
+              />
 
               <List>
                 <StyledChip label="Public" color="success" />
@@ -233,6 +270,9 @@ const CreateProblem = () => {
                         key={`${index}-${item.output.value}`}
                         functionName={title || "functionName"}
                         testCase={item}
+                        isPublic
+                        testCaseAction={testCaseAction}
+                        index={index}
                       />
                     );
                   })
@@ -250,6 +290,8 @@ const CreateProblem = () => {
                         key={`${index}-${item.output.value}`}
                         functionName={title || "functionName"}
                         testCase={item}
+                        testCaseAction={testCaseAction}
+                        index={index}
                       />
                     );
                   })

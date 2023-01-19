@@ -32,6 +32,7 @@ export interface TestSuite {
 
 export interface Case {
   id?: number;
+  isPublic?: boolean;
   inputs: Put[];
   output: Put;
 }

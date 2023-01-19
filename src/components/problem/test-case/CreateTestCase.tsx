@@ -14,8 +14,8 @@ import {
   List,
   Switch,
 } from "@mui/material";
-import { useState } from "react";
-import { DataType, Put } from "../../../interfaces/problemSet";
+import { useEffect, useState } from "react";
+import { Case, DataType, Put } from "../../../interfaces/problemSet";
 import TestCases from "../TestCases";
 import CreateData from "./CreateData";
 
@@ -28,6 +28,10 @@ const StyledChip = styled(Chip)`
 `;
 
 interface ICreateTestCaseProps {
+  functionName: string;
+  existingTestCase: Case | null;
+  setExistingTestCase: (param: any) => void;
+  updateExistingTestCase: (testCase: Case) => void;
   setTestCase: (isPublic: boolean, inputs: Put[], output: Put) => void;
 }
 
@@ -36,7 +40,13 @@ const defaultInputValue = {
   dataType: "INT" as DataType,
 };
 
-const CreateTestCase = ({ setTestCase }: ICreateTestCaseProps) => {
+const CreateTestCase = ({
+  functionName,
+  existingTestCase,
+  setExistingTestCase,
+  updateExistingTestCase,
+  setTestCase,
+}: ICreateTestCaseProps) => {
   const [open, setOpen] = useState(false);
 
   const [isPublic, setIsPublic] = useState(false);
@@ -54,13 +64,40 @@ const CreateTestCase = ({ setTestCase }: ICreateTestCaseProps) => {
     return passed;
   };
 
+  const resetData = () => {
+    setOpen(false);
+    setInputs([defaultInputValue]);
+    setOutput(defaultInputValue);
+    setIsPublic(false);
+    setExistingTestCase(null);
+  };
+
+  useEffect(() => {
+    if (existingTestCase && open === false) {
+      setInputs(existingTestCase.inputs);
+      setOutput(existingTestCase.output);
+      setIsPublic(existingTestCase.isPublic || false);
+      setOpen(true);
+    }
+    // if (open === false && inputs.length > 0) {
+    //   resetData();
+    // }
+  }, [existingTestCase, inputs.length, open, setExistingTestCase]);
+
   const submit = () => {
     if (handleValidation()) {
-      setTestCase(isPublic, inputs, output);
+      if (existingTestCase) {
+        updateExistingTestCase({
+          id: existingTestCase.id,
+          isPublic,
+          inputs,
+          output,
+        });
+      } else {
+        setTestCase(isPublic, inputs, output);
+      }
       setOpen(false);
-      setInputs([defaultInputValue]);
-      setOutput(defaultInputValue);
-      setIsPublic(false);
+      resetData();
     }
   };
 
@@ -112,7 +149,7 @@ const CreateTestCase = ({ setTestCase }: ICreateTestCaseProps) => {
       <Dialog
         fullWidth
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => resetData()}
         aria-labelledby="create-test-case-popup"
         aria-describedby="popup for creating a testcase"
       >
@@ -154,7 +191,10 @@ const CreateTestCase = ({ setTestCase }: ICreateTestCaseProps) => {
                 label={isPublic ? "Public" : "Private"}
                 color={isPublic ? "success" : "error"}
               />
-              <TestCases functionName="test" testCase={{ inputs, output }} />
+              <TestCases
+                functionName={functionName}
+                testCase={{ inputs, output }}
+              />
             </List>
           </>
         </DialogContent>

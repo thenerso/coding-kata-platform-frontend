@@ -1,4 +1,4 @@
-import { Edit, InputOutlined } from "@mui/icons-material";
+import { Delete, Edit, InputOutlined } from "@mui/icons-material";
 import {
   ListItem,
   ListItemIcon,
@@ -11,9 +11,18 @@ import { Case } from "../../interfaces/problemSet";
 interface ITestCasesProps {
   functionName: string;
   testCase: Case;
+  isPublic?: boolean;
+  index?: number;
+  testCaseAction?: (isPublic: boolean, action: string, index: number) => void;
 }
 
-const TestCases = ({ functionName, testCase }: ITestCasesProps) => {
+const TestCases = ({
+  functionName,
+  testCase,
+  isPublic = false,
+  index = 0,
+  testCaseAction,
+}: ITestCasesProps) => {
   return (
     <>
       <ListItem>
@@ -42,12 +51,24 @@ const TestCases = ({ functionName, testCase }: ITestCasesProps) => {
             </Tooltip>
           </code>
         </ListItemText>
-
-        <ListItemIcon>
-          <IconButton>
-            <Edit />
-          </IconButton>
-        </ListItemIcon>
+        {testCaseAction && (
+          <>
+            <ListItemIcon>
+              <IconButton
+                onClick={() => testCaseAction(isPublic, "edit", index)}
+              >
+                <Edit />
+              </IconButton>
+            </ListItemIcon>
+            <ListItemIcon>
+              <IconButton
+                onClick={() => testCaseAction(isPublic, "delete", index)}
+              >
+                <Delete />
+              </IconButton>
+            </ListItemIcon>
+          </>
+        )}
       </ListItem>
     </>
   );
