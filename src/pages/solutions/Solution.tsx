@@ -111,16 +111,15 @@ const Solution = () => {
                 <Tags tags={solution.problem?.tags} />
             </ChipWrapper>
             <TitleWrapper>
-                <Typography variant="h1">{`Solution for '${solution.problem.title}' by '${solution.user.username}'`}</Typography>
+                <Typography variant="h1">{`${solution.correct ? "Correct" : "Attempted"} Solution for '${solution.problem.title}'`}</Typography>
                 <TitleActionWrapper>
                     <Fab
-                        color="secondary"
-                        aria-label="Edit problem set"
+                        color= {solution.correct ? "success" : "error"}
+                        aria-label="Correct"
                     >
-                        <Done />
-                    </Fab>
-
                     {/* {problem.id && <DeleteProblem id={problem.id} />} */}
+                        {solution.correct ? <Done /> : <Typography>X</Typography>}
+                    </Fab>
                 </TitleActionWrapper>
             </TitleWrapper>
 
@@ -161,7 +160,9 @@ const Solution = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell><Typography>{`User: ${solution.user.username}`}</Typography></TableCell>
-                                    <TableCell><Typography>{`Language: ${solution.lang === "js" ? "javascript" : solution.lang}`}</Typography></TableCell>
+                                    <TableCell><Typography>{`Language: ${solution.lang === "js" 
+                                    ? "JavaScript" : solution.lang === "python" ? "Python": "Java"
+                                }`}</Typography></TableCell>
                                     <TableCell><Typography>{`Sumbitted: ${solution.submissionDate}`}</Typography></TableCell>
                                 </TableRow>
                             </TableHead>
@@ -169,7 +170,7 @@ const Solution = () => {
                     </TableContainer>
                     <CodeEditor fontSize={16}
                         theme={'monokai'}
-                        language={solution.lang === "js" ? "javascript" : solution.lang}
+                        language={solution.lang === "js" ? "JavaScript" : solution.lang}
                         value={solution.code}
                         onEditorValueChange={() => { }}
                         readOnly />

@@ -34,7 +34,7 @@ const ListAllSolutions = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  const tableFields = ["ID", "Problem",  "Difficulty", "Language", "User", "Submission Date"];
+  const tableFields = ["ID", "Problem",  "Difficulty", "Language", "User", "Submission Date", "Status"];
 
   const navigate = useNavigate();
 
@@ -103,6 +103,7 @@ const ListAllSolutions = () => {
                   <TableCell>{row.lang}</TableCell>
                   <TableCell>{row.user?.username}</TableCell>
                   <TableCell>{row.submissionDate}</TableCell>
+                  <TableCell>{row.correct ? "Correct" : "Incorrect"}</TableCell>
                 </TableRow>
                 
               ))
