@@ -11,6 +11,17 @@ const solutionService = {
     });
     return res.data;
   },
+  getById: async (token: string, id: string): Promise<ISolution> => {
+    const res = await axios.get(
+      `${GlobalConfig.server_url}/admin/solutions/${id}`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    return res.data;
+  },
   getAllForUser: async (token: string, id: string): Promise<ISolution> => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/admin/solutions/user/${id}`,

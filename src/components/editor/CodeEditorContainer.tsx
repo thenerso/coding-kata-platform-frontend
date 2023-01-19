@@ -13,7 +13,7 @@ interface ICodeEditorContainerProps {
 
 const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   readOnly = false,
-  startCode,
+  startCode
 }) => {
   const [fontSize, setFontSize] = useState(16);
   const [theme, setTheme] = useState("monokai");

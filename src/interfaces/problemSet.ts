@@ -19,7 +19,7 @@ export interface IProblem {
 
 export interface StartCode {
   [key: string]: any;
-  id: number;
+  id?: number;
   js: string;
   py: string;
   java: string;

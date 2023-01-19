@@ -74,7 +74,7 @@ const ListAllSolutions = () => {
         <Typography variant="h1">Solutions</Typography>
       </TitleWrapper>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="Problems table">
+        <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
           <TableHead>
             <TableRow>
               {tableFields.map((cell, index) => (
