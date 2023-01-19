@@ -126,6 +126,7 @@ const CreateData = ({
         </InputLabel>
 
         <Input
+          autoFocus={isInput}
           fullWidth
           type={renderInputType("input")}
           placeholder={renderInputType("placeholder")}

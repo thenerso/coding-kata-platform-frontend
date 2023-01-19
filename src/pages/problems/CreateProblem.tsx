@@ -227,9 +227,10 @@ const CreateProblem = () => {
                     No public cases
                   </Typography>
                 ) : (
-                  publicCases.map((item) => {
+                  publicCases.map((item, index) => {
                     return (
                       <TestCases
+                        key={`${index}-${item.output.value}`}
                         functionName={title || "functionName"}
                         testCase={item}
                       />
@@ -243,9 +244,10 @@ const CreateProblem = () => {
                     No public cases
                   </Typography>
                 ) : (
-                  privateCases.map((item) => {
+                  privateCases.map((item, index) => {
                     return (
                       <TestCases
+                        key={`${index}-${item.output.value}`}
                         functionName={title || "functionName"}
                         testCase={item}
                       />

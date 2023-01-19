@@ -10,9 +10,9 @@ import {
   DialogTitle,
   Fab,
   FormControlLabel,
+  FormLabel,
   List,
   Switch,
-  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { DataType, Put } from "../../../interfaces/problemSet";
@@ -40,8 +40,13 @@ const CreateTestCase = ({ setTestCase }: ICreateTestCaseProps) => {
   const [open, setOpen] = useState(false);
 
   const [isPublic, setIsPublic] = useState(false);
-  const [inputs, setInputs] = useState<Put[]>([defaultInputValue]);
-  const [output, setOutput] = useState<Put>(defaultInputValue);
+  const [inputs, setInputs] = useState<Put[]>([
+    { value: "", dataType: "INT" as DataType },
+  ]);
+  const [output, setOutput] = useState<Put>({
+    value: "",
+    dataType: "INT" as DataType,
+  });
 
   const handleValidation = () => {
     let passed = true;
@@ -55,6 +60,7 @@ const CreateTestCase = ({ setTestCase }: ICreateTestCaseProps) => {
       setOpen(false);
       setInputs([defaultInputValue]);
       setOutput(defaultInputValue);
+      setIsPublic(false);
     }
   };
 
@@ -112,43 +118,45 @@ const CreateTestCase = ({ setTestCase }: ICreateTestCaseProps) => {
       >
         <DialogTitle>Create a test case</DialogTitle>
         <DialogContent>
-          <FormControlLabel
-            control={
-              <Switch
-                value={isPublic}
-                onChange={(e) => setIsPublic(e.target.checked)}
-              />
-            }
-            label={isPublic ? "Public Test Case" : "Private Test Case"}
-          />
-
-          <Typography variant="body1">Inputs</Typography>
-          {inputs.map((input, index) => {
-            return (
-              <CreateData
-                key={`${index}-${input.value}`}
-                index={index}
-                isInput
-                data={input}
-                setData={setItemData}
-                addItem={addItem}
-                removeItem={removeItem}
-              />
-            );
-          })}
-
-          <Typography variant="body1">Output</Typography>
-          <CreateData data={output} setData={setItemData} />
-
-          <Typography variant="body1">Preview</Typography>
-
-          <List>
-            <StyledChip
-              label={isPublic ? "Public" : "Private"}
-              color={isPublic ? "success" : "error"}
+          <>
+            <FormLabel component="legend">Visibility</FormLabel>
+            <FormControlLabel
+              control={
+                <Switch
+                  value={isPublic}
+                  onChange={(e) => setIsPublic(e.target.checked)}
+                />
+              }
+              label={isPublic ? "Public Test Case" : "Private Test Case"}
             />
-            <TestCases functionName="test" testCase={{ inputs, output }} />
-          </List>
+
+            <FormLabel component="legend">Inputs</FormLabel>
+            {inputs.map((input, index) => {
+              return (
+                <CreateData
+                  key={`${index}-${input.value}`}
+                  index={index}
+                  isInput
+                  data={input}
+                  setData={setItemData}
+                  addItem={addItem}
+                  removeItem={removeItem}
+                />
+              );
+            })}
+
+            <FormLabel component="legend">Outputs</FormLabel>
+            <CreateData data={output} setData={setItemData} />
+
+            <FormLabel component="legend">Preview</FormLabel>
+            <List>
+              <StyledChip
+                label={isPublic ? "Public" : "Private"}
+                color={isPublic ? "success" : "error"}
+              />
+              <TestCases functionName="test" testCase={{ inputs, output }} />
+            </List>
+          </>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>

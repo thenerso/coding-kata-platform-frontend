@@ -25,16 +25,12 @@ const TestCases = ({ functionName, testCase }: ITestCasesProps) => {
             {functionName}(
             {testCase.inputs.map((input, index) => {
               return (
-                <>
-                  <Tooltip
-                    key={`${input.value}-${index}`}
-                    style={{ cursor: "pointer" }}
-                    title={input.dataType}
-                  >
+                <span key={`${input.value}-${index}`}>
+                  <Tooltip style={{ cursor: "pointer" }} title={input.dataType}>
                     <span>{input.value || ""}</span>
                   </Tooltip>
                   {index !== testCase.inputs.length - 1 ? "," : ""}
-                </>
+                </span>
               );
             })}
             ) {"=> "}
