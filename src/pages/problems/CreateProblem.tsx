@@ -27,7 +27,7 @@ import { useSnackbar } from "notistack";
 import { Case, Difficulty, IProblem, Put } from "../../interfaces/problemSet";
 import CreateTestCase from "../../components/problem/test-case/CreateTestCase";
 import TestCases from "../../components/problem/test-case/TestCases";
-import problemServices from "../../services/problemService";
+import ProblemService from "../../services/problemService";
 import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
 
 const StyledChip = styled(Chip)`
@@ -93,7 +93,7 @@ const CreateProblem = () => {
         };
         setLoading(true);
         try {
-          const response = await problemServices.create(token, body);
+          const response = await ProblemService.create(token, body);
 
           enqueueSnackbar(`Problem created`, {
             variant: "success",

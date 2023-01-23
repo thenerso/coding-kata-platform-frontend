@@ -18,6 +18,14 @@ const userService = {
     });
     return res.data;
   },
+  getCohortLeaderoard: async (token: string, cid: string) => {
+    const res = await axios.get(`${GlobalConfig.server_url}/user/users/leaderboard/${cid}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  }
 };
 
 export default userService;
