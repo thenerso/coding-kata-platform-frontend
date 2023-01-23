@@ -64,7 +64,7 @@ const Dashboard = () => {
         <Grid item xs={12}>
           <Card>
             <CardContent>
-              <Typography variant="h4">{user.username}'s Dashboard</Typography>
+              <Typography variant="h4">{user.username.toUpperCase()}'s Dashboard</Typography>
               <Typography variant="h6">Score: {user.score}</Typography>
             </CardContent>
           </Card>
