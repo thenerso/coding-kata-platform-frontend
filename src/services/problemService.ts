@@ -2,9 +2,17 @@ import axios, { AxiosError } from "axios";
 import GlobalConfig from "../config/GlobalConfig";
 import { IProblem, IProblemSet } from "../interfaces/problemSet";
 
-const problemServices = {
+const ProblemService = {
   getAll: async (token: string) => {
     const res = await axios.get(GlobalConfig.server_url + "/user/problems/", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  },
+  getNextForUser: async (token: string, id: string) => {
+    const res = await axios.get(GlobalConfig.server_url + `/user/problems/next-for/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -98,4 +106,4 @@ const problemServices = {
   },
 };
 
-export default problemServices;
+export default ProblemService;

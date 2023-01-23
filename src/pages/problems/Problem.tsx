@@ -25,7 +25,7 @@ import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
 import { IProblem } from "../../interfaces/problemSet";
 
 import authService from "../../services/authService";
-import problemServices from "../../services/problemService";
+import ProblemService from "../../services/problemService";
 
 /**
  * Injected styles
@@ -70,7 +70,7 @@ const Problem = () => {
       if (!problem && id) {
         setError("");
         setLoading(true);
-        problemServices
+        ProblemService
           .getById(token, id)
           .then((result) => {
             setProblem(result);
