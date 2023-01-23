@@ -14,6 +14,7 @@ const DifficultyChip = ({ label }: IDifficultyChip) => {
     default:
       return <Chip label={label} color="success" />;
   }
+  
 };
 
 export default DifficultyChip;

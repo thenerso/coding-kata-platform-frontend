@@ -11,6 +11,8 @@ import { Class, LockClock, Mail, SportsEsports } from "@mui/icons-material";
 import { ListItemText } from "@material-ui/core";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import DifficultyChip from "../components/problem/DifficultyChip";
+import SuccessChip from "../components/problem/SuccessChip";
 /**
  * Injected styles
  *
@@ -87,10 +89,10 @@ const Dashboard = () => {
                     onClick={() => navigate(`/solutions/${solution.id}`)}
                     style={{ cursor: "pointer" }}>
                       <TableCell>{solution.problem.title}</TableCell>
-                      <TableCell>{solution.problem.difficulty}</TableCell>
+                      <TableCell>  <DifficultyChip label={solution.problem.difficulty || ""} /></TableCell>
                       <TableCell>{solution.lang}</TableCell>
                       <TableCell>{solution.submissionDate}</TableCell>
-                      <TableCell>{solution.correct ? "Correct" : "Incorrect"}</TableCell>
+                      <TableCell><SuccessChip label={solution.correct ? "Correct" : "Incorrect"} /></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

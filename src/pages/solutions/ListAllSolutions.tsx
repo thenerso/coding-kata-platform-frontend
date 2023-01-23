@@ -19,6 +19,7 @@ import EmptyState from "../../components/global/EmptyState";
 import DifficultyChip from "../../components/problem/DifficultyChip";
 import { ISolution } from "../../interfaces/solutions";
 import solutionService from "../../services/solutionService";
+import SuccessChip from "../../components/problem/SuccessChip";
 
 /**
  * Injected styles
@@ -103,7 +104,7 @@ const ListAllSolutions = () => {
                   <TableCell>{row.lang}</TableCell>
                   <TableCell>{row.user?.username}</TableCell>
                   <TableCell>{row.submissionDate}</TableCell>
-                  <TableCell>{row.correct ? "Correct" : "Incorrect"}</TableCell>
+                  <TableCell><SuccessChip label={row.correct ? "Correct" : "Incorrect"} /></TableCell>
                 </TableRow>
                 
               ))
