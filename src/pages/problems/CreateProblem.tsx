@@ -95,7 +95,7 @@ const CreateProblem = () => {
         try {
           const response = await problemServices.create(token, body);
 
-          enqueueSnackbar(`Problem Set created`, {
+          enqueueSnackbar(`Problem created`, {
             variant: "success",
           });
 
