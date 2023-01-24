@@ -89,17 +89,16 @@ const Dashboard = () => {
     <Container maxWidth="lg">
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Card>
-            <CardContent>
+          {/* <Card>
+            <CardContent> */}
               <Typography variant="h4">{user.username.toUpperCase()}'s Dashboard</Typography>
-              <Typography variant="h6">Score: {user.score}</Typography>
-            </CardContent>
-          </Card>
+            {/* </CardContent>
+          </Card> */}
         </Grid>
         <Grid item xs={12}>
         <Card>
             <CardContent>
-              <Typography variant="h6">Total Progress</Typography>
+              <Typography variant="h6">Total Progress (Score: {user.score})</Typography>
               <BorderLinearProgress variant="determinate" value={50} />
             </CardContent>
           </Card>
@@ -107,7 +106,7 @@ const Dashboard = () => {
         <Grid item xs={8}>
           <Card>
             <CardContent>
-              <Typography variant="h5">Previously Submitted Solutions</Typography>
+              <Typography variant="h6">Previously Submitted Solutions</Typography>
               {/* <TableContainer> */}
               <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
                 <TableHead>
@@ -138,7 +137,7 @@ const Dashboard = () => {
         <Grid item xs={4}>
           <Card>
             <CardContent>
-              <Typography variant="h5">Next Recommended Task</Typography>
+              <Typography variant="h6">Next Recommended Task</Typography>
               <List>
                 <ListItem>
                   <ListItemText primary={nextProblem?.title} secondary={nextProblem?.description} />
@@ -153,7 +152,7 @@ const Dashboard = () => {
         <Grid item xs={8}>
           <Card>
             <CardContent>
-              <Typography variant="h5">Cohort Leaderboard</Typography>
+              <Typography variant="h6">Cohort Leaderboard</Typography>
               <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
                 <TableHead>
             <TableRow>
