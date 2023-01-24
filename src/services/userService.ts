@@ -25,7 +25,15 @@ const userService = {
       },
     });
     return res.data;
-  }
+  },
+  getGlobalLeaderboard: async (token: string) => {
+    const res = await axios.get(`${GlobalConfig.server_url}/user/users/leaderboard`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  },
 };
 
 export default userService;
