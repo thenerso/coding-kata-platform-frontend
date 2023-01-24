@@ -179,7 +179,7 @@ const routes: IRouteType[] = [
     name: "Solution",
     link: "/solutions/:id",
     Component: Solution,
-    authed: UserRoles.ADMIN,
+    authed: UserRoles.USER,
   },
   // {
   //   name: "Update Problem",
