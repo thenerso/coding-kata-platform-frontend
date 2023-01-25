@@ -11,6 +11,7 @@ import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
 import ListProblemSets from "../pages/problem-sets/ListProblemSets";
 import ProblemSet from "../pages/problem-sets/ProblemSet";
 import UpdateProblemSet from "../pages/problem-sets/UpdateProblemSet";
+import Attempt from "../pages/problems/Attempt";
 import CreateProblem from "../pages/problems/CreateProblem";
 import ListProblems from "../pages/problems/ListProblems";
 import Problem from "../pages/problems/Problem";
@@ -167,13 +168,22 @@ const routes: IRouteType[] = [
     name: "Problem",
     link: "/problems/:id",
     Component: Problem,
-    authed: UserRoles.ADMIN,
+    authed: UserRoles.USER,
   },
   {
     name: "Update Problem",
     link: "/problems/edit/:id",
     Component: UpdateProblem,
     authed: UserRoles.ADMIN,
+  },
+  /**
+   * Attempt
+   */
+  {
+    name: "Attempt",
+    link: "/problems/attempt/:id",
+    Component: Attempt,
+    authed: UserRoles.USER,
   },
   /**
    * Solution

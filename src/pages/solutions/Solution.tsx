@@ -134,7 +134,6 @@ const Solution = () => {
       <br />
       <Grid container spacing={5}>
         <Grid item md={6} sm={12} xs={12}>
-          ``
           <Card>
             <CardHeader title="Test Cases" />
             <CardContent>
@@ -152,7 +151,7 @@ const Solution = () => {
                   }
                 )}
                 <Divider />
-                ``
+
                 <StyledChip label="Private" color="warning" />
                 {solution.problem?.testSuite?.privateCases?.map(
                   (item, index) => {
