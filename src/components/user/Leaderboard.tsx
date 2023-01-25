@@ -31,7 +31,7 @@ const CohortLeaderoard = ({title, leaderboard, user}: {title: string, leaderboar
           </TableHead>
           <TableBody>
                  {leaderboard?.map((u: IUser, index: number) => (
-                    <TableRow className={u.id === user.id ? classes.activeRow : '' }>
+                    <TableRow key={index} className={u.id === user.id ? classes.activeRow : '' }>
                       <TableCell>{index+1}</TableCell>
                       <TableCell>{u.username}</TableCell>
                       <TableCell>{u.score}</TableCell>

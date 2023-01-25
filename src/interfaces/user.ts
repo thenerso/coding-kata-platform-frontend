@@ -13,3 +13,10 @@ export interface IUser {
   solutions?: ISolution[];
   completedProblems?: any[];
 }
+
+export interface IUserProgress {
+  username: string;
+  score: number;
+  problemsSolved: number;
+  totalProblems: number;
+}
