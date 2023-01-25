@@ -5,46 +5,33 @@ import {
   CardHeader,
   Container,
   Grid,
-  LinearProgress,
   List,
   ListItem,
-  ListItemIcon,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
-import styled from "@emotion/styled";
-import { IUser } from "../interfaces/user";
+import { IUser, IUserProgress } from "../interfaces/user";
 import authService from "../services/authService";
 import UserService from "../services/userService";
 import { useEffect, useState } from "react";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
 import { ListItemText } from "@material-ui/core";
-import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import DifficultyChip from "../components/problem/DifficultyChip";
 import SuccessChip from "../components/problem/SuccessChip";
 import { IProblem } from "../interfaces/problemSet";
 import ProblemService from "../services/problemService";
 import BorderLinearProgress from "../components/global/BorderLinearProgress";
-import CohortLeaderoard from "../components/cohort/Leaderboard";
-/**
- * Injected styles
- *
- */
-const TitleWrapper = styled("div")`
-  display: flex;
-  justify-content: space-between;
-`;
+import CohortLeaderoard from "../components/user/Leaderboard";
 
 const Dashboard = () => {
   const [user, setUser] = useState<IUser>();
+  const [userProgress, setUserProgress] = useState<IUserProgress>({username: '', problemsSolved: 0, totalProblems: 0, score: 0});
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [nextProblem, setNextProblem] = useState<IProblem>();
@@ -60,6 +47,11 @@ const Dashboard = () => {
     "Status",
   ];
 
+  const progressPercentage = () => {
+    const prog = Math.round((userProgress.problemsSolved / userProgress.totalProblems) * 100);
+    return prog;
+  }
+
   useEffect(() => {
     const user = authService.getUser();
     const token = authService.getAccessToken();
@@ -67,9 +59,16 @@ const Dashboard = () => {
       if (user && user.userId) {
         setError("");
         setLoading(true);
+        UserService.getUserProgress(token, user.userId.toString())
+        .then((result) => {
+          setUserProgress(result);
+        })
+        .catch((err) => {
+            console.log("Error getting progress ", err);
+            setError("Error fetching progress data");
+          });
         UserService.getById(token, user.userId.toString())
           .then((result) => {
-            console.log(result);
             setUser(result);
             setLoading(false);
             UserService.getCohortLeaderoard(
@@ -77,7 +76,6 @@ const Dashboard = () => {
               result?.cohort?.id.toString()
             ).then((res) => {
               setCohortBoard(res);
-              console.log(res);
             });
             // .catch((err) => {
             //   console.log("Error getting leaderboard", err);
@@ -93,7 +91,6 @@ const Dashboard = () => {
         UserService.getGlobalLeaderboard(token)
           .then((res) => {
             setGlobalBoard(res);
-            console.log("global board: ", res);
           })
           .catch((err) => {
             console.log("Error getting global leaderboard", err);
@@ -136,7 +133,7 @@ const Dashboard = () => {
               <Typography variant="h6">
                 Total Progress (Score: {user.score})
               </Typography>
-              <BorderLinearProgress variant="determinate" value={50} />
+              <BorderLinearProgress variant="determinate" value={progressPercentage()} />
             </CardContent>
           </Card>
         </Grid>
