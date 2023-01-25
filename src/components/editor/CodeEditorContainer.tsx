@@ -40,7 +40,9 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   const updateStartCode = (value: string, event: any) => {
     let newStartCode = { ...startCode };
     newStartCode[languageOptions[language]] = value;
-    console.log("update", newStartCode, languageOptions[language]);
+    // console.log("update", newStartCode, languageOptions[language]);
+
+    // console.log(startCode[languageOptions[language]]);
     if (setStartCode) setStartCode(newStartCode);
   };
 
@@ -60,7 +62,7 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
         theme={theme}
         language={language}
         defaultValue={languagePlaceholders[language]}
-        value={setStartCode ? startCode[languagePlaceholders[language]] : value}
+        value={setStartCode ? startCode[languageOptions[language]] : value}
         onEditorValueChange={setStartCode ? updateStartCode : setValue}
         readOnly={readOnly}
       />
