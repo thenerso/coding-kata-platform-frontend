@@ -23,7 +23,7 @@ const MainRouter = (): JSX.Element => {
   const { members, setNewMembers, setNewCohorts } = React.useContext(
     AppContext
   ) as IAppContext;
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation();
