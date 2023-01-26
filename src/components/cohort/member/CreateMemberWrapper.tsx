@@ -22,8 +22,8 @@ function TabPanel(props: TabPanelProps) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`create-member-tabpanel-${index}`}
+      aria-labelledby={`create-member-tab-${index}`}
       {...other}
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
@@ -33,8 +33,8 @@ function TabPanel(props: TabPanelProps) {
 
 function a11yProps(index: number) {
   return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    id: `create-member-tab-${index}`,
+    "aria-controls": `create-member-tabpanel-${index}`,
   };
 }
 export interface ICreateBulkMember {

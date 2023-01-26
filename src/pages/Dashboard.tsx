@@ -2,7 +2,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader,
   Container,
   Grid,
   List,
@@ -28,6 +27,7 @@ import { IProblem } from "../interfaces/problemSet";
 import ProblemService from "../services/problemService";
 import BorderLinearProgress from "../components/global/BorderLinearProgress";
 import CohortLeaderoard from "../components/user/Leaderboard";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [user, setUser] = useState<IUser>();
@@ -68,7 +68,6 @@ const Dashboard = () => {
         setLoading(true);
         UserService.getUserProgress(token, user.userId.toString())
           .then((result) => {
-            console.log("progress: ", result);
             setUserProgress(result);
           })
           .catch((err) => {
@@ -216,7 +215,13 @@ const Dashboard = () => {
                   />
                 </ListItem>
                 <ListItem>
-                  <Button variant="contained">Attempt</Button>
+                  <Button
+                    variant="contained"
+                    component={Link}
+                    to={`/problems/attempt/${nextProblem?.id}`}
+                  >
+                    Attempt
+                  </Button>
                 </ListItem>
               </List>
             </CardContent>

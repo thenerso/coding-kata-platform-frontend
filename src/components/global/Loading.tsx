@@ -11,10 +11,11 @@ import { CircularProgress } from "@mui/material";
  *
  */
 const ProgressWrapper = styled("div")`
-  min-height: "-webkit-fill-available";
-  display: "flex";
-  justify-content: "center";
-  align-items: "center";
+  min-height: -webkit-fill-available;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 /* type IProps = {

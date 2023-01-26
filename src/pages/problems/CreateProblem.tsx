@@ -29,6 +29,7 @@ import CreateTestCase from "../../components/problem/test-case/CreateTestCase";
 import TestCases from "../../components/problem/test-case/TestCases";
 import ProblemService from "../../services/problemService";
 import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
+import { languagePlaceholders } from "../../components/editor/EditorVariables";
 
 const StyledChip = styled(Chip)`
   margin: 10px 0;
@@ -52,9 +53,9 @@ const CreateProblem = () => {
   const [existingTestCase, setExistingTestCase] = useState<Case | null>(null);
 
   const [startCode, setStartCode] = useState({
-    js: "",
-    py: "",
-    java: "",
+    js: languagePlaceholders.javascript,
+    py: languagePlaceholders.python,
+    java: languagePlaceholders.java,
   });
 
   const [loading, setLoading] = useState(false);
@@ -178,7 +179,7 @@ const CreateProblem = () => {
       <Button
         color="info"
         component={Link}
-        to="/problem-sets"
+        to="/problems"
         startIcon={<ArrowBack />}
       >
         Back

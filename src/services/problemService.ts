@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import GlobalConfig from "../config/GlobalConfig";
-import { IProblem, IProblemSet } from "../interfaces/problemSet";
+import { IProblem } from "../interfaces/problemSet";
 
 const ProblemService = {
   getAll: async (token: string) => {
@@ -12,11 +12,14 @@ const ProblemService = {
     return res.data;
   },
   getNextForUser: async (token: string, id: string) => {
-    const res = await axios.get(GlobalConfig.server_url + `/user/problems/next-for/${id}`, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
+    const res = await axios.get(
+      GlobalConfig.server_url + `/user/problems/next-for/${id}`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     return res.data;
   },
   getById: async (token: string, id: string): Promise<IProblem> => {
@@ -56,7 +59,7 @@ const ProblemService = {
       throw new Error("Could not create Problem");
     }
   },
-  update: async (token: string, body: IProblemSet) => {
+  update: async (token: string, body: IProblem) => {
     try {
       const response = await axios.put(
         GlobalConfig.server_url + "/admin/problems/",

@@ -17,24 +17,28 @@ import "ace-builds/src-noconflict/theme-solarized_dark";
 import "ace-builds/src-noconflict/ext-language_tools";
 
 interface ICodeEditor {
-  fontSize: number;
-  theme: string;
+  fontSize?: number;
+  theme?: string;
   language: string;
   readOnly?: boolean;
   value: string;
+  height?: string;
   defaultValue?: string;
-  onEditorValueChange: (value: string, event: any) => void;
+  showGutter?: boolean;
+  onEditorValueChange?: (value: string, event: any) => void;
 }
 
 // Render editor
 const CodeEditor: React.FC<ICodeEditor> = ({
-  fontSize,
-  theme,
+  fontSize = 16,
+  theme = "monokai",
   language,
   readOnly = false,
   value,
+  height = "500px",
   defaultValue = "",
   onEditorValueChange,
+  showGutter = true,
 }) => {
   return (
     <>
@@ -47,10 +51,11 @@ const CodeEditor: React.FC<ICodeEditor> = ({
         defaultValue={defaultValue}
         fontSize={fontSize}
         showPrintMargin={true}
-        showGutter={true}
+        showGutter={showGutter}
         highlightActiveLine={true}
         value={value}
         width="100%"
+        height={height}
         setOptions={{
           enableBasicAutocompletion: true,
           enableLiveAutocompletion: true,

@@ -26,6 +26,7 @@ import { IProblem } from "../../interfaces/problemSet";
 
 import authService from "../../services/authService";
 import ProblemService from "../../services/problemService";
+import DeleteProblem from "../../components/problem/DeleteProblem";
 
 /**
  * Injected styles
@@ -70,8 +71,7 @@ const Problem = () => {
       if (!problem && id) {
         setError("");
         setLoading(true);
-        ProblemService
-          .getById(token, id)
+        ProblemService.getById(token, id)
           .then((result) => {
             setProblem(result);
             setLoading(false);
@@ -111,12 +111,12 @@ const Problem = () => {
             color="primary"
             aria-label="Edit problem set"
             component={Link}
-            to={`/problem-sets/edit/${problem.id}`}
+            to={`/problems/edit/${problem.id}`}
           >
             <Edit />
           </Fab>
 
-          {/* {problem.id && <DeleteProblem id={problem.id} />} */}
+          {problem.id && <DeleteProblem id={problem.id} />}
         </TitleActionWrapper>
       </TitleWrapper>
 
