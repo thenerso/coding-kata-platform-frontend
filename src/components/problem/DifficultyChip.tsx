@@ -2,17 +2,18 @@ import { Chip } from "@mui/material";
 
 interface IDifficultyChip {
   label: string;
+  size?: "small" | "medium";
 }
-const DifficultyChip = ({ label }: IDifficultyChip) => {
+const DifficultyChip = ({ label, size="medium" }: IDifficultyChip) => {
   switch (label) {
     case "MEDIUM":
-      return <Chip label={label} color="warning" />;
+      return <Chip size={size} label={label} color="warning" />;
 
     case "HARD":
-      return <Chip label={label} color="error" />;
+      return <Chip size={size} label={label} color="error" />;
 
     default:
-      return <Chip label={label} color="success" />;
+      return <Chip size={size} label={label} color="success" />;
   }
   
 };

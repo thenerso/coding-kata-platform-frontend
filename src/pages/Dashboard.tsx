@@ -31,7 +31,12 @@ import CohortLeaderoard from "../components/user/Leaderboard";
 
 const Dashboard = () => {
   const [user, setUser] = useState<IUser>();
-  const [userProgress, setUserProgress] = useState<IUserProgress>({username: '', problemsSolved: 0, totalProblems: 0, score: 0});
+  const [userProgress, setUserProgress] = useState<IUserProgress>({
+    username: "",
+    problemsSolved: 0,
+    totalProblems: 0,
+    score: 0,
+  });
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [nextProblem, setNextProblem] = useState<IProblem>();
@@ -48,9 +53,11 @@ const Dashboard = () => {
   ];
 
   const progressPercentage = () => {
-    const prog = Math.round((userProgress.problemsSolved / userProgress.totalProblems) * 100);
+    const prog = Math.round(
+      (userProgress.problemsSolved / userProgress.totalProblems) * 100
+    );
     return prog;
-  }
+  };
 
   useEffect(() => {
     const user = authService.getUser();
@@ -60,15 +67,17 @@ const Dashboard = () => {
         setError("");
         setLoading(true);
         UserService.getUserProgress(token, user.userId.toString())
-        .then((result) => {
-          setUserProgress(result);
-        })
-        .catch((err) => {
+          .then((result) => {
+            console.log("progress: ", result);
+            setUserProgress(result);
+          })
+          .catch((err) => {
             console.log("Error getting progress ", err);
             setError("Error fetching progress data");
           });
         UserService.getById(token, user.userId.toString())
           .then((result) => {
+            console.log("user: ", result);
             setUser(result);
             setLoading(false);
             UserService.getCohortLeaderoard(
@@ -133,7 +142,10 @@ const Dashboard = () => {
               <Typography variant="h6">
                 Total Progress (Score: {user.score})
               </Typography>
-              <BorderLinearProgress variant="determinate" value={progressPercentage()} />
+              <BorderLinearProgress
+                variant="determinate"
+                value={progressPercentage()}
+              />
             </CardContent>
           </Card>
         </Grid>
@@ -184,7 +196,18 @@ const Dashboard = () => {
         <Grid item xs={4}>
           <Card>
             <CardContent>
-              <Typography variant="h6">Next Recommended Task</Typography>
+              <Grid container>
+                <Grid item xs={9}>
+                  <Typography variant="h6">Suggested Task</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <DifficultyChip
+                    label={
+                      nextProblem?.difficulty ? nextProblem.difficulty : ""
+                    }
+                  />
+                </Grid>
+              </Grid>
               <List>
                 <ListItem>
                   <ListItemText

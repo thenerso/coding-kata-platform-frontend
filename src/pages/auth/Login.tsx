@@ -57,7 +57,7 @@ const Login = () => {
       try {
         await authService.signin(username, password);
 
-        navigate("/profile");
+        navigate("/dashboard");
       } catch (err: any) {
         setError(err.message ? err.message : "Server Error");
         setLoading(false);
