@@ -1,64 +1,22 @@
 import styled from "@emotion/styled";
-import {
-  ArrowBack,
-  Edit,
-  PlayArrow,
-  PlayArrowOutlined,
-  PlayCircle,
-} from "@mui/icons-material";
-import {
-  Chip,
-  Button,
-  Divider,
-  Typography,
-  Fab,
-  Grid,
-  Card,
-  CardContent,
-  CardHeader,
-  List,
-} from "@mui/material";
+import { PlayCircle } from "@mui/icons-material";
+import { Button, Grid, CircularProgress } from "@mui/material";
+import { useSnackbar } from "notistack";
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
-import { languagePlaceholders } from "../../components/editor/EditorVariables";
+import {
+  languageOptions,
+  languagePlaceholders,
+} from "../../components/editor/EditorVariables";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
-import DeleteProblem from "../../components/problem/DeleteProblem";
-import DifficultyChip from "../../components/problem/DifficultyChip";
-import Tags from "../../components/problem/Tags";
-import TestCases from "../../components/problem/test-case/TestCases";
+import AttemptDetailsWrapper from "../../components/problem/attempt/AttemptDetailsWrapper";
+import { IEvalResponse, IEvaluate } from "../../interfaces/eval";
 import { IProblem, StartCode } from "../../interfaces/problemSet";
 import authService from "../../services/authService";
+import EvalService from "../../services/evalService";
 import ProblemService from "../../services/problemService";
-
-/**
- * Injected styles
- *
- */
-const TitleWrapper = styled("div")`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const TitleActionWrapper = styled("div")`
-  a {
-    margin: 0 5px;
-  }
-`;
-
-const StyledChip = styled(Chip)`
-  margin: 10px 0;
-`;
-
-const ChipWrapper = styled("div")`
-  display: flex;
-  align-items: center;
-  div {
-    margin: 0 10px;
-  }
-  margin: 15px 0;
-`;
 
 const ControlsWrapper = styled("div")`
   margin-top: 10px;
@@ -72,15 +30,22 @@ const Attempt = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const [compiling, setCompiling] = useState<boolean>(false);
+  const [evalResponse, setEvalResponse] = useState<IEvalResponse | null>();
+  const [compileError, setCompileError] = useState<string>("");
 
-  const [startCode, setStartCode] = useState({
+  const [startCode, setStartCode] = useState<StartCode>({
     js: languagePlaceholders.javascript,
     py: languagePlaceholders.python,
     java: languagePlaceholders.java,
   });
 
+  const [tabValue, setTabValue] = useState<number>(0);
+
+  const [activeLanguage, setActiveLanguage] = useState<string>("js");
+
   const { id } = useParams();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const token = authService.getAccessToken();
@@ -107,65 +72,91 @@ const Attempt = () => {
     }
   }, [problem, id]);
 
-  const compile = () => {};
+  const compile = async () => {
+    const user = authService.getUser();
+    const token = authService.getAccessToken();
+
+    if (user && token) {
+      const body: IEvaluate = {
+        userId: user.userId?.toString() || "",
+        problemId: problem?.id?.toString() || "0",
+        code: startCode[languageOptions[activeLanguage]],
+        lang: languageOptions[activeLanguage],
+      };
+      setCompiling(true);
+      try {
+        const response = await EvalService.evaluate(body, token);
+
+        setEvalResponse(response);
+        setTabValue(1);
+        const compileError = evalResponse?.testResultsWithLogs.find(
+          (result) => result.compileResult.errors !== ""
+        );
+        if (compileError) {
+          enqueueSnackbar(`Compiled with errors`, {
+            variant: "error",
+          });
+          setCompileError(compileError.compileResult.errors);
+        }
+        // else {
+        // enqueueSnackbar(`Code Compiled`, {
+        //   variant: "success",
+        // });
+        // }
+
+        // navigate(`/problems/${response?.id}`);
+        console.log("response!");
+        console.log(response);
+        setCompiling(false);
+      } catch (err: any) {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+        });
+
+        setCompiling(false);
+      }
+    } else {
+      enqueueSnackbar("Authentication error, please log in again", {
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
+
+  // const codeEditorValue = () => {
+  //   if (evalResponse?.testResultsWithLogs[0].compileResult.errors !== "") {
+  //     return evalResponse?.testResultsWithLogs[0].compileResult.errors || "";
+  //   }
+  //   return evalResponse?.testResultsWithLogs[0].compileResult.output || "";
+  // };
 
   if (loading) return <Loading />;
   if (error || !problem) return <EmptyState message={error} />;
   return (
     <>
-      <Button
-        color="info"
-        onClick={() => navigate(-1)}
-        startIcon={<ArrowBack />}
-      >
-        Back
-      </Button>
-      <Grid container spacing={5} alignItems="center">
-        <Grid item md={5}>
-          <Card>
-            <CardContent>
-              <ChipWrapper>
-                <DifficultyChip label={problem.difficulty || ""} />
-                <Divider orientation="vertical" flexItem />
-                <Tags tags={problem.tags} />
-              </ChipWrapper>
+      <Grid container spacing={5} alignItems="start" alignSelf="center">
+        <AttemptDetailsWrapper
+          problem={problem}
+          evalResponse={evalResponse}
+          value={tabValue}
+          setValue={setTabValue}
+        />
 
-              <Typography variant="h1">{problem.title}</Typography>
-
-              <Typography variant="subtitle1">{problem.description}</Typography>
-            </CardContent>
-          </Card>
-          <br />
-          <Card>
-            <CardHeader title="Test Cases" />
-            <CardContent>
-              <List>
-                <StyledChip label="Public" color="success" />
-                {problem.testSuite?.publicCases?.map((item, index) => {
-                  return (
-                    <TestCases
-                      key={`${index}-${item.id}`}
-                      functionName={problem.title || ""}
-                      testCase={item}
-                    />
-                  );
-                })}
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
         <Grid item md={7}>
-          {/* <TitleActionWrapper>
-            <Fab color="warning" aria-label="Attempt Problem">
-              <PlayArrow />
-            </Fab>
-          </TitleActionWrapper> */}
           <CodeEditorContainer
             startCode={startCode}
             setStartCode={setStartCode}
+            setActiveLanguage={setActiveLanguage}
           />
           <ControlsWrapper>
-            <Button variant="contained" endIcon={<PlayCircle />}>
+            <Button
+              variant="contained"
+              endIcon={
+                compiling ? <CircularProgress size={18} /> : <PlayCircle />
+              }
+              onClick={compile}
+              disabled={compiling}
+            >
               Attempt
             </Button>
           </ControlsWrapper>

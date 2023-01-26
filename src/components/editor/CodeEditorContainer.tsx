@@ -10,12 +10,14 @@ interface ICodeEditorContainerProps {
   readOnly?: boolean;
   startCode: StartCode;
   setStartCode?: (startCode: StartCode) => void;
+  setActiveLanguage?: (language: string) => void;
 }
 
 const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   readOnly = false,
   startCode,
   setStartCode,
+  setActiveLanguage,
 }) => {
   const [fontSize, setFontSize] = useState(16);
   const [theme, setTheme] = useState("monokai");
@@ -26,7 +28,9 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   const updateLanguage = (value: string) => {
     setLanguage(value);
     setValue(startCode[languageOptions[value]]);
-    // checkForStartCode();
+    if (setActiveLanguage) {
+      setActiveLanguage(value);
+    }
   };
 
   // const checkForStartCode = () => {

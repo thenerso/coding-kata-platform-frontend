@@ -23,6 +23,7 @@ const MainRouter = (): JSX.Element => {
   const { members, setNewMembers, setNewCohorts } = React.useContext(
     AppContext
   ) as IAppContext;
+  const [loading, setLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -54,6 +55,7 @@ const MainRouter = (): JSX.Element => {
           setRole(UserRoles.UNAUTHED);
           break;
       }
+      setLoading(false);
     };
     // check if the user is authenticated
 
@@ -99,44 +101,48 @@ const MainRouter = (): JSX.Element => {
       <Grid
         container
         component="main"
-        style={{ marginTop: "20px", marginBottom: "20px", height: "90vh" }}
+        style={{ marginTop: "20px", marginBottom: "20px", minHeight: "60vh" }}
         justifyContent="space-evenly"
       >
         <Grid item xs={11}>
-          <Suspense fallback={<Loading />}>
-            <Routes>
-              <Route path="/" element={isAuthed ? <Dashboard /> : <Home />} />
+          {loading ? (
+            <Loading />
+          ) : (
+            <Suspense fallback={<Loading />}>
+              <Routes>
+                <Route path="/" element={isAuthed ? <Dashboard /> : <Home />} />
 
-              {routes.map(({ link, Component, authed }, i) => {
-                if (authed !== UserRoles.UNAUTHED && !isAuthed) {
-                  return displayAuthState(
-                    i,
-                    link,
-                    "You need to be logged in to view this page"
-                  );
-                }
-                if (authed === UserRoles.ADMIN && role !== UserRoles.ADMIN) {
-                  return displayAuthState(
-                    i,
-                    link,
-                    "You need admin access to view this page"
-                  );
-                }
+                {routes.map(({ link, Component, authed }, i) => {
+                  if (authed !== UserRoles.UNAUTHED && !isAuthed) {
+                    return displayAuthState(
+                      i,
+                      link,
+                      "You need to be logged in to view this page"
+                    );
+                  }
+                  if (authed === UserRoles.ADMIN && role !== UserRoles.ADMIN) {
+                    return displayAuthState(
+                      i,
+                      link,
+                      "You need admin access to view this page"
+                    );
+                  }
 
-                return <Route path={link} element={<Component />} key={i} />;
-              })}
-              <Route
-                path="*"
-                element={
-                  <EmptyState
-                    message={"The page you are looking for does not exist"}
-                    action={() => navigate("/")}
-                    actionLabel={"Home"}
-                  />
-                }
-              />
-            </Routes>
-          </Suspense>
+                  return <Route path={link} element={<Component />} key={i} />;
+                })}
+                <Route
+                  path="*"
+                  element={
+                    <EmptyState
+                      message={"The page you are looking for does not exist"}
+                      action={() => navigate("/")}
+                      actionLabel={"Home"}
+                    />
+                  }
+                />
+              </Routes>
+            </Suspense>
+          )}
         </Grid>
       </Grid>
     </>
