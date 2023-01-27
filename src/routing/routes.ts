@@ -21,7 +21,7 @@ import UpdateProblem from "../pages/problems/UpdateProblem";
 import Profile from "../pages/Profile";
 import ListSolutions from "../pages/solutions/ListAllSolutions";
 import Solution from "../pages/solutions/Solution";
-
+import CreateUser from "../pages/user/CreateUser";
 import ListUsers from "../pages/user/ListUsers";
 import User from "../pages/user/User";
 
@@ -106,7 +106,12 @@ const routes: IRouteType[] = [
     Component: User,
     authed: UserRoles.ADMIN,
   },
-
+  {
+    name: "NewUser",
+    link: "/users/new",
+    Component: CreateUser,
+    authed: UserRoles.ADMIN,
+  },
   /**
    * Cohort
    */

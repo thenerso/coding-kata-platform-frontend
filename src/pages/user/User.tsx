@@ -82,7 +82,7 @@ const User = () => {
               <ListItemIcon>
                 <Lock />
               </ListItemIcon>
-              <ListItemText primary={user.roles} secondary="Role" />
+              <ListItemText primary={user.roles?.toString()} secondary="Role" />
             </ListItem>
             <ListItem>
               <ListItemIcon>
