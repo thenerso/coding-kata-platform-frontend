@@ -9,12 +9,12 @@ export interface IProblemSet {
 
 export interface IProblem {
   id?: number;
-  title?: string;
-  description?: string;
-  difficulty?: string;
-  testSuite?: TestSuite;
+  title: string;
+  description: string;
+  difficulty: string;
+  testSuite: TestSuite;
   startCode: StartCode;
-  tags?: string[];
+  tags: string[];
 }
 
 export interface StartCode {

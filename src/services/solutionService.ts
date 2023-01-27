@@ -13,7 +13,7 @@ const solutionService = {
   },
   getById: async (token: string, id: string): Promise<ISolution> => {
     const res = await axios.get(
-      `${GlobalConfig.server_url}/admin/solutions/${id}`,
+      `${GlobalConfig.server_url}/user/problems/solutions/${id}`,
       {
         headers: {
           Authorization: "Bearer " + token,

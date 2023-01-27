@@ -34,6 +34,17 @@ const theme = createTheme({
       marginBottom: "20px",
     }
   },
+  
+  components: {
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          // backgroundColor: '#f7f7f7'
+          borderBottom: '2px solid #bbb'
+        }
+      }
+    }
+  }
 });
 
 export default theme;

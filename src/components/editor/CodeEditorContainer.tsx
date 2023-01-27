@@ -2,7 +2,7 @@ import { useState } from "react";
 import CodeEditor from "./CodeEditor";
 import EditorTools from "./EditorTools";
 import { StartCode } from "../../interfaces/problemSet";
-import { languageOptions, languagePlaceholders } from "./EditorVariables";
+import { languageOptions } from "./EditorVariables";
 
 interface ICodeEditorContainerProps {
   // onSubmit?: (code: string, lang: string) => Promise<void>;
@@ -10,12 +10,14 @@ interface ICodeEditorContainerProps {
   readOnly?: boolean;
   startCode: StartCode;
   setStartCode?: (startCode: StartCode) => void;
+  setActiveLanguage?: (language: string) => void;
 }
 
 const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   readOnly = false,
   startCode,
   setStartCode,
+  setActiveLanguage,
 }) => {
   const [fontSize, setFontSize] = useState(16);
   const [theme, setTheme] = useState("monokai");
@@ -26,7 +28,9 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   const updateLanguage = (value: string) => {
     setLanguage(value);
     setValue(startCode[languageOptions[value]]);
-    // checkForStartCode();
+    if (setActiveLanguage) {
+      setActiveLanguage(value);
+    }
   };
 
   // const checkForStartCode = () => {
@@ -40,9 +44,12 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   const updateStartCode = (value: string, event: any) => {
     let newStartCode = { ...startCode };
     newStartCode[languageOptions[language]] = value;
-    console.log("update", newStartCode, languageOptions[language]);
     if (setStartCode) setStartCode(newStartCode);
   };
+
+  const editorValue = setStartCode
+    ? startCode[languageOptions[language]]
+    : value;
 
   return (
     <>
@@ -59,8 +66,8 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
         fontSize={fontSize}
         theme={theme}
         language={language}
-        defaultValue={languagePlaceholders[language]}
-        value={setStartCode ? startCode[languagePlaceholders[language]] : value}
+        // defaultValue={editorValue === "" ? languagePlaceholders[language] : }
+        value={editorValue}
         onEditorValueChange={setStartCode ? updateStartCode : setValue}
         readOnly={readOnly}
       />

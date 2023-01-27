@@ -16,7 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 
 import authService from "../../services/authService";
-import problemServices from "../../services/problemService";
+import ProblemService from "../../services/problemService";
 import Loading from "../../components/global/Loading";
 import EmptyState from "../../components/global/EmptyState";
 import DifficultyChip from "../../components/problem/DifficultyChip";
@@ -48,7 +48,7 @@ const ListProblems = () => {
       if (problems.length === 0) {
         setError("");
         setLoading(true);
-        problemServices
+        ProblemService
           .getAll(token)
           .then((result) => {
             setProblems(result);

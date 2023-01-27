@@ -1,14 +1,25 @@
 import axios, { AxiosError } from "axios";
 import GlobalConfig from "../config/GlobalConfig";
-import { IProblem, IProblemSet } from "../interfaces/problemSet";
+import { IProblem } from "../interfaces/problemSet";
 
-const problemServices = {
+const ProblemService = {
   getAll: async (token: string) => {
     const res = await axios.get(GlobalConfig.server_url + "/user/problems/", {
       headers: {
         Authorization: "Bearer " + token,
       },
     });
+    return res.data;
+  },
+  getNextForUser: async (token: string, id: string) => {
+    const res = await axios.get(
+      GlobalConfig.server_url + `/user/problems/next-for/${id}`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     return res.data;
   },
   getById: async (token: string, id: string): Promise<IProblem> => {
@@ -48,7 +59,7 @@ const problemServices = {
       throw new Error("Could not create Problem");
     }
   },
-  update: async (token: string, body: IProblemSet) => {
+  update: async (token: string, body: IProblem) => {
     try {
       const response = await axios.put(
         GlobalConfig.server_url + "/admin/problems/",
@@ -98,4 +109,4 @@ const problemServices = {
   },
 };
 
-export default problemServices;
+export default ProblemService;

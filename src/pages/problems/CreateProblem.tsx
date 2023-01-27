@@ -27,8 +27,9 @@ import { useSnackbar } from "notistack";
 import { Case, Difficulty, IProblem, Put } from "../../interfaces/problemSet";
 import CreateTestCase from "../../components/problem/test-case/CreateTestCase";
 import TestCases from "../../components/problem/test-case/TestCases";
-import problemServices from "../../services/problemService";
+import ProblemService from "../../services/problemService";
 import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
+import { languagePlaceholders } from "../../components/editor/EditorVariables";
 
 const StyledChip = styled(Chip)`
   margin: 10px 0;
@@ -52,9 +53,9 @@ const CreateProblem = () => {
   const [existingTestCase, setExistingTestCase] = useState<Case | null>(null);
 
   const [startCode, setStartCode] = useState({
-    js: "",
-    py: "",
-    java: "",
+    js: languagePlaceholders.javascript,
+    py: languagePlaceholders.python,
+    java: languagePlaceholders.java,
   });
 
   const [loading, setLoading] = useState(false);
@@ -93,9 +94,9 @@ const CreateProblem = () => {
         };
         setLoading(true);
         try {
-          const response = await problemServices.create(token, body);
+          const response = await ProblemService.create(token, body);
 
-          enqueueSnackbar(`Problem Set created`, {
+          enqueueSnackbar(`Problem created`, {
             variant: "success",
           });
 
@@ -178,7 +179,7 @@ const CreateProblem = () => {
       <Button
         color="info"
         component={Link}
-        to="/problem-sets"
+        to="/problems"
         startIcon={<ArrowBack />}
       >
         Back

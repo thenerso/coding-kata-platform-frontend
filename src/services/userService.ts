@@ -18,6 +18,30 @@ const userService = {
     });
     return res.data;
   },
+  getUserProgress: async (token: string, id: string) => {
+    const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}/progress`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  },
+  getCohortLeaderoard: async (token: string, cid: string) => {
+    const res = await axios.get(`${GlobalConfig.server_url}/user/users/leaderboard/${cid}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  },
+  getGlobalLeaderboard: async (token: string) => {
+    const res = await axios.get(`${GlobalConfig.server_url}/user/users/leaderboard`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  },
 };
 
 export default userService;
