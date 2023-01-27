@@ -49,7 +49,7 @@ const ListUsers = () => {
               <TableRow
                 key={`${row.id}-${row.username}`}
                 hover
-                onClick={() => navigate(`/members/${row.id}`)}
+                onClick={() => navigate(`/users/${row.id}`)}
                 style={{ cursor: "pointer" }}
               >
                 <TableCell>{row.id}</TableCell>
