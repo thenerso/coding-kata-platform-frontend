@@ -3,12 +3,12 @@ import { IUser } from "./user";
 
 export interface ISolution {
     id?: number;
-    code?: string;
-    lang?: string;
-    correct?: boolean;
-    problem?: IProblem;
-    submissionDate?: string;
-    user?: IUser;
+    code: string;
+    lang: string;
+    correct: boolean;
+    problem: IProblem;
+    submissionDate: string;
+    user: IUser;
 }
 
 export interface IEvalInput {

@@ -22,7 +22,7 @@ const problemServices = {
     );
     return res.data;
   },
-  create: async (token: string, body: IProblemSet) => {
+  create: async (token: string, body: IProblem) => {
     try {
       const response = await axios.post(
         GlobalConfig.server_url + "/admin/problems/",

@@ -12,6 +12,7 @@ import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-terminal";
 import "ace-builds/src-noconflict/theme-solarized_light";
+import "ace-builds/src-noconflict/theme-solarized_dark";
 
 import "ace-builds/src-noconflict/ext-language_tools";
 
@@ -21,7 +22,8 @@ interface ICodeEditor {
   language: string;
   readOnly?: boolean;
   value: string;
-  onEditorValueChange: (newValue: string) => void;
+  defaultValue?: string;
+  onEditorValueChange: (value: string, event: any) => void;
 }
 
 // Render editor
@@ -31,6 +33,7 @@ const CodeEditor: React.FC<ICodeEditor> = ({
   language,
   readOnly = false,
   value,
+  defaultValue = "",
   onEditorValueChange,
 }) => {
   return (
@@ -41,6 +44,7 @@ const CodeEditor: React.FC<ICodeEditor> = ({
         theme={theme}
         name="code-editor"
         onChange={onEditorValueChange}
+        defaultValue={defaultValue}
         fontSize={fontSize}
         showPrintMargin={true}
         showGutter={true}

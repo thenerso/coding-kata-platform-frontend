@@ -34,7 +34,7 @@ const ListAllSolutions = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  const tableFields = ["ID", "Problem",  "Difficulty", "Language", "User", "Submission Date"];
+  const tableFields = ["ID", "Problem",  "Difficulty", "Language", "User", "Submission Date", "Status"];
 
   const navigate = useNavigate();
 
@@ -74,7 +74,7 @@ const ListAllSolutions = () => {
         <Typography variant="h1">Solutions</Typography>
       </TitleWrapper>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="Problems table">
+        <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
           <TableHead>
             <TableRow>
               {tableFields.map((cell, index) => (
@@ -103,6 +103,7 @@ const ListAllSolutions = () => {
                   <TableCell>{row.lang}</TableCell>
                   <TableCell>{row.user?.username}</TableCell>
                   <TableCell>{row.submissionDate}</TableCell>
+                  <TableCell>{row.correct ? "Correct" : "Incorrect"}</TableCell>
                 </TableRow>
                 
               ))

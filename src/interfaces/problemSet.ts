@@ -19,7 +19,7 @@ export interface IProblem {
 
 export interface StartCode {
   [key: string]: any;
-  id: number;
+  id?: number;
   js: string;
   py: string;
   java: string;
@@ -32,11 +32,13 @@ export interface TestSuite {
 
 export interface Case {
   id?: number;
+  isPublic?: boolean;
   inputs: Put[];
   output: Put;
 }
 
 export interface Put {
+  [key: string]: any;
   id?: number;
   value?: string;
   dataType?: DataType;

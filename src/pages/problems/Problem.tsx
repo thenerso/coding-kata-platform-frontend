@@ -20,7 +20,7 @@ import Loading from "../../components/global/Loading";
 import DifficultyChip from "../../components/problem/DifficultyChip";
 
 import Tags from "../../components/problem/Tags";
-import TestCases from "../../components/problem/TestCases";
+import TestCases from "../../components/problem/test-case/TestCases";
 import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
 import { IProblem } from "../../interfaces/problemSet";
 
@@ -134,17 +134,20 @@ const Problem = () => {
                   return (
                     <TestCases
                       key={`${index}-${item.id}`}
+                      functionName={problem.title || ""}
                       testCase={item}
-                      defaultOpen
                     />
                   );
                 })}
                 <Divider />
                 <StyledChip label="Private" color="warning" />
-
                 {problem.testSuite?.privateCases?.map((item, index) => {
                   return (
-                    <TestCases key={`${index}-${item.id}`} testCase={item} />
+                    <TestCases
+                      functionName={problem.title || ""}
+                      key={`${index}-${item.id}`}
+                      testCase={item}
+                    />
                   );
                 })}
               </List>

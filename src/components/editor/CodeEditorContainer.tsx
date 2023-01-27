@@ -9,11 +9,13 @@ interface ICodeEditorContainerProps {
   // submitButtonTitle: string;
   readOnly?: boolean;
   startCode: StartCode;
+  setStartCode?: (startCode: StartCode) => void;
 }
 
 const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   readOnly = false,
   startCode,
+  setStartCode,
 }) => {
   const [fontSize, setFontSize] = useState(16);
   const [theme, setTheme] = useState("monokai");
@@ -24,16 +26,23 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   const updateLanguage = (value: string) => {
     setLanguage(value);
     setValue(startCode[languageOptions[value]]);
-    checkForStartCode();
+    // checkForStartCode();
   };
 
-  const checkForStartCode = () => {
-    if (value === "") {
-      setValue(languagePlaceholders[language]);
-    }
-  };
+  // const checkForStartCode = () => {
+  //   if (value === "") {
+  //     setValue(languagePlaceholders[language]);
+  //   }
+  // };
 
-  checkForStartCode();
+  // checkForStartCode();
+
+  const updateStartCode = (value: string, event: any) => {
+    let newStartCode = { ...startCode };
+    newStartCode[languageOptions[language]] = value;
+    console.log("update", newStartCode, languageOptions[language]);
+    if (setStartCode) setStartCode(newStartCode);
+  };
 
   return (
     <>
@@ -50,8 +59,9 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
         fontSize={fontSize}
         theme={theme}
         language={language}
-        value={value}
-        onEditorValueChange={setValue}
+        defaultValue={languagePlaceholders[language]}
+        value={setStartCode ? startCode[languagePlaceholders[language]] : value}
+        onEditorValueChange={setStartCode ? updateStartCode : setValue}
         readOnly={readOnly}
       />
     </>

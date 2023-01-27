@@ -16,6 +16,7 @@ import ListProblems from "../pages/problems/ListProblems";
 import Problem from "../pages/problems/Problem";
 import Profile from "../pages/Profile";
 import ListSolutions from "../pages/solutions/ListAllSolutions";
+import Solution from "../pages/solutions/Solution";
 import ListUsers from "../pages/user/ListUsers";
 import User from "../pages/user/User";
 
@@ -180,6 +181,12 @@ const routes: IRouteType[] = [
     Component: ListSolutions,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN
+  },
+  {
+    name: "Solution",
+    link: "/solutions/:id",
+    Component: Solution,
+    authed: UserRoles.ADMIN,
   },
   // {
   //   name: "Update Problem",

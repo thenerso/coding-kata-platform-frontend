@@ -3,6 +3,7 @@ export const themeOptions = [
   "monokai",
   "github",
   "solarized_light",
+  "solarized_dark",
   "terminal",
 ];
 
