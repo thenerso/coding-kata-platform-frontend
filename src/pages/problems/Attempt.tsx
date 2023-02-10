@@ -93,7 +93,6 @@ const Attempt = () => {
       try {
         const response = await EvalService.evaluate(body, token);
         const evalResponse: IEvalResponse = response as IEvalResponse;
-        console.log(evalResponse);
         setEvalResponse(response);
         setTabValue(1);
 
