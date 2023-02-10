@@ -194,12 +194,14 @@ const Dashboard = () => {
           </Card>
         </Grid>
         <Grid item xs={4}>
-          <Card>
+        <Card>
             <CardContent>
+            {nextProblem ? (<>
               <Grid container>
                 <Grid item xs={9}>
                   <Typography variant="h6">Suggested Task</Typography>
                 </Grid>
+
                 <Grid item xs={3}>
                   <DifficultyChip
                     label={
@@ -224,7 +226,7 @@ const Dashboard = () => {
                     Attempt
                   </Button>
                 </ListItem>
-              </List>
+              </List></>) : "You've completed all the problems!"}
             </CardContent>
           </Card>
         </Grid>
