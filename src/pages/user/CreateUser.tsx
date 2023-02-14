@@ -9,13 +9,14 @@ import dayjs, { Dayjs } from "dayjs";
 import { ArrowBack, Check } from "@mui/icons-material";
 import { Button, Typography, Grid, Card, CardHeader, TextField, FormControl, InputLabel, Select, MenuItem, Autocomplete, Chip, CircularProgress, CardContent } from "@mui/material";
 import { title } from "process";
-import { Difficulty } from "../../interfaces/problemSet";
+// import { Difficulty } from "../../interfaces/problemSet";
 import { useSnackbar } from "notistack";
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ICohort } from "../../interfaces/cohort";
 import { UserRoles } from "../../routing/routes";
 import problemSetServices from "../../services/problemSetService";
+import userService from "../../services/userService";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -70,7 +71,7 @@ const CreateUser = () => {
         };
         setLoading(true);
         try {
-          const response = await problemSetServices.create(token, body);
+          const response = await userService.create(token, body);
 
           enqueueSnackbar(`Problem Set created`, {
             variant: "success",
