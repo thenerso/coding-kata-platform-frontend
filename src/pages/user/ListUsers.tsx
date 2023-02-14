@@ -30,7 +30,7 @@ const ListUsers = () => {
           color="primary"
           aria-label="Add a user"
           component={Link}
-          to="/users"
+          to="/users/new"
         >
           <Add />
         </Fab>

@@ -9,9 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { error } from "console";
 import dayjs from "dayjs";
-import { setDefaultResultOrder } from "dns";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";

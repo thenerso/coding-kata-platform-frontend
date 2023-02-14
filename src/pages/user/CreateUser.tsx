@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FC} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 
@@ -8,14 +8,11 @@ import { IUser } from "../../interfaces/user";
 import dayjs, { Dayjs } from "dayjs";
 import { ArrowBack, Check } from "@mui/icons-material";
 import { Button, Typography, Grid, Card, CardHeader, TextField, FormControl, InputLabel, Select, MenuItem, Autocomplete, Chip, CircularProgress, CardContent } from "@mui/material";
-import { title } from "process";
-// import { Difficulty } from "../../interfaces/problemSet";
 import { useSnackbar } from "notistack";
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ICohort } from "../../interfaces/cohort";
 import { UserRoles } from "../../routing/routes";
-import problemSetServices from "../../services/problemSetService";
 import userService from "../../services/userService";
 
 const StyledCardContent = styled(CardContent)`
@@ -24,7 +21,7 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 
-const CreateUser = () => {
+const CreateUser : FC = () => {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -46,7 +43,7 @@ const CreateUser = () => {
       passed = false;
     } else setEmailError("");
 
-    if (title === "") {
+    if (email === "") {
       setEmailError("Email cannot be blank");
       passed = false;
     } else setEmailError("");
@@ -73,11 +70,11 @@ const CreateUser = () => {
         try {
           const response = await userService.create(token, body);
 
-          enqueueSnackbar(`Problem Set created`, {
+          enqueueSnackbar(`User created`, {
             variant: "success",
           });
 
-          navigate(`/problem-sets/${response?.id}`);
+          navigate(`/users/${response?.id}`);
         } catch (err: any) {
           enqueueSnackbar(err.message, {
             variant: "error",
@@ -124,6 +121,11 @@ const CreateUser = () => {
                 helperText={emailError}
               />
               <br />
+              {/* Username here - based off email but editable*/}
+              <br/>
+              {/* Cohort here - single select*/}
+              <br />
+
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DesktopDatePicker
                   label="Start Date"
@@ -134,8 +136,8 @@ const CreateUser = () => {
                     <TextField variant="standard" {...params} />
                   )}
                 />
+                {/* Add option to base from cohort */}
               </LocalizationProvider>
-
 
               <br />
 
@@ -154,6 +156,7 @@ const CreateUser = () => {
                     setRoles(typeof value === "string" ? value.split(',') : value)
                   }
                   }
+                  // Set default to USER, remove 0,1,2?
                 >
                   {Object.keys(UserRoles).map((item) => (
                     <MenuItem key={item} value={item}>
