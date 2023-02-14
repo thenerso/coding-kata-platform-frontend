@@ -28,7 +28,7 @@ const ListUsers = () => {
         <Typography variant="h1">Users</Typography>
         <Fab
           color="primary"
-          aria-label="Add a cohort"
+          aria-label="Add a user"
           component={Link}
           to="/users"
         >
