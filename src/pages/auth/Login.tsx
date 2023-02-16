@@ -55,8 +55,11 @@ const Login = () => {
       setError("");
       setLoading(true);
       try {
-        await authService.signin(username, password);
-        navigate("/dashboard");
+        const res = await authService.signin(username, password);
+        console.log(res);
+        if (res.roles && res.roles[0] === "ADMIN") {
+          navigate("/admin/dashboard");
+        } else navigate("/dashboard");
       } catch (err: any) {
         setError(err.message ? err.message : "Server Error");
         setLoading(false);

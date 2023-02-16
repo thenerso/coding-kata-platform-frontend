@@ -2,13 +2,16 @@ import {
   Button,
   Card,
   CardContent,
+  CardHeader,
   Container,
   Grid,
   List,
   ListItem,
+  ListItemText,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   Typography,
@@ -19,17 +22,16 @@ import UserService from "../services/userService";
 import { useEffect, useState } from "react";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
-import { ListItemText } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import DifficultyChip from "../components/problem/DifficultyChip";
-import SuccessChip from "../components/problem/SuccessChip";
 import { IProblem } from "../interfaces/problemSet";
 import ProblemService from "../services/problemService";
 import BorderLinearProgress from "../components/global/BorderLinearProgress";
 import CohortLeaderoard from "../components/user/Leaderboard";
 import { Link } from "react-router-dom";
+import SuccessChip from "../components/problem/SuccessChip";
 
-const Dashboard = () => {
+const StudentDashboard = () => {
   const [user, setUser] = useState<IUser>();
   const [userProgress, setUserProgress] = useState<IUserProgress>({
     username: "",
@@ -41,7 +43,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [nextProblem, setNextProblem] = useState<IProblem>();
   const [cohortBoard, setCohortBoard] = useState<IUser[]>();
-  const [globalBoard, setGlobalBoard] = useState<IUser[]>();
+
   const navigate = useNavigate();
 
   const solutionTablelFields = [
@@ -49,7 +51,7 @@ const Dashboard = () => {
     "Difficulty",
     "Language",
     "Submission Date",
-    "Correctness",
+    "Status",
   ];
 
   const progressPercentage = () => {
@@ -74,35 +76,24 @@ const Dashboard = () => {
             console.log("Error getting progress ", err);
             setError("Error fetching progress data");
           });
+
         UserService.getById(token, user.userId.toString())
           .then((result) => {
-            console.log("user: ", result);
             setUser(result);
             setLoading(false);
-            UserService.getCohortLeaderoard(
-              token,
-              result?.cohort?.id.toString()
-            ).then((res) => {
-              setCohortBoard(res);
-            });
-            // .catch((err) => {
-            //   console.log("Error getting leaderboard", err);
-            //   setError("Error fetching leaderboard data");
-            // });
+            if (result?.cohort) {
+              UserService.getCohortLeaderoard(
+                token,
+                result?.cohort?.id.toString()
+              ).then((res) => {
+                setCohortBoard(res);
+              });
+            }
           })
           .catch((err) => {
             console.log("Error getting cohorts", err);
             setError("Error fetching data");
             setLoading(false);
-          });
-
-        UserService.getGlobalLeaderboard(token)
-          .then((res) => {
-            setGlobalBoard(res);
-          })
-          .catch((err) => {
-            console.log("Error getting global leaderboard", err);
-            setError("Error fetching global leaderboard data");
           });
 
         ProblemService.getNextForUser(token, user.userId.toString())
@@ -127,20 +118,12 @@ const Dashboard = () => {
     <Container maxWidth="lg">
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          {/* <Card>
-            <CardContent> */}
-          <Typography variant="h4">
-            {user.username.toUpperCase()}'s Dashboard
-          </Typography>
-          {/* </CardContent>
-          </Card> */}
+          <Typography variant="h1">Hi {user.username} 👋🏻</Typography>
         </Grid>
         <Grid item xs={12}>
           <Card>
+            <CardHeader title={`Your Progress (Score: ${user.score})`} />
             <CardContent>
-              <Typography variant="h6">
-                Total Progress (Score: {user.score})
-              </Typography>
               <BorderLinearProgress
                 variant="determinate"
                 value={progressPercentage()}
@@ -150,58 +133,55 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={8}>
           <Card>
+            <CardHeader title="Previously Submitted Solutions" />
             <CardContent>
-              <Typography variant="h6">
-                Previously Submitted Solutions
-              </Typography>
-              {/* <TableContainer> */}
-              <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
-                <TableHead>
-                  <TableRow>
-                    {solutionTablelFields.map((cell, index) => (
-                      <TableCell key={`${index}-${cell}`}>{cell}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {user.solutions?.map((solution) => (
-                    <TableRow
-                      key={solution.id}
-                      hover
-                      onClick={() => navigate(`/solutions/${solution.id}`)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <TableCell>{solution.problem.title}</TableCell>
-                      <TableCell>
-                        {" "}
-                        <DifficultyChip
-                          label={solution.problem.difficulty || ""}
-                        />
-                      </TableCell>
-                      <TableCell>{solution.lang}</TableCell>
-                      <TableCell>{solution.submissionDate}</TableCell>
-                      <TableCell>
-                        <SuccessChip
-                          label={solution.correctness.toString() + "%"}
-                          score={solution.correctness}
-                        />
-                      </TableCell>
+              <TableContainer sx={{ height: 240 }}>
+                <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
+                  <TableHead>
+                    <TableRow>
+                      {solutionTablelFields.map((cell, index) => (
+                        <TableCell key={`${index}-${cell}`}>{cell}</TableCell>
+                      ))}
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHead>
+                  <TableBody>
+                    {user.solutions?.map((solution) => (
+                      <TableRow
+                        key={solution.id}
+                        hover
+                        onClick={() => navigate(`/solutions/${solution.id}`)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <TableCell>{solution.problem.title}</TableCell>
+                        <TableCell>
+                          {" "}
+                          <DifficultyChip
+                            label={solution.problem.difficulty || ""}
+                          />
+                        </TableCell>
+                        <TableCell>{solution.lang}</TableCell>
+                        <TableCell>{solution.submissionDate}</TableCell>
+                        <TableCell>
+                          <SuccessChip
+                            score={solution.correctness}
+                            label={`${solution.correctness}%`}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={4}>
-        <Card>
+          <Card>
             <CardContent>
-            {nextProblem ? (<>
               <Grid container>
                 <Grid item xs={9}>
                   <Typography variant="h6">Suggested Task</Typography>
                 </Grid>
-
                 <Grid item xs={3}>
                   <DifficultyChip
                     label={
@@ -210,44 +190,35 @@ const Dashboard = () => {
                   />
                 </Grid>
               </Grid>
-              <List>
-                <ListItem>
-                  <ListItemText
-                    primary={nextProblem?.title}
-                    secondary={nextProblem?.description}
-                  />
-                </ListItem>
-                <ListItem>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to={`/problems/attempt/${nextProblem?.id}`}
-                  >
-                    Attempt
-                  </Button>
-                </ListItem>
-              </List></>) : "You've completed all the problems!"}
+              <TableContainer sx={{ height: 272 }}>
+                <List>
+                  <ListItem>
+                    <ListItemText
+                      primary={nextProblem?.title}
+                      secondary={nextProblem?.description}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <Button
+                      variant="contained"
+                      component={Link}
+                      to={`/problems/attempt/${nextProblem?.id}`}
+                    >
+                      Attempt
+                    </Button>
+                  </ListItem>
+                </List>
+              </TableContainer>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Card>
+            <CardHeader title="Cohort Leaderboard" />
             <CardContent>
               <CohortLeaderoard
-                title="Global Leaderboard"
-                leaderboard={globalBoard}
-                user={user}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={6}>
-          <Card>
-            <CardContent>
-              <CohortLeaderoard
-                title="Cohort Leaderboard"
                 leaderboard={cohortBoard}
-                user={user}
+                userId={user.id || 0}
               />
             </CardContent>
           </Card>
@@ -256,4 +227,4 @@ const Dashboard = () => {
     </Container>
   );
 };
-export default Dashboard;
+export default StudentDashboard;

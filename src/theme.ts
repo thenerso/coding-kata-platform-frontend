@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-// import { createTheme } from '@material-ui/core/styles';
+
 const theme = createTheme({
   //custom theme will go herec
   // components: {
@@ -10,15 +10,15 @@ const theme = createTheme({
   //   }
   // },
   palette: {
-    mode: 'light',
+    mode: "light",
     background: {
-      default: '#225D61',
+      default: "#225D61",
     },
     primary: {
-      main: '#287f85',
+      main: "#287f85",
     },
     secondary: {
-      main: '#ff9b35',
+      main: "#ff9b35",
     },
   },
   typography: {
@@ -32,19 +32,19 @@ const theme = createTheme({
       fontWeight: 600,
       fontSize: "1.6rem",
       marginBottom: "20px",
-    }
+    },
   },
-  
+
   components: {
     MuiTableHead: {
       styleOverrides: {
         root: {
           // backgroundColor: '#f7f7f7'
-          borderBottom: '2px solid #bbb'
-        }
-      }
-    }
-  }
+          borderBottom: "2px solid #bbb",
+        },
+      },
+    },
+  },
 });
 
 export default theme;

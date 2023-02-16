@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ArrowBack, Done } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import {
   Button,
   Typography,

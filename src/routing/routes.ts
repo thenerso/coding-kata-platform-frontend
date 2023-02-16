@@ -1,11 +1,13 @@
 import React from "react";
+import AdminDashboard from "../pages/AdminDashboard";
+import StudentDashboard from "../pages/StudentDashboard";
 import ForgetPassword from "../pages/auth/ForgetPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import Cohort from "../pages/cohorts/Cohort";
 import CreateCohort from "../pages/cohorts/CreateCohort";
 import ListCohorts from "../pages/cohorts/ListCohorts";
 import UpdateCohort from "../pages/cohorts/UpdateCohort";
-import Dashboard from "../pages/Dashboard";
+
 import Home from "../pages/Home";
 import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
 import ListProblemSets from "../pages/problem-sets/ListProblemSets";
@@ -19,6 +21,7 @@ import UpdateProblem from "../pages/problems/UpdateProblem";
 import Profile from "../pages/Profile";
 import ListSolutions from "../pages/solutions/ListAllSolutions";
 import Solution from "../pages/solutions/Solution";
+
 import ListUsers from "../pages/user/ListUsers";
 
 export enum UserRoles {
@@ -68,9 +71,16 @@ const routes: IRouteType[] = [
   {
     name: "Dashboard",
     link: "/dashboard",
-    Component: Dashboard,
+    Component: StudentDashboard,
     authed: UserRoles.USER,
     showInMenuFor: UserRoles.USER,
+  },
+  {
+    name: "Dashboard",
+    link: "/admin/dashboard",
+    Component: AdminDashboard,
+    authed: UserRoles.ADMIN,
+    showInMenuFor: UserRoles.ADMIN,
   },
   {
     name: "Profile",
