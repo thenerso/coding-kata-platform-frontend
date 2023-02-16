@@ -5,7 +5,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { orange } from "@mui/material/colors";
 import { IUser } from "../../interfaces/user";

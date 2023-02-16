@@ -30,6 +30,7 @@ import BorderLinearProgress from "../components/global/BorderLinearProgress";
 import CohortLeaderoard from "../components/user/Leaderboard";
 import { Link } from "react-router-dom";
 import SuccessChip from "../components/problem/SuccessChip";
+import dayjs from "dayjs";
 
 const StudentDashboard = () => {
   const [user, setUser] = useState<IUser>();
@@ -120,22 +121,11 @@ const StudentDashboard = () => {
         <Grid item xs={12}>
           <Typography variant="h1">Hi {user.username} 👋🏻</Typography>
         </Grid>
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader title={`Your Progress (Score: ${user.score})`} />
-            <CardContent>
-              <BorderLinearProgress
-                variant="determinate"
-                value={progressPercentage()}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
         <Grid item xs={8}>
           <Card>
-            <CardHeader title="Previously Submitted Solutions" />
+            <CardHeader title="✏️ Previously Submitted Solutions" />
             <CardContent>
-              <TableContainer sx={{ height: 240 }}>
+              <TableContainer sx={{ height: 267 }}>
                 <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
                   <TableHead>
                     <TableRow>
@@ -160,7 +150,9 @@ const StudentDashboard = () => {
                           />
                         </TableCell>
                         <TableCell>{solution.lang}</TableCell>
-                        <TableCell>{solution.submissionDate}</TableCell>
+                        <TableCell>
+                          {dayjs(solution.submissionDate).fromNow()}
+                        </TableCell>
                         <TableCell>
                           <SuccessChip
                             score={solution.correctness}
@@ -175,46 +167,71 @@ const StudentDashboard = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
-          <Card>
-            <CardContent>
-              <Grid container>
-                <Grid item xs={9}>
-                  <Typography variant="h6">Suggested Task</Typography>
+        <Grid container item rowSpacing={3} xs={4} direction="row">
+          <Grid item xs={12}>
+            <Card>
+              <CardHeader title={`📈 Progress (Score: ${user.score})`} />
+              <CardContent>
+                <BorderLinearProgress
+                  variant="determinate"
+                  value={progressPercentage()}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card sx={{ minHeight: "100%" }}>
+              <CardContent>
+                <Grid container>
+                  <Grid item xs={9}>
+                    <Typography variant="h6">🤔 Suggested Task</Typography>
+                  </Grid>
+                  {nextProblem && (
+                    <Grid item xs={3}>
+                      <DifficultyChip
+                        label={
+                          nextProblem?.difficulty ? nextProblem.difficulty : ""
+                        }
+                      />
+                    </Grid>
+                  )}
                 </Grid>
-                <Grid item xs={3}>
-                  <DifficultyChip
-                    label={
-                      nextProblem?.difficulty ? nextProblem.difficulty : ""
-                    }
-                  />
-                </Grid>
-              </Grid>
-              <TableContainer sx={{ height: 272 }}>
-                <List>
-                  <ListItem>
-                    <ListItemText
-                      primary={nextProblem?.title}
-                      secondary={nextProblem?.description}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <Button
-                      variant="contained"
-                      component={Link}
-                      to={`/problems/attempt/${nextProblem?.id}`}
-                    >
-                      Attempt
-                    </Button>
-                  </ListItem>
-                </List>
-              </TableContainer>
-            </CardContent>
-          </Card>
+
+                <>
+                  <List>
+                    {nextProblem ? (
+                      <ListItem>
+                        <ListItemText
+                          primary={<code>{nextProblem?.title}</code>}
+                          secondary={nextProblem?.description}
+                        />
+                        <ListItem>
+                          <Button
+                            variant="contained"
+                            component={Link}
+                            to={`/problems/attempt/${nextProblem?.id}`}
+                          >
+                            Attempt
+                          </Button>
+                        </ListItem>
+                      </ListItem>
+                    ) : (
+                      <ListItem>
+                        <ListItemText>
+                          No more suggested tasks 🎉 <br /> please check again
+                          later
+                        </ListItemText>
+                      </ListItem>
+                    )}
+                  </List>
+                </>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Card>
-            <CardHeader title="Cohort Leaderboard" />
+            <CardHeader title="🏆 Cohort Leaderboard" />
             <CardContent>
               <CohortLeaderoard
                 leaderboard={cohortBoard}

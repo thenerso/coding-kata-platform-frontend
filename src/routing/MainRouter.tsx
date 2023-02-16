@@ -102,7 +102,7 @@ const MainRouter = (): JSX.Element => {
       <Grid
         container
         component="main"
-        style={{ marginTop: "20px", marginBottom: "20px", minHeight: "60vh" }}
+        style={{ marginTop: "40px", marginBottom: "20px", minHeight: "60vh" }}
         justifyContent="space-evenly"
       >
         <Grid item xs={11} alignSelf={loading ? "center" : "start"}>

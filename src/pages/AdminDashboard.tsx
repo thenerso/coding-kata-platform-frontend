@@ -1,5 +1,7 @@
 import {
+  Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
   Container,
@@ -31,9 +33,15 @@ import solutionService from "../services/solutionService";
 import { ISolution } from "../interfaces/solutions";
 import { IJWTUser } from "../interfaces/network";
 import { ListItemIcon } from "@material-ui/core";
-import { ArrowRight, Groups } from "@mui/icons-material";
+import { ArrowForward, ArrowRight, Groups } from "@mui/icons-material";
 import { AppContext, IAppContext } from "../context/AppContext";
 import dayjs from "dayjs";
+import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
+
+const StyledCardActions = styled(CardActions)`
+  justify-content: flex-end;
+`;
 
 const AdminDashboard = () => {
   const { cohorts } = useContext(AppContext) as IAppContext;
@@ -100,9 +108,9 @@ const AdminDashboard = () => {
         </Grid>
         <Grid item xs={8}>
           <Card>
-            <CardHeader title="Recent Student Submissions" />
+            <CardHeader title="✏️ Recent Student Submissions" />
             <CardContent>
-              <TableContainer sx={{ height: 300 }}>
+              <TableContainer sx={{ height: 308 }}>
                 <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
                   <TableHead>
                     <TableRow>
@@ -149,11 +157,20 @@ const AdminDashboard = () => {
                 </Table>
               </TableContainer>
             </CardContent>
+            <StyledCardActions>
+              <Button
+                endIcon={<ArrowForward />}
+                component={Link}
+                to="/solutions"
+              >
+                All Solutions
+              </Button>
+            </StyledCardActions>
           </Card>
         </Grid>
         <Grid item xs={4}>
           <Card>
-            <CardHeader title="Recent Cohorts" />
+            <CardHeader title="👨‍🎓 Recent Cohorts" />
             <TableContainer sx={{ height: 340 }}>
               <List>
                 {cohorts.length === 0 ? (
@@ -161,7 +178,7 @@ const AdminDashboard = () => {
                     <ListItemText>No Cohorts added yet</ListItemText>
                   </ListItem>
                 ) : (
-                  cohorts.slice(0, 3).map((cohort) => {
+                  cohorts.slice(0, 4).map((cohort) => {
                     return (
                       <ListItem>
                         <ListItemButton>
@@ -187,51 +204,24 @@ const AdminDashboard = () => {
                 )}
               </List>
             </TableContainer>
+            <StyledCardActions>
+              <Button endIcon={<ArrowForward />} component={Link} to="/cohorts">
+                All Cohorts
+              </Button>
+            </StyledCardActions>
           </Card>
         </Grid>
-        {/* <Grid item xs={4}>
+
+        <Grid item xs={12}>
           <Card>
+            <CardHeader title="🏆 Global Leaderboard" />
             <CardContent>
-              <Grid container>
-                <Grid item xs={9}>
-                  <Typography variant="h6">Suggested Task</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <DifficultyChip
-                    label={
-                      nextProblem?.difficulty ? nextProblem.difficulty : ""
-                    }
-                  />
-                </Grid>
-              </Grid>
-              <List>
-                <ListItem>
-                  <ListItemText
-                    primary={nextProblem?.title}
-                    secondary={nextProblem?.description}
-                  />
-                </ListItem>
-                <ListItem>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to={`/problems/attempt/${nextProblem?.id}`}
-                  >
-                    Attempt
-                  </Button>
-                </ListItem>
-              </List>
-            </CardContent>
-          </Card>
-        </Grid> */}
-        <Grid item xs={6}>
-          <Card>
-            <CardHeader title="Global Leaderboard" />
-            <CardContent>
-              <CohortLeaderoard
-                leaderboard={globalBoard}
-                userId={user?.userId || 0}
-              />
+              <TableContainer sx={{ height: 500 }}>
+                <CohortLeaderoard
+                  leaderboard={globalBoard}
+                  userId={user?.userId || 0}
+                />
+              </TableContainer>
             </CardContent>
           </Card>
         </Grid>
