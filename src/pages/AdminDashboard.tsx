@@ -107,7 +107,7 @@ const AdminDashboard = () => {
         <Grid item xs={12}>
           <Typography variant="h1">Hi, {user?.sub} 👋🏻</Typography>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           <Card>
             <CardHeader title="📊 Solutions by month" />
             <CardContent>
@@ -115,7 +115,7 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Card>
             <CardHeader title="👨‍🎓 Recent Cohorts" />
             <TableContainer sx={{ height: 350 }}>
@@ -127,7 +127,7 @@ const AdminDashboard = () => {
                 ) : (
                   cohorts.slice(0, 4).map((cohort) => {
                     return (
-                      <ListItem>
+                      <ListItem key={cohort.id}>
                         <ListItemButton>
                           <ListItemIcon>
                             <Groups />
