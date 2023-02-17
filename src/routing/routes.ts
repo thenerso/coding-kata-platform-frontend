@@ -23,6 +23,16 @@ import ListSolutions from "../pages/solutions/ListAllSolutions";
 import Solution from "../pages/solutions/Solution";
 
 import ListUsers from "../pages/user/ListUsers";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { SvgIconTypeMap } from "@mui/material";
+import {
+  Dashboard,
+  Edit,
+  Groups,
+  List,
+  Person,
+  Rule,
+} from "@mui/icons-material";
 
 export enum UserRoles {
   UNAUTHED,
@@ -39,6 +49,7 @@ export type IRouteType = {
   Component: React.FC;
   authed: UserRoles;
   showInMenuFor?: UserRoles;
+  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
 };
 
 const routes: IRouteType[] = [
@@ -74,6 +85,7 @@ const routes: IRouteType[] = [
     Component: StudentDashboard,
     authed: UserRoles.USER,
     showInMenuFor: UserRoles.USER,
+    icon: Dashboard,
   },
   {
     name: "Dashboard",
@@ -81,6 +93,7 @@ const routes: IRouteType[] = [
     Component: AdminDashboard,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
+    icon: Dashboard,
   },
   {
     name: "Profile",
@@ -98,6 +111,7 @@ const routes: IRouteType[] = [
     Component: ListUsers,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
+    icon: Person,
   },
 
   /**
@@ -115,6 +129,7 @@ const routes: IRouteType[] = [
     Component: ListCohorts,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
+    icon: Groups,
   },
   {
     name: "Cohort",
@@ -144,6 +159,7 @@ const routes: IRouteType[] = [
     Component: ListProblemSets,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
+    icon: List,
   },
   {
     name: "Problem Set",
@@ -173,6 +189,7 @@ const routes: IRouteType[] = [
     Component: ListProblems,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
+    icon: Edit,
   },
   {
     name: "Problem",
@@ -204,6 +221,7 @@ const routes: IRouteType[] = [
     Component: ListSolutions,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
+    icon: Rule,
   },
   {
     name: "Solution",

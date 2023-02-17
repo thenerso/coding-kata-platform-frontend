@@ -15,6 +15,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import routes, { UserRoles } from "../../routing/routes";
 import authService from "../../services/authService";
+import Drawer from "./Drawer";
 
 /**
  * Component Types
@@ -74,6 +75,13 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
     homeLink = "/dashboard";
   }
 
+  const routesToDisplay = routes.filter((route) => {
+    if (role === UserRoles.ADMIN) {
+      return route.showInMenuFor === role && route.authed === role;
+    }
+    return route.showInMenuFor === role && route.authed === role;
+  });
+
   return (
     <React.Fragment>
       <AppBar position="sticky">
@@ -90,14 +98,10 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
           </Link>
 
           <Box sx={{ display: { sm: "block" } }}>
-            {routes
-              .filter((route) => {
-                if (role === UserRoles.ADMIN) {
-                  return route.showInMenuFor === role && route.authed === role;
-                }
-                return route.showInMenuFor === role && route.authed === role;
-              })
-              .map((route) => (
+            {role === UserRoles.ADMIN ? (
+              <Drawer routes={routesToDisplay} />
+            ) : (
+              routesToDisplay.map((route) => (
                 <Button
                   component={Link}
                   to={route.link}
@@ -106,7 +110,8 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
                 >
                   {route.name}
                 </Button>
-              ))}
+              ))
+            )}
 
             {isAuthed && (
               <React.Fragment>
