@@ -20,7 +20,7 @@ const OptionsWrapper = styled("div")`
 `;
 interface IEditorTools {
   language: string;
-  setLanguage: (param: string) => void;
+  setLanguage?: (param: string) => void;
   theme: string;
   setTheme: (param: string) => void;
   fontSize: number;
@@ -73,7 +73,10 @@ const EditorTools: React.FC<IEditorTools> = ({
           labelId="language-label"
           value={language}
           label="Language"
-          onChange={(e) => setLanguage(e.target.value)}
+          disabled={!setLanguage}
+          onChange={(e) =>
+            setLanguage ? setLanguage(e.target.value) : () => {}
+          }
         >
           {Object.keys(languageOptions).map((item) => (
             <MenuItem key={item} value={item}>

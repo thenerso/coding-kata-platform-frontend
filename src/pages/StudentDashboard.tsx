@@ -7,6 +7,7 @@ import {
   Grid,
   List,
   ListItem,
+  ListItemSecondaryAction,
   ListItemText,
   Table,
   TableBody,
@@ -121,53 +122,65 @@ const StudentDashboard = () => {
         <Grid item xs={12}>
           <Typography variant="h1">Hi {user.username} 👋🏻</Typography>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item md={8} xs={12}>
           <Card>
             <CardHeader title="✏️ Previously Submitted Solutions" />
             <CardContent>
-              <TableContainer sx={{ height: 267 }}>
-                <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
+              <TableContainer sx={{ minHeight: 302 }}>
+                <Table aria-label="Solutions table">
                   <TableHead>
                     <TableRow>
-                      {solutionTablelFields.map((cell, index) => (
-                        <TableCell key={`${index}-${cell}`}>{cell}</TableCell>
-                      ))}
+                      {user.solutions?.length === 0 ? (
+                        <TableCell></TableCell>
+                      ) : (
+                        solutionTablelFields.map((cell, index) => (
+                          <TableCell key={`${index}-${cell}`}>{cell}</TableCell>
+                        ))
+                      )}
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {user.solutions?.map((solution) => (
-                      <TableRow
-                        key={solution.id}
-                        hover
-                        onClick={() => navigate(`/solutions/${solution.id}`)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <TableCell>{solution.problem.title}</TableCell>
-                        <TableCell>
-                          {" "}
-                          <DifficultyChip
-                            label={solution.problem.difficulty || ""}
-                          />
-                        </TableCell>
-                        <TableCell>{solution.lang}</TableCell>
-                        <TableCell>
-                          {dayjs(solution.submissionDate).fromNow()}
-                        </TableCell>
-                        <TableCell>
-                          <SuccessChip
-                            score={solution.correctness}
-                            label={`${solution.correctness}%`}
-                          />
+                    {user.solutions?.length === 0 ? (
+                      <TableRow>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          Your solutions will appear here!
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      user.solutions?.map((solution) => (
+                        <TableRow
+                          key={solution.id}
+                          hover
+                          onClick={() => navigate(`/solutions/${solution.id}`)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <TableCell>{solution.problem.title}</TableCell>
+                          <TableCell>
+                            {" "}
+                            <DifficultyChip
+                              label={solution.problem.difficulty || ""}
+                            />
+                          </TableCell>
+                          <TableCell>{solution.lang}</TableCell>
+                          <TableCell>
+                            {dayjs(solution.submissionDate).fromNow()}
+                          </TableCell>
+                          <TableCell>
+                            <SuccessChip
+                              score={solution.correctness}
+                              label={`${solution.correctness}%`}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
             </CardContent>
           </Card>
         </Grid>
-        <Grid container item rowSpacing={3} xs={4} direction="row">
+        <Grid container item rowSpacing={3} xs={12} md={4} direction="row">
           <Grid item xs={12}>
             <Card>
               <CardHeader title={`📈 Progress (Score: ${user.score})`} />
@@ -182,29 +195,28 @@ const StudentDashboard = () => {
           <Grid item xs={12}>
             <Card sx={{ minHeight: "100%" }}>
               <CardContent>
-                <Grid container>
-                  <Grid item xs={9}>
-                    <Typography variant="h6">🤔 Suggested Task</Typography>
-                  </Grid>
-                  {nextProblem && (
-                    <Grid item xs={3}>
-                      <DifficultyChip
-                        label={
-                          nextProblem?.difficulty ? nextProblem.difficulty : ""
-                        }
-                      />
-                    </Grid>
-                  )}
-                </Grid>
-
+                <Typography variant="h6">🤔 Suggested Task</Typography>
                 <>
                   <List>
                     {nextProblem ? (
-                      <ListItem>
-                        <ListItemText
-                          primary={<code>{nextProblem?.title}</code>}
-                          secondary={nextProblem?.description}
-                        />
+                      <>
+                        <ListItem>
+                          <ListItemSecondaryAction>
+                            <DifficultyChip
+                              label={
+                                nextProblem?.difficulty
+                                  ? nextProblem.difficulty
+                                  : ""
+                              }
+                            />
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                        <ListItem>
+                          <ListItemText
+                            primary={<code>{nextProblem?.title}</code>}
+                            secondary={nextProblem?.description}
+                          />
+                        </ListItem>
                         <ListItem>
                           <Button
                             variant="contained"
@@ -214,7 +226,7 @@ const StudentDashboard = () => {
                             Attempt
                           </Button>
                         </ListItem>
-                      </ListItem>
+                      </>
                     ) : (
                       <ListItem>
                         <ListItemText>

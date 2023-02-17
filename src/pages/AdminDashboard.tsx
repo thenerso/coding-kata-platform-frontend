@@ -125,7 +125,7 @@ const AdminDashboard = () => {
                         <TableCell>No Solutions added yet</TableCell>
                       </TableRow>
                     ) : (
-                      solutions.map((row) => (
+                      solutions.slice(0, 5).map((row) => (
                         <TableRow
                           key={`${row.id}-${row.problem?.title}`}
                           hover

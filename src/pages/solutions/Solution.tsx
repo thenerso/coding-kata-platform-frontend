@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ArrowBack } from "@mui/icons-material";
+import { AccessTime, ArrowBack, Code, Person } from "@mui/icons-material";
 import {
   Button,
   Typography,
@@ -11,18 +11,14 @@ import {
   CardContent,
   List,
   Chip,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
+  ListItemIcon,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
-// import DeleteProblem from "../../components/problem/DeleteProblem";
 import DifficultyChip from "../../components/problem/DifficultyChip";
 
 import Tags from "../../components/problem/Tags";
@@ -31,7 +27,8 @@ import TestCases from "../../components/problem/test-case/TestCases";
 import authService from "../../services/authService";
 import { ISolution } from "../../interfaces/solutions";
 import solutionService from "../../services/solutionService";
-import CodeEditor from "../../components/editor/CodeEditor";
+import dayjs from "dayjs";
+import PreviewCodeEditorContainer from "../../components/editor/PreviewCodeEditorContainer";
 
 /**
  * Injected styles
@@ -59,6 +56,11 @@ const ChipWrapper = styled("div")`
     margin: 0 10px;
   }
   margin: 15px 0;
+`;
+
+const StyledListItemText = styled(ListItemText)`
+  display: flex;
+  flex-direction: column-reverse;
 `;
 
 const Solution = () => {
@@ -111,7 +113,10 @@ const Solution = () => {
         <Tags tags={solution.problem?.tags} />
       </ChipWrapper>
       <TitleWrapper>
-        <Typography variant="h1">{`Solution for '${solution.problem.title}' (${solution.correctness}%)`}</Typography>
+        <Typography variant="h1">
+          Solution for <code>'{solution.problem.title}'</code> (
+          {solution.correctness}%)
+        </Typography>
         <TitleActionWrapper>
           <Fab
             color={solution.correctness > 70 ? "success" : "error"}
@@ -131,72 +136,85 @@ const Solution = () => {
 
       <br />
       <Grid container spacing={5}>
-        <Grid item md={6} sm={12} xs={12}>
-          <Card>
-            <CardHeader title="Test Cases" />
-            <CardContent>
+        <Grid container spacing={2} item xs={12} md={6}>
+          <Grid item md={12}>
+            <Card>
+              <CardHeader title="Submission Details" />
               <List>
-                <StyledChip label="Public" color="success" />
-                {solution.problem?.testSuite?.publicCases?.map(
-                  (item, index) => {
-                    return (
-                      <TestCases
-                        key={`${index}-${item.id}`}
-                        testCase={item}
-                        functionName={solution.problem.title || "functionName"}
-                      />
-                    );
-                  }
-                )}
-                <Divider />
-
-                <StyledChip label="Private" color="warning" />
-                {solution.problem?.testSuite?.privateCases?.map(
-                  (item, index) => {
-                    return (
-                      <TestCases
-                        key={`${index}-${item.id}`}
-                        testCase={item}
-                        functionName={solution.problem.title || "functionName"}
-                      />
-                    );
-                  }
-                )}
+                <ListItem>
+                  <ListItemIcon>
+                    <Person />
+                  </ListItemIcon>
+                  <StyledListItemText
+                    primary={solution.user.username}
+                    secondary="Username"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Code />
+                  </ListItemIcon>
+                  <StyledListItemText
+                    primary={solution.lang}
+                    secondary="Language"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <AccessTime />
+                  </ListItemIcon>
+                  <StyledListItemText
+                    primary={dayjs(solution.submissionDate).fromNow()}
+                    secondary="Submitted"
+                  />
+                </ListItem>
               </List>
-            </CardContent>
-          </Card>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card>
+              <CardHeader title="Test Cases" />
+              <CardContent>
+                <List>
+                  <StyledChip label="Public" color="success" />
+                  {solution.problem?.testSuite?.publicCases?.map(
+                    (item, index) => {
+                      return (
+                        <TestCases
+                          key={`${index}-${item.id}`}
+                          testCase={item}
+                          functionName={
+                            solution.problem.title || "functionName"
+                          }
+                        />
+                      );
+                    }
+                  )}
+                  <Divider />
+
+                  <StyledChip label="Private" color="warning" />
+                  {solution.problem?.testSuite?.privateCases?.map(
+                    (item, index) => {
+                      return (
+                        <TestCases
+                          key={`${index}-${item.id}`}
+                          testCase={item}
+                          functionName={
+                            solution.problem.title || "functionName"
+                          }
+                        />
+                      );
+                    }
+                  )}
+                </List>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
         <Grid item md={6} sm={12} xs={12}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="Solution">
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <Typography>{`User: ${solution.user.username}`}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography>{`Language: ${
-                      solution.lang === "js"
-                        ? "JavaScript"
-                        : solution.lang === "python"
-                        ? "Python"
-                        : "Java"
-                    }`}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography>{`Sumbitted: ${solution.submissionDate}`}</Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-            </Table>
-          </TableContainer>
-          <CodeEditor
-            fontSize={16}
-            theme={"monokai"}
-            language={solution.lang === "js" ? "javascript" : solution.lang}
-            value={solution.code}
-            onEditorValueChange={() => {}}
-            readOnly
+          <PreviewCodeEditorContainer
+            code={solution.code}
+            inputLanguage={solution.lang}
           />
         </Grid>
       </Grid>
