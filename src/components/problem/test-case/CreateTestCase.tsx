@@ -49,7 +49,7 @@ const CreateTestCase = ({
 }: ICreateTestCaseProps) => {
   const [open, setOpen] = useState(false);
 
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
 
   const [inputs, setInputs] = useState<Put[]>([{ ...defaultInputValue }]);
   const [output, setOutput] = useState<Put>({ ...defaultInputValue });

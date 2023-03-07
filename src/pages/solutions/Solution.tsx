@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ArrowBack, Done } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import {
   Button,
   Typography,
@@ -111,16 +111,14 @@ const Solution = () => {
         <Tags tags={solution.problem?.tags} />
       </ChipWrapper>
       <TitleWrapper>
-        <Typography variant="h1">{`${
-          solution.correct ? "Correct" : "Attempted"
-        } Solution for '${solution.problem.title}'`}</Typography>
+        <Typography variant="h1">{`Solution for '${solution.problem.title}' (${solution.correctness}%)`}</Typography>
         <TitleActionWrapper>
           <Fab
-            color={solution.correct ? "success" : "error"}
+            color={solution.correctness > 70 ? "success" : "error"}
             aria-label="Correct"
           >
             {/* {problem.id && <DeleteProblem id={problem.id} />} */}
-            {solution.correct ? <Done /> : <Typography>X</Typography>}
+            <Typography>{solution.correctness + "%"}</Typography>
           </Fab>
 
           {/* {problem.id && <DeleteProblem id={problem.id} />} */}

@@ -28,6 +28,8 @@ const Attempt = () => {
   const [problem, setProblem] = useState<IProblem>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
+  const [correctness, setCorrectness] = useState<number>(0);
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
   const [compiling, setCompiling] = useState<boolean>(false);
   const [evalResponse, setEvalResponse] = useState<IEvalResponse | null>();
@@ -78,7 +80,7 @@ const Attempt = () => {
     }
   }, [problem, id]);
 
-  const compile = async () => {
+  const submit = async () => {
     const user = authService.getUser();
     const token = authService.getAccessToken();
 
@@ -90,10 +92,10 @@ const Attempt = () => {
         lang: languageOptions[activeLanguage],
       };
       setCompiling(true);
+      setSubmitted(true);
       try {
         const response = await EvalService.evaluate(body, token);
         const evalResponse: IEvalResponse = response as IEvalResponse;
-
         setEvalResponse(response);
         setTabValue(1);
 
@@ -115,6 +117,66 @@ const Attempt = () => {
             variant: "warning",
           });
         }
+        enqueueSnackbar(`Correctness: ${correctness}%`, {
+         variant: correctness > 70 ? "success" : "error",
+       });
+
+        setCompiling(false);
+      } catch (err: any) {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+        });
+
+        setCompiling(false);
+      }
+    } else {
+      enqueueSnackbar("Authentication error, please log in again", {
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
+
+  const test = async () => {
+    const user = authService.getUser();
+    const token = authService.getAccessToken();
+
+    if (user && token) {
+      const body: IEvaluate = {
+        userId: user.userId?.toString() || "",
+        problemId: problem?.id?.toString() || "0",
+        code: startCode[languageOptions[activeLanguage]],
+        lang: languageOptions[activeLanguage],
+      };
+      setCompiling(true);
+      try {
+        const response = await EvalService.evaluate(body, token);
+        const evalResponse: IEvalResponse = response as IEvalResponse;
+        setEvalResponse(response);
+        setTabValue(1);
+
+        const compileError = evalResponse.testResultsWithLogs.find(
+          (result) => !result.compileResult.compiled
+        );
+
+        setCorrectness(evalResponse.correctness);
+        if (compileError) {
+          enqueueSnackbar(`Compiled with errors`, {
+            variant: "error",
+          });
+        } else if (evalResponse.successful) {
+          enqueueSnackbar(`Solution successful`, {
+            variant: "success",
+          });
+          getNextProblemForUser(token, user.userId || 0);
+        } else {
+          enqueueSnackbar(`Some test cases failed`, {
+            variant: "warning",
+          });
+        }
+        enqueueSnackbar(`Correctness: ${evalResponse.correctness}%`, {
+          variant: evalResponse.correctness > 70 ? "success" : "error",
+        });
 
         setCompiling(false);
       } catch (err: any) {
@@ -147,6 +209,8 @@ const Attempt = () => {
       navigate("/");
     } else {
       setLoading(true);
+      setSubmitted(false);
+      setCorrectness(0);
       setActiveLanguage("javascript");
       setTabValue(0);
       navigate(`/problems/attempt/${nextProblem}`);
@@ -173,17 +237,28 @@ const Attempt = () => {
             setActiveLanguage={setActiveLanguage}
           />
           <ControlsWrapper>
-            <Button
+            {!submitted && <Button
               variant={nextProblem !== -1 ? "outlined" : "contained"}
               endIcon={
                 compiling ? <CircularProgress size={18} /> : <PlayCircle />
               }
-              onClick={compile}
+              onClick={test}
               disabled={compiling}
             >
               Attempt
-            </Button>
-            {nextProblem !== -1 && (
+            </Button>}
+            {correctness >= 70 && !submitted && (<Button
+               style={{ marginLeft: 10 }}
+               color="secondary"
+               variant="contained"
+             endIcon={
+               compiling ? <CircularProgress size={18} /> : <PlayCircle />
+             }
+             onClick={submit}
+             disabled={compiling}>
+              Submit
+            </Button>)}
+            {nextProblem !== -1 && submitted && (
               <Button
                 style={{ marginLeft: 10 }}
                 color="secondary"

@@ -4,7 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
 import Header from "../components/global/Header";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "../pages/StudentDashboard";
 import Home from "../pages/Home";
 import authService from "../services/authService";
 import routes, { UserRoles } from "./routes";
@@ -81,6 +81,7 @@ const MainRouter = (): JSX.Element => {
         path={link}
         element={
           <EmptyState
+            displayIcon
             message={message}
             action={() => navigate("/login")}
             actionLabel={"Login"}
@@ -101,10 +102,10 @@ const MainRouter = (): JSX.Element => {
       <Grid
         container
         component="main"
-        style={{ marginTop: "20px", marginBottom: "20px", minHeight: "60vh" }}
+        style={{ marginTop: "40px", marginBottom: "20px", minHeight: "60vh" }}
         justifyContent="space-evenly"
       >
-        <Grid item xs={11}>
+        <Grid item xs={11} alignSelf={loading ? "center" : "start"}>
           {loading ? (
             <Loading />
           ) : (

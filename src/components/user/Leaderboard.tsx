@@ -1,40 +1,45 @@
+import styled from "@emotion/styled";
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
+import { orange } from "@mui/material/colors";
 import { IUser } from "../../interfaces/user";
-import { makeStyles } from "@material-ui/core/styles";
-import { orange } from "@material-ui/core/colors";
 
-const useStyles = makeStyles((theme) => ({
-  activeRow: {
-    backgroundColor: orange[100],
-    // color: theme.palette.primary.light
-  },
-  headText: {
-    fontWeight: "bold",
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   activeRow: {
+//     backgroundColor: orange[100],
+//     // color: theme.palette.primary.light
+//   },
+//   headText: {
+//     fontWeight: "bold",
+//   },
+// }));
+
+type IStyledRowProps = {
+  isActive: boolean;
+};
+
+const StyledRow = styled(TableRow)`
+  background-color: ${(props: IStyledRowProps) =>
+    props.isActive ? orange[100] : "inherit"};
+`;
 
 const leaderboardFields = ["Rank", "User", "Score"];
 
 const CohortLeaderoard = ({
-  title,
   leaderboard,
-  user,
+  userId,
 }: {
-  title: string;
   leaderboard: IUser[] | undefined;
-  user: IUser;
+  userId: number;
 }) => {
-  const classes = useStyles();
+  /* const classes = useStyles(); */
   return (
     <>
-      <Typography variant="h6">{title}</Typography>
       <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
         <TableHead>
           <TableRow>
@@ -45,14 +50,11 @@ const CohortLeaderoard = ({
         </TableHead>
         <TableBody>
           {leaderboard?.map((u: IUser, index: number) => (
-            <TableRow
-              key={index}
-              className={u.id === user.id ? classes.activeRow : ""}
-            >
+            <StyledRow key={index} isActive={u.id === userId}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>{u.username}</TableCell>
               <TableCell>{u.score}</TableCell>
-            </TableRow>
+            </StyledRow>
           ))}
         </TableBody>
       </Table>

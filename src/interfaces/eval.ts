@@ -9,6 +9,7 @@ export interface IEvaluate {
 
 export interface IEvalResponse {
   successful: boolean;
+  correctness: number;
   privateTestsPassed: boolean;
   testResultsWithLogs: PublicTestResult[];
   publicTestResults: PublicTestResult[];

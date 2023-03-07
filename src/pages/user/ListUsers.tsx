@@ -1,11 +1,9 @@
 import styled from "@emotion/styled";
 import { Add } from "@mui/icons-material";
 import { Typography, Fab, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import dayjs from "dayjs";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext, IAppContext } from "../../context/AppContext";
-import { IUser } from "../../interfaces/user";
 
 // Injected styles
 const TitleWrapper = styled("div")`
@@ -15,8 +13,6 @@ justify-content: space-between;
 
 const ListUsers = () => {
   const { members } = useContext(AppContext) as IAppContext;
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
 
   const tableFields = ["ID", "Cohort", "Username", "Score"];
 

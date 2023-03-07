@@ -5,7 +5,7 @@ export interface ISolution {
     id?: number;
     code: string;
     lang: string;
-    correct: boolean;
+    correctness: number;
     problem: IProblem;
     submissionDate: string;
     user: IUser;

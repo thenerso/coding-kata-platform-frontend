@@ -7,7 +7,6 @@ import {
   MenuItem,
   Snackbar,
   Button,
-  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 
@@ -68,11 +67,18 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
     setAnchorEl(null);
   };
 
+  let homeLink = "/";
+  if (role === UserRoles.ADMIN) {
+    homeLink = "/admin/dashboard";
+  } else if (role === UserRoles.USER) {
+    homeLink = "/dashboard";
+  }
+
   return (
     <React.Fragment>
       <AppBar position="sticky">
-        <Toolbar  style={{ justifyContent: "space-between" }}>
-          <Link to="/">
+        <Toolbar style={{ justifyContent: "space-between" }}>
+          <Link to={homeLink}>
             <Box
               component="img"
               sx={{
@@ -87,10 +93,7 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
             {routes
               .filter((route) => {
                 if (role === UserRoles.ADMIN) {
-                  return (
-                    (route.showInMenuFor === role && route.authed === role) ||
-                    route.showInMenuFor === UserRoles.USER
-                  );
+                  return route.showInMenuFor === role && route.authed === role;
                 }
                 return route.showInMenuFor === role && route.authed === role;
               })
