@@ -21,9 +21,9 @@ import UpdateProblem from "../pages/problems/UpdateProblem";
 import Profile from "../pages/Profile";
 import ListSolutions from "../pages/solutions/ListAllSolutions";
 import Solution from "../pages/solutions/Solution";
-import CreateUser from "../pages/user/CreateUser";
-import ListUsers from "../pages/user/ListUsers";
-import User from "../pages/user/User";
+import CreateUser from "../pages/users/CreateUser";
+import ListUsers from "../pages/users/ListUsers";
+import UserInfo from "../pages/users/UserInfo";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { SvgIconTypeMap } from "@mui/material";
 import {
@@ -117,7 +117,7 @@ const routes: IRouteType[] = [
   {
     name: "User",
     link: "/users/:id",
-    Component: User,
+    Component: UserInfo,
     authed: UserRoles.ADMIN,
   },
   {

@@ -19,7 +19,7 @@ import { IUser } from "../../interfaces/user";
 import authService from "../../services/authService";
 import userService from "../../services/userService";
 
-const User = () => {
+const UserInfo = () => {
   const [user, setUser] = useState<IUser>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -128,4 +128,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default UserInfo;
