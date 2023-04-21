@@ -22,8 +22,9 @@ import UpdateProblem from "../pages/problems/UpdateProblem";
 import Profile from "../pages/Profile";
 import ListSolutions from "../pages/solutions/ListAllSolutions";
 import Solution from "../pages/solutions/Solution";
-
-import ListUsers from "../pages/user/ListUsers";
+import CreateUser from "../pages/users/CreateUser";
+import ListUsers from "../pages/users/ListUsers";
+import UserInfo from "../pages/users/UserInfo";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { SvgIconTypeMap } from "@mui/material";
 import {
@@ -115,7 +116,18 @@ const routes: IRouteType[] = [
     showInMenuFor: UserRoles.ADMIN,
     icon: Person,
   },
-
+  {
+    name: "User",
+    link: "/users/:id",
+    Component: UserInfo,
+    authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Create User",
+    link: "/users/new",
+    Component: CreateUser,
+    authed: UserRoles.ADMIN,
+  },
   /**
    * Cohort
    */
