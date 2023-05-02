@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Button,
@@ -35,11 +35,12 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   //const { id, secret = '' } = useParams();
   // const secret = window.location.search.split("secret=")[1];
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
+  const { id ='', secret ='' } = useParams();
+  //const location = useLocation();
+  //const queryParams = new URLSearchParams(location.search);
 
-  const id = queryParams.get('id') || '';
-  const secret = queryParams.get('secret') || '';
+  // const id = queryParams.get('id') || '';
+  // const secret = queryParams.get('secret') || '';
 
   const handleValidation = () => {
     let passed = true;
