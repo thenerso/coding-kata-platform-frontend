@@ -16,15 +16,19 @@ import {
   FormControl,
 } from "@mui/material";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 import problemSetServices from "../../services/problemSetService";
+import problemService from "../../services/problemService";
 
-import { Difficulty, IProblemSet } from "../../interfaces/problemSet";
+import { Difficulty, IProblem, IProblemSet } from "../../interfaces/problemSet";
 import styled from "@emotion/styled";
 
 import { useSnackbar } from "notistack";
+import ProblemsTable from "../../components/problem/ProblemsTable";
+import Loading from "../../components/global/Loading";
+import EmptyState from "../../components/global/EmptyState";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -38,11 +42,37 @@ const CreateProblemSet = () => {
   const [descriptionError, setDescriptionError] = useState<string>("");
   const [difficulty, setDifficulty] = useState<string>("EASY");
   const [tags, setTags] = useState<string[]>([]);
-
+  const [problems, setProblems] = useState<IProblem[]>([])
+  const [availableProblems, setAvailableProblems] = useState<IProblem[]>([]); // New state for available problems
+  const [error, setError] = useState("");
+  
   const [loading, setLoading] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = authService.getAccessToken();
+
+    if (token) {
+      setError("");
+      setLoading(true);
+      problemService
+        .getAll(token)
+        .then((result) => {
+          setAvailableProblems(result);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log("Error getting problems", err);
+          setError("Error fetching data");
+          setLoading(false);
+        });
+    } else {
+      setError("Authentication error, please log in again");
+      setLoading(false);
+    }
+  }, []);
 
   const handleValidation = () => {
     let passed = true;
@@ -70,7 +100,7 @@ const CreateProblemSet = () => {
           description,
           tags,
           difficulty,
-          problems: [],
+          problems,
         };
         setLoading(true);
         try {
@@ -101,6 +131,28 @@ const CreateProblemSet = () => {
     setTags([...tags, event.target.value]);
   };
 
+  const handleAddProblem = (problem: IProblem) => {
+    setProblems([...problems, problem]);
+  };
+
+  const handleDeleteProblem = (problem: IProblem) => {
+    setProblems(problems.filter((p) => p.id !== problem.id));
+  };
+
+  const body: IProblemSet = {
+    title,
+    description,
+    tags,
+    difficulty,
+    problems,
+  };
+
+    // New function to handle updating problems
+    const updateProblems = (event: any, values: IProblem[]) => {
+      setProblems(values);
+    };
+    if (loading) return <Loading />;
+    if (error) return <EmptyState message={error} />;
   return (
     <>
       <Button
@@ -189,8 +241,41 @@ const CreateProblemSet = () => {
               />
             </StyledCardContent>
           </Card>
+        {/* </Grid> */}
+        <Grid item md={12}>
+          <Autocomplete
+            multiple
+            id="problems-selector"
+            options={availableProblems.filter(
+              (availableProblem) =>
+                !problems.some((problem) => problem.id === availableProblem.id)
+            )}
+            value={problems}
+            onChange={updateProblems}
+            getOptionLabel={(option) => option.title}
+            renderTags={(value: readonly IProblem[], getTagProps) =>
+              value.map((option: IProblem, index: number) => (
+                <Chip
+                  label={option.title}
+                  {...getTagProps({ index })}
+                  variant="filled" color="primary"
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                label="Add problems"
+                placeholder="Problems"
+              />
+            )}
+          />
         </Grid>
-
+        <Grid item md={12} xs={12}>
+          <ProblemsTable problems={problems} canDelete={true} />
+        </Grid>
+      </Grid>
         <Grid item md={12} xs={12}>
           <Button
             color="primary"
