@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import authService from "../../services/authService";
 import problemSetServices from "../../services/problemSetService";
+import problemServices from "../../services/problemService";
 
 import { Difficulty, IProblem, IProblemSet } from "../../interfaces/problemSet";
 import styled from "@emotion/styled";
@@ -42,6 +43,7 @@ const UpdateProblemSet = () => {
   const [difficulty, setDifficulty] = useState<string>("EASY");
   const [tags, setTags] = useState<string[]>([]);
   const [problems, setProblems] = useState<IProblem[]>([]);
+  const [availableProblems, setAvailableProblems] = useState<IProblem[]>([]); // New state for available problems
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -49,6 +51,29 @@ const UpdateProblemSet = () => {
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = authService.getAccessToken();
+
+    if (token) {
+      setError("");
+      setLoading(true);
+      problemServices
+        .getAll(token)
+        .then((result) => {
+          setAvailableProblems(result);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log("Error getting problems", err);
+          setError("Error fetching data");
+          setLoading(false);
+        });
+    } else {
+      setError("Authentication error, please log in again");
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const token = authService.getAccessToken();
@@ -138,6 +163,11 @@ const UpdateProblemSet = () => {
     setTags(values);
   };
 
+  // New function to handle updating problems
+  const updateProblems = (event: any, values: IProblem[]) => {
+    setProblems(values);
+  };
+
   if (loading) return <Loading />;
   if (error) return <EmptyState message={error} />;
   return (
@@ -183,27 +213,6 @@ const UpdateProblemSet = () => {
 
               <br />
 
-              <FormControl>
-                <InputLabel variant="standard" id="difficulty-label">
-                  Font Size
-                </InputLabel>
-                <Select
-                  variant="standard"
-                  labelId="difficulty-label"
-                  value={difficulty}
-                  label="Difficulty"
-                  onChange={(e) => setDifficulty(e.target.value as Difficulty)}
-                >
-                  {Object.keys(Difficulty).map((item) => (
-                    <MenuItem key={item} value={item}>
-                      {item.replace("_", " ").toLowerCase()}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <br />
-
               <Autocomplete
                 multiple
                 id="problem-tags"
@@ -228,6 +237,37 @@ const UpdateProblemSet = () => {
               />
             </StyledCardContent>
           </Card>
+        </Grid>
+
+        <Grid item md={12}>
+          <Autocomplete
+            multiple
+            id="problems-selector"
+            options={availableProblems.filter(
+              (availableProblem) =>
+                !problems.some((problem) => problem.id === availableProblem.id)
+            )}
+            value={problems}
+            onChange={updateProblems}
+            getOptionLabel={(option) => option.title}
+            renderTags={(value: readonly IProblem[], getTagProps) =>
+              value.map((option: IProblem, index: number) => (
+                <Chip
+                  label={option.title}
+                  {...getTagProps({ index })}
+                  variant="filled" color="primary"
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                label="Add problems"
+                placeholder="Problems"
+              />
+            )}
+          />
         </Grid>
 
         <Grid item md={12}>

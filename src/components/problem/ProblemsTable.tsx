@@ -17,9 +17,10 @@ import Tags from "./Tags";
 interface IProblemProps {
   problems: IProblem[];
   attempt?: boolean;
+  canDelete?: boolean;
 }
 
-const ProblemsTable = ({ problems, attempt = false}: IProblemProps) => {
+const ProblemsTable = ({ problems, attempt = false, canDelete = false}: IProblemProps) => {
   const tableFields = ["Title", "Difficulty", "Tags"];
 
   return (
