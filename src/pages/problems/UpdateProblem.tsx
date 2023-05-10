@@ -159,8 +159,8 @@ const UpdateProblem = () => {
     }
   };
 
-  const updateTags = (event: any) => {
-    setTags([...tags, event.target.value]);
+  const updateTags = (event: any, values: any, reason: any, details: any) => {
+    setTags(values);
   };
 
   const addTestCase = (isPublic: boolean, inputs: Put[], output: Put) => {
