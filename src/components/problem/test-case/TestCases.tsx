@@ -38,7 +38,7 @@ const TestCases = ({
                   <Tooltip style={{ cursor: "pointer" }} title={input.dataType}>
                     <span>
                       {input.dataType?.includes("ARRAY") ? "[" : ""}
-                      {input.value || ""}
+                      {input.dataType?.includes("STRING") ? input.value?.split(",").map(word => `"${word.trim()}"`).join(",") : input.value ? input.value : ""}
                       {input.dataType?.includes("ARRAY") ? "]" : ""}
                     </span>
                   </Tooltip>
@@ -51,7 +51,7 @@ const TestCases = ({
               style={{ cursor: "pointer" }}
               title={testCase.output.dataType}
             >
-              <span>{testCase.output.value}</span>
+              <span>{testCase.output.dataType?.includes("STRING") ? testCase.output.value?.split(",").map(word => `"${word.trim()}"`).join(",") : testCase.output.value ? testCase.output.value : ""}</span>
             </Tooltip>
           </code>
         </ListItemText>
