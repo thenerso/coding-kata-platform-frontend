@@ -27,6 +27,7 @@ import { IProblem } from "../../interfaces/problemSet";
 import authService from "../../services/authService";
 import ProblemService from "../../services/problemService";
 import DeleteProblem from "../../components/problem/DeleteProblem";
+import { renderHTML } from "../../components/global/Rendering";
 
 /**
  * Injected styles
@@ -120,8 +121,10 @@ const Problem = () => {
         </TitleActionWrapper>
       </TitleWrapper>
 
-      <Typography variant="subtitle1">{problem.description}</Typography>
-
+      <Typography variant="subtitle1">
+      <div dangerouslySetInnerHTML={renderHTML(problem.description)} />
+        </Typography>
+      <br />
       <br />
       <Grid container spacing={5}>
         <Grid item md={6} sm={12} xs={12}>
