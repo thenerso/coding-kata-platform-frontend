@@ -68,16 +68,18 @@ export enum Difficulty {
 export const sanitizeCase = (testCase: Case) => {
   testCase.inputs = testCase.inputs.map(input => {
     if(input.dataType?.includes("ARRAY")) {
-      input.value = input.value?.replaceAll(", ", ",");
+      input.value = input.value?.replaceAll(", ", ",")
+      .replaceAll(" ,", ",");
     }
-    // if(!input.dataType?.includes("STRING")) input.value = input.value?.replaceAll(" ", "");
+    // if(input.dataType !== DataType.STRING) input.value = input.value?.replaceAll(" ", "");
     return input;
   });
   
   if(testCase.output.dataType?.includes("ARRAY")) {
-    testCase.output.value = testCase.output.value?.replaceAll(", ", ",");
+    testCase.output.value = testCase.output.value?.replaceAll(", ", ",")
+    .replaceAll(" ,", ",");
   }
-  // if(!testCase.output.dataType?.includes("STRING")) {
+  // if(testCase.output.dataType !== DataType.STRING) {
   //   testCase.output.value = testCase.output.value?.replaceAll(" ", "");
   // }
   return testCase;
