@@ -65,22 +65,27 @@ export enum Difficulty {
   VERY_HARD = "Very Hard",
 }
 
-export const sanitizeCase = (testCase: Case) => {
-  testCase.inputs = testCase.inputs.map(input => {
-    if(input.dataType?.includes("ARRAY")) {
-      input.value = input.value?.replaceAll(", ", ",")
-      .replaceAll(" ,", ",");
+export const sanitizeCase = (testCase: Case): Case => {
+  const sanitizeValue = (value: string | undefined, dataType: DataType | undefined) : string | undefined => {
+    if(dataType === DataType.STRING) return value;
+    if(dataType?.includes("ARRAY")) {
+      return value?.replace(/,\s/g, ",").replace(/\s,/g, ",");
     }
+  }
+  testCase.inputs = testCase.inputs.map(input => {
+    input.value = sanitizeValue(input.value, input.dataType)
     // if(input.dataType !== DataType.STRING) input.value = input.value?.replaceAll(" ", "");
     return input;
   });
   
-  if(testCase.output.dataType?.includes("ARRAY")) {
-    testCase.output.value = testCase.output.value?.replaceAll(", ", ",")
-    .replaceAll(" ,", ",");
-  }
+  testCase.output.value = sanitizeValue(testCase.output.value, testCase.output.dataType);
+  // if(testCase.output.dataType?.includes("ARRAY")) {
+  //   testCase.output.value = testCase.output.value?.replaceAll(", ", ",")
+  //   .replaceAll(" ,", ",");
+  // }
   // if(testCase.output.dataType !== DataType.STRING) {
   //   testCase.output.value = testCase.output.value?.replaceAll(" ", "");
   // }
   return testCase;
 }
+
