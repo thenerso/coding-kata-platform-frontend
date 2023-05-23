@@ -156,6 +156,7 @@ const UserInfo = () => {
               title="Submitted Solutions"
               rows={user.solutions}
               fields={solutionTableFields}
+              viewLink='/solutions/'
             />
           </Card>
         </Grid>

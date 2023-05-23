@@ -9,6 +9,7 @@ import styled from "@emotion/styled";
 import DeleteCohort from "../../components/cohort/DeleteCohort";
 import dayjs from "dayjs";
 import { AppContext, IAppContext } from "../../context/AppContext";
+import FilterTable, { ITableFields } from "../../components/global/FilterTable";
 
 /**
  * Injected styles
@@ -44,6 +45,15 @@ const Cohort = () => {
     }
   }, [cohorts, id]);
 
+  const tableFields: ITableFields[] = [
+    { label: "ID", field: "id", type: "index" },
+    { label: "Username", field: "username", type: "string" },
+    { label: "Email", field: "email", type: "string" },
+    // { label: "Cohort", field: "cohort.name", type: "string" },
+    { label: "Start Date", field: "startDate", type: "date" },
+    { label: "Score", field: "score", type: "string" },
+  ];
+
   if (error || !cohort) return <EmptyState message={error} />;
   return (
     <>
@@ -75,7 +85,14 @@ const Cohort = () => {
       </Typography>
 
       <br />
-      <Members members={cohort.members} displayScore={true} />
+      {/* <Members members={cohort.members} displayScore={true} /> */}
+      <FilterTable
+      title="Cohort Members"
+      viewLink={"/users/"}
+      rows={cohort.members}
+      fields={tableFields}
+      // createLink={`/users/new`}
+    />
     </>
   );
 };
