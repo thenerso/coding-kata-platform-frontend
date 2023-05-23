@@ -19,6 +19,9 @@ import {
   Grid,
 } from "@mui/material";
 import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
@@ -28,7 +31,9 @@ import authService from "../../services/authService";
 import userService from "../../services/userService";
 import FilterTable, { ITableFields } from "../../components/global/FilterTable";
 
-const UserInfo = () => {
+dayjs.extend(relativeTime);
+
+const UserInfo = ({title = "User Info"}) => {
   const [user, setUser] = useState<IUser>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -81,7 +86,7 @@ const UserInfo = () => {
       >
         Back
       </Button>
-      <Typography variant="h1">User Info</Typography>
+      <Typography variant="h1">{title}</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <Card>
