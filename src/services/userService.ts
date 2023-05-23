@@ -1,7 +1,6 @@
 import axios, { AxiosError } from "axios";
 import GlobalConfig from "../config/GlobalConfig";
 import { IUser } from "../interfaces/user";
-import { ICohort } from "../interfaces/cohort";
 
 const userService = {
   getAll: async (token: string) => {

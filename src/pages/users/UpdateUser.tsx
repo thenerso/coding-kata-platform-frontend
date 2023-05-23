@@ -32,6 +32,8 @@ import { ICohort } from "../../interfaces/cohort";
 import { UserRoles } from "../../routing/routes";
 import userService from "../../services/userService";
 import { AppContext, IAppContext } from "../../context/AppContext";
+import Loading from "../../components/global/Loading";
+import EmptyState from "../../components/global/EmptyState";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -89,7 +91,7 @@ const UpdateUser = () => {
       setError("Authentication error, please log in again");
       setLoading(false);
     }
-  }, []);
+  }, [id]);
 
   const handleValidation = () => {
     let passed = true;
@@ -154,7 +156,9 @@ const UpdateUser = () => {
       setLoading(false);
     }
   };
-
+  
+  if (loading) return <Loading />;
+  if (error) return <EmptyState message={error} />;
   return (
     <>
       <Button
