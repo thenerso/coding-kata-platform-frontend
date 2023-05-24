@@ -54,6 +54,9 @@ const MainRouter = (): JSX.Element => {
         case "USER":
           setRole(UserRoles.USER);
           break;
+          case "CLIENT":
+            setRole(UserRoles.CLIENT);
+            break;
         default:
           setRole(UserRoles.UNAUTHED);
           break;
@@ -122,6 +125,20 @@ const MainRouter = (): JSX.Element => {
                       i,
                       link,
                       "You need to be logged in to view this page"
+                    );
+                  }
+                  if (authed === UserRoles.USER && role !== UserRoles.USER) {
+                    return displayAuthState(
+                      i,
+                      link,
+                      "You need a user account to view this page. Contact an adminstrator if you do not have an account."
+                    );
+                  }
+                  if (authed === UserRoles.CLIENT && role !== UserRoles.CLIENT) {
+                    return displayAuthState(
+                      i,
+                      link,
+                      "You need client access to view this page"
                     );
                   }
                   if (authed === UserRoles.ADMIN && role !== UserRoles.ADMIN) {
