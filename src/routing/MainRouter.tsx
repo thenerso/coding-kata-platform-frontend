@@ -131,14 +131,14 @@ const MainRouter = (): JSX.Element => {
                     return displayAuthState(
                       i,
                       link,
-                      "You need a user account to view this page. Contact an adminstrator if you do not have an account."
+                      "You need user or admin access to view this page. Contact an adminstrator if you do not have an account."
                     );
                   }
-                  if (authed === UserRoles.CLIENT && role !== UserRoles.CLIENT) {
+                  if (authed === UserRoles.CLIENT && (role !== UserRoles.CLIENT && role !== UserRoles.ADMIN)) {
                     return displayAuthState(
                       i,
                       link,
-                      "You need client access to view this page"
+                      "You need client or admin access to view this page"
                     );
                   }
                   if (authed === UserRoles.ADMIN && role !== UserRoles.ADMIN) {
