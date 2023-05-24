@@ -43,6 +43,7 @@ const ListProblemSets = () => {
     { label: "Title", field: "title", type: "string" },
     { label: "Difficulty", field: "difficulty", type: "difficulty" },
     { label: "# Problems", field: "problems", type: "count" },
+    { label: "Tags", field: "tags", type: "tags" },
   ];
 
   if (loading) return <Loading />;
