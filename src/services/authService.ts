@@ -93,24 +93,24 @@ const authService = {
   },
 
   logout() {
-    window.sessionStorage.setItem("access_token", "");
-    window.sessionStorage.setItem("user", "");
+    window.localStorage.setItem("access_token", "");
+    window.localStorage.setItem("user", "");
   },
 
   storeAccessToken(accessToken: string) {
-    window.sessionStorage.setItem("access_token", accessToken);
+    window.localStorage.setItem("access_token", accessToken);
   },
 
   getAccessToken(): string | null {
-    return window.sessionStorage.getItem("access_token");
+    return window.localStorage.getItem("access_token");
   },
 
   storeUser(user: IJWTUser) {
-    window.sessionStorage.setItem("user", JSON.stringify(user));
+    window.localStorage.setItem("user", JSON.stringify(user));
   },
 
   getUser(): IJWTUser | undefined {
-    const user = window.sessionStorage.getItem("user");
+    const user = window.localStorage.getItem("user");
     if (user) return JSON.parse(user);
     return undefined;
   },
