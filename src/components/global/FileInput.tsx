@@ -16,7 +16,7 @@ const FileInput: FC<FileInputProps> = ({ label, file, onChange }) => {
   };
 
   return (
-    <Button variant="outlined">
+    <Button sx={{width: '100%'}} variant="outlined">
       <input
         type="file"
         onChange={handleFileChange}

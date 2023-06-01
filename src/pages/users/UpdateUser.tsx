@@ -39,6 +39,7 @@ import EditableList from "../../components/global/EditableList";
 import { AppContext, IAppContext } from "../../context/AppContext";
 import Loading from "../../components/global/Loading";
 import EmptyState from "../../components/global/EmptyState";
+import { HeadshotInput } from "../../components/user/HeadshotInput";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -66,6 +67,8 @@ const UpdateUser = () => {
   const [education, setEducation] = useState<string[]>([]);
   const [workHistory, setWorkHistory] = useState<string[]>([]);
 
+  const [headshotImage, setHeadshotImage] = useState<File | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -75,77 +78,92 @@ const UpdateUser = () => {
 
   useEffect(() => {
     const token = authService.getAccessToken();
-  
+
     if (token) {
       if (id) {
         setError("");
         setLoading(true);
-  
+
         // const userPromise = userService.getById(token, id);
         // const userProfilePromise = userProfileService.getById(token, id);
-  
-        userService
-        .getById(token, id)
-        .then((userResult) => {
-          setCohort(userResult?.cohort || null);
-          setEmail(userResult?.email || "");
-          setUsername(userResult?.username || "");
-          setRoles(userResult?.roles || []);
-          setStartDate(userResult?.joinDate ? dayjs(userResult.joinDate) : null);
 
-          userProfileService
-            .getById(token, id)
-            .then((userProfileResult) => {
-              setFullName(userProfileResult?.fullName || "");
-              setBio(userProfileResult?.bio || "");
-              setHeadshot(userProfileResult?.headshot || null);
-              setResume(userProfileResult?.resume || null);
-              setEducation(userProfileResult?.education || []);
-              setWorkHistory(userProfileResult?.workHistory || []);
-            })
-            .catch((err) => {
-              console.log("Error fetching user profile", err);
-            })
-            .finally(() => setLoading(false));
-        })
-        .catch((err) => {
-          console.log("Error fetching user", err);
-          setError("Error fetching data");
-          setLoading(false);
-        });
+        userService
+          .getById(token, id)
+          .then((userResult) => {
+            setCohort(userResult?.cohort || null);
+            setEmail(userResult?.email || "");
+            setUsername(userResult?.username || "");
+            setRoles(userResult?.roles || []);
+            setStartDate(
+              userResult?.joinDate ? dayjs(userResult.joinDate) : null
+            );
+
+            userProfileService
+              .getById(token, id)
+              .then((userProfileResult) => {
+                setFullName(userProfileResult?.fullName || "");
+                setBio(userProfileResult?.bio || "");
+                setHeadshot(userProfileResult?.headshot || null);
+                setResume(userProfileResult?.resume || null);
+                setEducation(userProfileResult?.education || []);
+                setWorkHistory(userProfileResult?.workHistory || []);
+              })
+              .catch((err) => {
+                console.log("Error fetching user profile", err);
+              })
+              .finally(() => setLoading(false));
+          })
+          .catch((err) => {
+            console.log("Error fetching user", err);
+            setError("Error fetching data");
+            setLoading(false);
+          });
+
+        loadHeadshot(token, id);
       }
     } else {
       setError("Authentication error, please log in again");
       setLoading(false);
     }
   }, [id]);
-  
-  
-  const handleHeadshotChange = (newFile: File | null) => {
-    setHeadshot(newFile ? newFile.name : null);
+
+  useEffect(() => {
+    console.log(`headshot image set: ${headshotImage}`);
+  }, [headshotImage])
+
+  const loadHeadshot = async (token: string, id: string) => {
+    const blob: File = await userProfileService.getHeadshot(token, id);
+    setHeadshotImage(blob);
   };
-  
+
+  const handleHeadshotChange = (newFile: File | null) => {
+    setHeadshotImage(newFile ? newFile: null);
+  };
+
   const handleResumeChange = (newFile: File | null) => {
     setResume(newFile ? newFile.name : null);
   };
 
+  const handleAddEducation = (newEducation: string) => {
+    setEducation((prevEducation) => [...prevEducation, newEducation]);
+  };
 
-const handleAddEducation = (newEducation: string) => {
-  setEducation(prevEducation => [...prevEducation, newEducation]);
-};
+  const handleDeleteEducation = (index: number) => {
+    setEducation((prevEducation) =>
+      prevEducation.filter((_, i) => i !== index)
+    );
+  };
 
-const handleDeleteEducation = (index: number) => {
-  setEducation(prevEducation => prevEducation.filter((_, i) => i !== index));
-};
+  const handleAddWorkHistory = (newWorkHistory: string) => {
+    setWorkHistory((prevWorkHistory) => [...prevWorkHistory, newWorkHistory]);
+  };
 
-const handleAddWorkHistory = (newWorkHistory: string) => {
-  setWorkHistory(prevWorkHistory => [...prevWorkHistory, newWorkHistory]);
-};
+  const handleDeleteWorkHistory = (index: number) => {
+    setWorkHistory((prevWorkHistory) =>
+      prevWorkHistory.filter((_, i) => i !== index)
+    );
+  };
 
-const handleDeleteWorkHistory = (index: number) => {
-  setWorkHistory(prevWorkHistory => prevWorkHistory.filter((_, i) => i !== index));
-};
-  
   const handleValidation = () => {
     let passed = true;
 
@@ -188,7 +206,7 @@ const handleDeleteWorkHistory = (index: number) => {
           resume,
           education,
           workHistory,
-          user: userBody
+          user: userBody,
         };
 
         console.log(userBody);
@@ -197,7 +215,11 @@ const handleDeleteWorkHistory = (index: number) => {
         try {
           //const response = await userService.update(token, userBody);
           const updateUserPromise = userService.update(token, userBody);
-          const updateUserProfilePromise = userProfileService.update(token, id || "", userProfileBody);
+          const updateUserProfilePromise = userProfileService.update(
+            token,
+            id || "",
+            userProfileBody
+          );
           await Promise.all([updateUserPromise, updateUserProfilePromise]);
           enqueueSnackbar(`User updated`, {
             variant: "success",
@@ -239,9 +261,9 @@ const handleDeleteWorkHistory = (index: number) => {
       </Button>
       <Typography variant="h1">Update User</Typography>
       <Grid container spacing={5}>
-        <Grid item sm={12} md={6} xs={12}>
+        <Grid item sm={12} md={5} xs={12}>
           <Card>
-            <CardHeader title="User details" />
+            <CardHeader title="Basic Credentials" />
             <StyledCardContent>
               <TextField
                 variant="standard"
@@ -327,7 +349,7 @@ const handleDeleteWorkHistory = (index: number) => {
                   value={roles}
                   label="Role"
                   renderValue={(selected) => {
-                    console.log(selected);
+                  //  console.log(selected);
                     return selected.join(", ");
                   }}
                   onChange={(e) => {
@@ -353,49 +375,67 @@ const handleDeleteWorkHistory = (index: number) => {
             </StyledCardContent>
           </Card>
         </Grid>
-        <Grid item md={12} xs={12}>
-        <Card>
-    <CardHeader title="User Profile" />
-    <StyledCardContent>
-      <TextField
-        variant="standard"
-        label="Full Name"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && submit()}
-      />
-      <TextField
-        variant="standard"
-        label="Bio"
-        value={bio}
-        onChange={(e) => setBio(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && submit()}
-      />
-      <FileInput
-        label="Headshot"
-        file={headshot ? new File([], headshot) : null}
-        onChange={handleHeadshotChange}
-      />
-      <FileInput
-        label="Resume"
-        file={resume ? new File([], resume) : null}
-        onChange={handleResumeChange}
-      />
-      <EditableList
-        label="Education"
-        items={education}
-        onAddItem={handleAddEducation}
-        onDeleteItem={handleDeleteEducation}
-      />
-      <EditableList
-        label="Work History"
-        items={workHistory}
-        onAddItem={handleAddWorkHistory}
-        onDeleteItem={handleDeleteWorkHistory}
-      />
-    </StyledCardContent>
-  </Card>
+        <Grid item md={7} xs={12}>
+          <Card>
+            <CardHeader
+              title="User Profile"
+            />
+            <StyledCardContent>
+              <Grid container spacing={5}>
+                <Grid item md={8} xs={12} sm={12}>
+                  <TextField sx={{width: '100%'}}
+                    variant="standard"
+                    label="Full Name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && submit()}
+                  />
+                  <br />
+                  <TextField multiline sx={{width: '100%', height: '10em'}}
+                    variant="standard"
+                    label="Bio"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && submit()}
+                  />
+
+                  <FileInput
+                    label="Resume"
+                    file={resume ? new File([], resume) : null}
+                    onChange={handleResumeChange}
+                  />
+                  
+               
+                </Grid>
+                <Grid item md={4} xs={12} sm={12}>
+                  <HeadshotInput
+                    headshot={headshotImage ? headshotImage : null}
+                    onChange={handleHeadshotChange}
+                  />
+                </Grid>
+              </Grid>
+            </StyledCardContent>
+          </Card>
         </Grid>
+          <Grid item md={8}>
+            <Card>
+              <StyledCardContent>
+                <CardHeader title="Education & Experience" />
+                <EditableList
+                  label="Education"
+                  items={education}
+                  onAddItem={handleAddEducation}
+                  onDeleteItem={handleDeleteEducation}
+                />
+                <EditableList
+                  label="Work History"
+                  items={workHistory}
+                  onAddItem={handleAddWorkHistory}
+                  onDeleteItem={handleDeleteWorkHistory}
+                />
+              </StyledCardContent>
+            </Card>
+          </Grid>
 
         <Grid item md={12} xs={12}>
           <Button
