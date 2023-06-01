@@ -44,6 +44,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          marginbottom: '30px'
+        }
+      }
+    }
   },
 });
 

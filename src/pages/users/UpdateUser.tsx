@@ -10,7 +10,6 @@ import {
   Button,
   Typography,
   Grid,
-  Card,
   CardHeader,
   TextField,
   FormControl,
@@ -40,6 +39,7 @@ import { AppContext, IAppContext } from "../../context/AppContext";
 import Loading from "../../components/global/Loading";
 import EmptyState from "../../components/global/EmptyState";
 import { HeadshotInput } from "../../components/user/HeadshotInput";
+import StyledCard from "../../components/global/StyledCard";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -61,6 +61,7 @@ const UpdateUser = () => {
 
   // UserProfile states
   const [fullName, setFullName] = useState("");
+  const [githubLink, setGithubLink] = useState("");
   const [bio, setBio] = useState("");
   const [headshot, setHeadshot] = useState<string | null>(null);
   const [resume, setResume] = useState<string | null>(null);
@@ -107,6 +108,7 @@ const UpdateUser = () => {
                 setResume(userProfileResult?.resume || null);
                 setEducation(userProfileResult?.education || []);
                 setWorkHistory(userProfileResult?.workHistory || []);
+                setGithubLink(userProfileResult?.githubLink || "");
               })
               .catch((err) => {
                 console.log("Error fetching user profile", err);
@@ -129,7 +131,7 @@ const UpdateUser = () => {
 
   useEffect(() => {
     console.log(`headshot image set: ${headshotImage}`);
-  }, [headshotImage])
+  }, [headshotImage]);
 
   const loadHeadshot = async (token: string, id: string) => {
     const blob: File = await userProfileService.getHeadshot(token, id);
@@ -137,7 +139,7 @@ const UpdateUser = () => {
   };
 
   const handleHeadshotChange = (newFile: File | null) => {
-    setHeadshotImage(newFile ? newFile: null);
+    setHeadshotImage(newFile ? newFile : null);
   };
 
   const handleResumeChange = (newFile: File | null) => {
@@ -261,167 +263,64 @@ const UpdateUser = () => {
       </Button>
       <Typography variant="h1">Update User</Typography>
       <Grid container spacing={5}>
-        <Grid item sm={12} md={5} xs={12}>
-          <Card>
-            <CardHeader title="Basic Credentials" />
-            <StyledCardContent>
-              <TextField
-                variant="standard"
-                name="title"
-                label="Email"
-                autoFocus={true}
-                margin="normal"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && submit()}
-                error={emailError !== ""}
-                helperText={emailError}
-              />
-              <TextField
-                variant="standard"
-                name="title"
-                label="Username"
-                margin="normal"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && submit()}
-              />
-              <br />
-              <FormControl variant="standard">
-                <InputLabel id="cohort-label">Cohort</InputLabel>
-                <Select
-                  variant="standard"
-                  labelId="cohort-label"
-                  value={cohort?.name}
-                  label="Cohort"
-                  onChange={
-                    (e) =>
-                      setCohort(
-                        cohorts.filter(
-                          (cohort) => cohort.name === e.target.value
-                        )[0]
-                      )
-                    // setCohort(e.target.value)
-                  }
-                >
-                  {cohorts.map((cohort) => (
-                    <MenuItem value={cohort.name} key={cohort?.id}>
-                      {cohort.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <br />
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DesktopDatePicker
-                  label="Start Date"
-                  inputFormat="DD/MM/YYYY"
-                  value={customStartDate ? startDate : cohort?.startDate}
-                  onChange={(e: Dayjs | null) => setStartDate(e)}
-                  renderInput={(params) => (
-                    <TextField variant="standard" {...params} />
-                  )}
-                  disabled={!customStartDate}
-                />
-              </LocalizationProvider>
-              {cohort ? (
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={!customStartDate} />}
-                    onChange={() => setCustomStartDate(!customStartDate)}
-                    value={customStartDate}
-                    label="Use same start date as Cohort"
-                  />
-                </FormGroup>
-              ) : (
-                <br />
-              )}
-
-              <FormControl>
-                <InputLabel variant="standard" id="role-label">
-                  Role
-                </InputLabel>
-                <Select
-                  variant="standard"
-                  multiple
-                  labelId="role-label"
-                  value={roles}
-                  label="Role"
-                  renderValue={(selected) => {
-                  //  console.log(selected);
-                    return selected.join(", ");
-                  }}
-                  onChange={(e) => {
-                    let value = e.target.value;
-                    console.log(value);
-                    setRoles(
-                      typeof value === "string" ? value.split(",") : value
-                    );
-                  }}
-                >
-                  {Object.keys(UserRoles)
-                    .filter((key) => Number(key) > 0)
-                    .map((item) => (
-                      <MenuItem key={item} value={UserRoles[Number(item)]}>
-                        <Checkbox
-                          checked={roles.indexOf(UserRoles[Number(item)]) > -1}
-                        />
-                        <ListItemText primary={UserRoles[Number(item)]} />
-                      </MenuItem>
-                    ))}
-                </Select>
-              </FormControl>
-            </StyledCardContent>
-          </Card>
-        </Grid>
-        <Grid item md={7} xs={12}>
-          <Card>
-            <CardHeader
-              title="User Profile"
-            />
-            <StyledCardContent>
-              <Grid container spacing={5}>
-                <Grid item md={8} xs={12} sm={12}>
-                  <TextField sx={{width: '100%'}}
-                    variant="standard"
-                    label="Full Name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && submit()}
-                  />
-                  <br />
-                  <TextField multiline sx={{width: '100%', minHeight: '5em'}}
-                    variant="standard"
-                    label="Bio"
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                   // onKeyDown={(e) => e.key === "Enter" && submit()}
-                  />
-
-                  <FileInput
-                    label="Resume"
-                    file={resume ? new File([], resume) : null}
-                    onChange={handleResumeChange}
-                    accept=".pdf"
-                  />
-                  
-               
-                </Grid>
-                <Grid item md={4} xs={12} sm={12}>
-                  <HeadshotInput
-                    headshot={headshotImage ? headshotImage : null}
-                    onChange={handleHeadshotChange}
-                  />
-                </Grid>
-              </Grid>
-            </StyledCardContent>
-          </Card>
-        </Grid>
-          <Grid item md={8}>
-            <Card>
+        {/* left col */}
+        <Grid item sm={12} md={8} xs={12}>
+          <Grid item md={12} xs={12} sm={12}>
+            <StyledCard>
+              <CardHeader title="User Profile" />
               <StyledCardContent>
-                <CardHeader title="Education & Experience" />
+                <Grid container spacing={5}>
+                  <Grid item md={8} xs={12} sm={12}>
+                    <TextField
+                      sx={{ width: "100%" }}
+                      variant="standard"
+                      label="Full Name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && submit()}
+                    />
+                    <br />
+                    <TextField
+                      sx={{ width: "100%" }}
+                      variant="standard"
+                      label="Github Link"
+                      value={githubLink}
+                      onChange={(e) => setGithubLink(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && submit()}
+                    />
+                    <br />
+                    <TextField
+                      multiline
+                      sx={{ width: "100%", minHeight: "5em" }}
+                      variant="standard"
+                      label="Bio"
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      // onKeyDown={(e) => e.key === "Enter" && submit()}
+                    />
+
+                    <FileInput
+                      label="Resume (PDF)"
+                      file={resume ? new File([], resume) : null}
+                      onChange={handleResumeChange}
+                      accept=".pdf"
+                    />
+                  </Grid>
+                  <Grid item md={4} xs={12} sm={12}>
+                    <HeadshotInput
+                      headshot={headshotImage ? headshotImage : null}
+                      onChange={handleHeadshotChange}
+                    />
+                  </Grid>
+                </Grid>
+              </StyledCardContent>
+            </StyledCard>
+          </Grid>
+          {/* left sub col */}
+          <Grid item md={6} xs={12} sm={12}>
+            <StyledCard>
+              <StyledCardContent>
+                <CardHeader title="Education & Skills" />
                 <EditableList
                   label="Education"
                   items={education}
@@ -435,19 +334,160 @@ const UpdateUser = () => {
                   onDeleteItem={handleDeleteWorkHistory}
                 />
               </StyledCardContent>
-            </Card>
+            </StyledCard>
+          </Grid>
+          {/* right sub col */}
+          <Grid item md={6} xs={12} sm={12}>
+          <StyledCard>
+              <StyledCardContent>
+                <CardHeader title="Education & Skills" />
+                <EditableList
+                  label="Education"
+                  items={education}
+                  onAddItem={handleAddEducation}
+                  onDeleteItem={handleDeleteEducation}
+                />
+                <EditableList
+                  label="Work History"
+                  items={workHistory}
+                  onAddItem={handleAddWorkHistory}
+                  onDeleteItem={handleDeleteWorkHistory}
+                />
+              </StyledCardContent>
+            </StyledCard>
           </Grid>
 
-        <Grid item md={12} xs={12}>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={submit}
-            disabled={loading}
-            endIcon={loading ? <CircularProgress size={18} /> : <Check />}
-          >
-            Save
-          </Button>
+          <Grid item md={12} xs={12} sm={12}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={submit}
+              disabled={loading}
+              endIcon={loading ? <CircularProgress size={18} /> : <Check />}
+            >
+              Save
+            </Button>
+          </Grid>
+        </Grid>
+        {/* right col */}
+        <Grid item sm={12} md={4} xs={12}>
+          {/* Basic Credentials */}
+          <Grid item sm={12} md={12} xs={12}>
+            <StyledCard>
+              <CardHeader title="Basic Credentials" />
+              <StyledCardContent>
+                <TextField
+                  variant="standard"
+                  name="title"
+                  label="Email"
+                  autoFocus={true}
+                  margin="normal"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && submit()}
+                  error={emailError !== ""}
+                  helperText={emailError}
+                />
+                <TextField
+                  variant="standard"
+                  name="title"
+                  label="Username"
+                  margin="normal"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && submit()}
+                />
+                <br />
+                <FormControl variant="standard">
+                  <InputLabel id="cohort-label">Cohort</InputLabel>
+                  <Select
+                    variant="standard"
+                    labelId="cohort-label"
+                    value={cohort?.name}
+                    label="Cohort"
+                    onChange={
+                      (e) =>
+                        setCohort(
+                          cohorts.filter(
+                            (cohort) => cohort.name === e.target.value
+                          )[0]
+                        )
+                      // setCohort(e.target.value)
+                    }
+                  >
+                    {cohorts.map((cohort) => (
+                      <MenuItem value={cohort.name} key={cohort?.id}>
+                        {cohort.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <br />
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DesktopDatePicker
+                    label="Start Date"
+                    inputFormat="DD/MM/YYYY"
+                    value={customStartDate ? startDate : cohort?.startDate}
+                    onChange={(e: Dayjs | null) => setStartDate(e)}
+                    renderInput={(params) => (
+                      <TextField variant="standard" {...params} />
+                    )}
+                    disabled={!customStartDate}
+                  />
+                </LocalizationProvider>
+                {cohort ? (
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Checkbox checked={!customStartDate} />}
+                      onChange={() => setCustomStartDate(!customStartDate)}
+                      value={customStartDate}
+                      label="Use same start date as Cohort"
+                    />
+                  </FormGroup>
+                ) : (
+                  <br />
+                )}
+
+                <FormControl>
+                  <InputLabel variant="standard" id="role-label">
+                    Role
+                  </InputLabel>
+                  <Select
+                    variant="standard"
+                    multiple
+                    labelId="role-label"
+                    value={roles}
+                    label="Role"
+                    renderValue={(selected) => {
+                      //  console.log(selected);
+                      return selected.join(", ");
+                    }}
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      console.log(value);
+                      setRoles(
+                        typeof value === "string" ? value.split(",") : value
+                      );
+                    }}
+                  >
+                    {Object.keys(UserRoles)
+                      .filter((key) => Number(key) > 0)
+                      .map((item) => (
+                        <MenuItem key={item} value={UserRoles[Number(item)]}>
+                          <Checkbox
+                            checked={
+                              roles.indexOf(UserRoles[Number(item)]) > -1
+                            }
+                          />
+                          <ListItemText primary={UserRoles[Number(item)]} />
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </StyledCardContent>
+            </StyledCard>
+          </Grid>
         </Grid>
       </Grid>
     </>
