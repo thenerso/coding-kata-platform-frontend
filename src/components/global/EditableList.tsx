@@ -19,6 +19,7 @@ const EditableList: FC<EditableListProps> = ({
   const [newItem, setNewItem] = useState("");
 
   const handleAdd = () => {
+    if(!newItem) return;
     onAddItem(newItem);
     setNewItem("");
   };

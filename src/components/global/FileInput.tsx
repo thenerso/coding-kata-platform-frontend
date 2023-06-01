@@ -7,20 +7,21 @@ interface FileInputProps {
   label: string;
   file: File | null;
   onChange: (newFile: File | null) => void;
+  accept?: string;
 }
 
-const FileInput: FC<FileInputProps> = ({ label, file, onChange }) => {
+const FileInput: FC<FileInputProps> = ({ label, file, onChange, accept=".pdf, .jpg, .jpeg, .png" }) => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newFile = e.target.files ? e.target.files[0] : null;
     onChange(newFile);
   };
 
   return (
-    <Button sx={{width: '100%'}} variant="outlined">
+    <Button variant="outlined">
       <input
         type="file"
         onChange={handleFileChange}
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept={accept}
       />
       {file ? file.name : `Upload ${label}`}
     </Button>

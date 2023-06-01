@@ -391,18 +391,19 @@ const UpdateUser = () => {
                     onKeyDown={(e) => e.key === "Enter" && submit()}
                   />
                   <br />
-                  <TextField multiline sx={{width: '100%', height: '10em'}}
+                  <TextField multiline sx={{width: '100%', minHeight: '5em'}}
                     variant="standard"
                     label="Bio"
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && submit()}
+                   // onKeyDown={(e) => e.key === "Enter" && submit()}
                   />
 
                   <FileInput
                     label="Resume"
                     file={resume ? new File([], resume) : null}
                     onChange={handleResumeChange}
+                    accept=".pdf"
                   />
                   
                
