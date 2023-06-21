@@ -22,6 +22,7 @@ import {
   ListItemText,
   FormGroup,
   FormControlLabel,
+  Box,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
@@ -66,13 +67,13 @@ const UpdateUser = () => {
   const [headshot, setHeadshot] = useState<string | null>(null);
   const [resume, setResume] = useState<string | null>(null);
   const [education, setEducation] = useState<string[]>([]);
-  const [workHistory, setWorkHistory] = useState<string[]>([]);
+  const [workExperience, setWorkExperience] = useState<string[]>([]);
   const [preferredLocations, setPrefferedLocations] = useState<string[]>([]);
-  const [preferredJobRoles, setPreferredJobRoles] = useState<string[]>([]);
+  const [preferredRoles, setPreferredRoles] = useState<string[]>([]);
 
   const [headshotImage, setHeadshotImage] = useState<File | null>(null);
 
-  const [hasProfile, setHasProfile] = useState(false)
+  const [hasProfile, setHasProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -111,10 +112,13 @@ const UpdateUser = () => {
                 setHeadshot(userProfileResult?.headshot || null);
                 setResume(userProfileResult?.resume || null);
                 setEducation(userProfileResult?.education || []);
-                setWorkHistory(userProfileResult?.workHistory || []);
-                setPreferredJobRoles(userProfileResult?.preferredJobRoles || []);
-                setPrefferedLocations(userProfileResult?.preferredLocations || []);
-                setWorkHistory(userProfileResult?.workHistory || []);
+                setWorkExperience(userProfileResult?.workExperience || []);
+                setPreferredRoles(
+                  userProfileResult?.preferredRoles || []
+                );
+                setPrefferedLocations(
+                  userProfileResult?.preferredLocations || []
+                );
                 setGithubLink(userProfileResult?.githubLink || "");
               })
               .catch((err) => {
@@ -173,24 +177,32 @@ const UpdateUser = () => {
     );
   };
 
-  const handleAddJobRole= (location: string) => {
-    setPrefferedLocations((prevLocations) => [...prevLocations, location]);
+  const handleAddJobRole = (role: string) => {
+    setPreferredRoles((prevRoles) => [...prevRoles, role]);
   };
 
   const handleDeleteJobRole = (index: number) => {
-    setPreferredJobRoles((prevRoles) =>
+    setPreferredRoles((prevRoles) =>
       prevRoles.filter((_, i) => i !== index)
     );
   };
 
   const handleAddWorkHistory = (newWorkHistory: string) => {
-    setWorkHistory((prevWorkHistory) => [...prevWorkHistory, newWorkHistory]);
+    setWorkExperience((prevWorkHistory) => [
+      ...prevWorkHistory,
+      newWorkHistory,
+    ]);
   };
 
   const handleDeleteWorkHistory = (index: number) => {
-    setWorkHistory((prevWorkHistory) =>
+    setWorkExperience((prevWorkHistory) =>
       prevWorkHistory.filter((_, i) => i !== index)
     );
+  };
+
+  const handleGithubLinkChange = (value: string) => {
+    // if(value[0])
+    setGithubLink(value);
   };
 
   const handleValidation = () => {
@@ -221,7 +233,6 @@ const UpdateUser = () => {
           id: parseInt(id || "0"),
           username,
           email,
-          startDate,
           roles,
           cohort,
         };
@@ -234,22 +245,32 @@ const UpdateUser = () => {
           headshot,
           resume,
           education,
-          workHistory,
+          workExperience,
+          preferredLocations,
+          preferredRoles,
+          githubLink,
           user: userBody,
         };
 
-        console.log(userBody);
-        debugger;
+        console.log(userProfileBody);
         setLoading(true);
         try {
-          //const response = await userService.update(token, userBody);
           const updateUserPromise = userService.update(token, userBody);
-          const updateUserProfilePromise = userProfileService.update(
-            token,
-            id || "",
-            userProfileBody
-          );
+          let updateUserProfilePromise;
+          if (hasProfile)
+            updateUserProfilePromise = userProfileService.update(
+              token,
+              id || "",
+              userProfileBody
+            );
+          else
+            updateUserProfilePromise = userProfileService.create(
+              token,
+              userProfileBody
+            );
+
           await Promise.all([updateUserPromise, updateUserProfilePromise]);
+
           enqueueSnackbar(`User updated`, {
             variant: "success",
           });
@@ -291,7 +312,7 @@ const UpdateUser = () => {
       <Typography variant="h1">Update User</Typography>
       <Grid container spacing={5}>
         {/* left col */}
-        <Grid item sm={12} md={8} xs={12}>
+        <Grid container sm={12} md={8} xs={12}>
           <Grid item md={12} xs={12} sm={12}>
             <StyledCard>
               <CardHeader title="User Profile" />
@@ -312,7 +333,7 @@ const UpdateUser = () => {
                       variant="standard"
                       label="Github Link"
                       value={githubLink}
-                      onChange={(e) => setGithubLink(e.target.value)}
+                      onChange={(e) => handleGithubLinkChange(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && submit()}
                     />
                     <br />
@@ -343,57 +364,64 @@ const UpdateUser = () => {
               </StyledCardContent>
             </StyledCard>
           </Grid>
+
           {/* left sub col */}
-          <Grid item md={6} xs={12} sm={12}>
-            <StyledCard>
-              <StyledCardContent>
-                <CardHeader title="Education & Skills" />
-                <EditableList
-                  label="Education"
-                  items={education}
-                  onAddItem={handleAddEducation}
-                  onDeleteItem={handleDeleteEducation}
-                />
-                <EditableList
-                  label="Work History"
-                  items={workHistory}
-                  onAddItem={handleAddWorkHistory}
-                  onDeleteItem={handleDeleteWorkHistory}
-                />
-              </StyledCardContent>
-            </StyledCard>
+          <Grid container md={6} xs={12} sm={12}>
+            <Grid item md={12} xs={12} sm={12}>
+              <StyledCard>
+                <StyledCardContent>
+                  <CardHeader title="Roles of Interest" />
+                  <EditableList
+                    label="Roles"
+                    items={preferredRoles}
+                    onAddItem={handleAddJobRole}
+                    onDeleteItem={handleDeleteJobRole}
+                  />
+                </StyledCardContent>
+              </StyledCard>
+            </Grid>
+            <Grid item md={12} xs={12} sm={12}>
+              <StyledCard>
+                <StyledCardContent>
+                  <CardHeader title="Education & Skills" />
+                  <EditableList
+                    label="Education"
+                    items={education}
+                    onAddItem={handleAddEducation}
+                    onDeleteItem={handleDeleteEducation}
+                  />
+                </StyledCardContent>
+              </StyledCard>
+            </Grid>
           </Grid>
           {/* right sub col */}
-          <Grid item md={6} xs={12} sm={12}>
-          <StyledCard>
-              <StyledCardContent>
-                <CardHeader title="Education & Skills" />
-                <EditableList
-                  label="Education"
-                  items={education}
-                  onAddItem={handleAddEducation}
-                  onDeleteItem={handleDeleteEducation}
-                />
-                <EditableList
-                  label="Work History"
-                  items={workHistory}
-                  onAddItem={handleAddWorkHistory}
-                  onDeleteItem={handleDeleteWorkHistory}
-                />
-              </StyledCardContent>
-            </StyledCard>
-          </Grid>
-
-          <Grid item md={12} xs={12} sm={12}>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={submit}
-              disabled={loading}
-              endIcon={loading ? <CircularProgress size={18} /> : <Check />}
-            >
-              Save
-            </Button>
+          <Grid container md={6} xs={12} sm={12}>
+            <Grid item md={12} xs={12} sm={12}>
+              <StyledCard>
+                <StyledCardContent>
+                  <CardHeader title="Preferred Locations" />
+                  <EditableList
+                    label="Locations"
+                    items={preferredLocations}
+                    onAddItem={handleAddLocation}
+                    onDeleteItem={handleDeleteLocation}
+                  />
+                </StyledCardContent>
+              </StyledCard>
+            </Grid>
+            <Grid item md={12} xs={12} sm={12}>
+              <StyledCard>
+                <StyledCardContent>
+                  <CardHeader title="Work Experience" />
+                  <EditableList
+                    label="Work History"
+                    items={workExperience}
+                    onAddItem={handleAddWorkHistory}
+                    onDeleteItem={handleDeleteWorkHistory}
+                  />
+                </StyledCardContent>
+              </StyledCard>
+            </Grid>
           </Grid>
         </Grid>
         {/* right col */}
@@ -515,6 +543,20 @@ const UpdateUser = () => {
               </StyledCardContent>
             </StyledCard>
           </Grid>
+        </Grid>
+        <Grid item md={12} xs={12} sm={12}>
+          <Box display="flex" justifyContent="flex-end">
+            <Button
+              color="secondary"
+              variant="contained"
+              size="large"
+              onClick={submit}
+              disabled={loading}
+              endIcon={loading ? <CircularProgress size={18} /> : <Check />}
+            >
+              Save
+            </Button>
+          </Box>
         </Grid>
       </Grid>
     </>

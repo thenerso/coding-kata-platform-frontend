@@ -16,6 +16,10 @@ export interface IUser {
   completedProblems?: any[];
 }
 
+export interface IUserId {
+  id: number;
+}
+
 export interface IUserProfile {
   [key: string]: any;
   id?: number;

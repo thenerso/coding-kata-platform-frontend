@@ -4,7 +4,7 @@ import { IUserProfile } from "../interfaces/user";
 
 const userProfileService = {
     getAll: async (token: string) => {
-        const res = await axios.get(GlobalConfig.server_url + "/profiles/", {
+        const res = await axios.get(GlobalConfig.server_url + "/user/profiles/", {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -12,7 +12,7 @@ const userProfileService = {
         return res.data;
     },
     getById: async (token: string, id: string): Promise<IUserProfile> => {
-        const res = await axios.get(`${GlobalConfig.server_url}/profiles/${id}`, {
+        const res = await axios.get(`${GlobalConfig.server_url}/user/profiles/${id}`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -22,7 +22,7 @@ const userProfileService = {
     create: async (token: string, body: IUserProfile) => {
         try {
             const response = await axios.post(
-                GlobalConfig.server_url + "/profiles/",
+                GlobalConfig.server_url + "/user/profiles/",
                 body,
                 {
                     headers: {
@@ -48,7 +48,7 @@ const userProfileService = {
     update: async (token: string, id: string, body: IUserProfile) => {
         try {
             const response = await axios.put(
-                `${GlobalConfig.server_url}/profiles/${id}`,
+                `${GlobalConfig.server_url}/user/profiles/${id}`,
                 body,
                 {
                     headers: {
@@ -71,7 +71,7 @@ const userProfileService = {
         }
     },
     delete: async (token: string, id: string) => {
-        const res = await axios.delete(`${GlobalConfig.server_url}/profiles/${id}`, {
+        const res = await axios.delete(`${GlobalConfig.server_url}/user/profiles/${id}`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -83,7 +83,7 @@ const userProfileService = {
         formData.append('file', file);
 
         const res = await axios.post(
-            `${GlobalConfig.server_url}/profiles/${id}/headshot`,
+            `${GlobalConfig.server_url}/user/profiles/${id}/headshot`,
             formData,
             {
                 headers: {
@@ -96,7 +96,7 @@ const userProfileService = {
 
     getHeadshot: async (token: string, id: string) => {
         const res = await axios.get(
-            `${GlobalConfig.server_url}/profiles/${id}/headshot`,
+            `${GlobalConfig.server_url}/user/profiles/${id}/headshot`,
             {
                 headers: {
                     Authorization: "Bearer " + token,
@@ -112,7 +112,7 @@ const userProfileService = {
         formData.append('file', file);
 
         const res = await axios.post(
-            `${GlobalConfig.server_url}/profiles/${id}/cv`,
+            `${GlobalConfig.server_url}/user/profiles/${id}/cv`,
             formData,
             {
                 headers: {
@@ -125,7 +125,7 @@ const userProfileService = {
 
     getResume: async (token: string, id: string) => {
         const res = await axios.get(
-            `${GlobalConfig.server_url}/profiles/${id}/cv`,
+            `${GlobalConfig.server_url}/user/profiles/${id}/cv`,
             {
                 headers: {
                     Authorization: "Bearer " + token,
