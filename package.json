@@ -23,6 +23,7 @@
     "notistack": "^2.0.8",
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
+    "react-avatar-editor": "^13.0.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.2",
@@ -55,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-avatar-editor": "^13.0.0"
   }
 }
