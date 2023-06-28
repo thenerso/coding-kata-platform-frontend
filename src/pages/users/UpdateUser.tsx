@@ -42,6 +42,7 @@ import Loading from "../../components/global/Loading";
 import EmptyState from "../../components/global/EmptyState";
 import { HeadshotInput } from "../../components/user/HeadshotInput";
 import StyledCard from "../../components/global/StyledCard";
+import URLTextField from "../../components/global/URLTextField";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -201,8 +202,15 @@ const UpdateUser = () => {
   };
 
   const handleGithubLinkChange = (value: string) => {
-    // if(value[0])
     setGithubLink(value);
+
+    // try {
+    //   new URL(value);
+    //   setGithubLink(value);
+    //   setError("");  // clear the error if the URL is valid
+    // } catch (_) {
+    //   setError("Invalid URL");
+    // }
   };
 
   const handleValidation = () => {
@@ -333,12 +341,11 @@ const UpdateUser = () => {
                         onKeyDown={(e) => e.key === "Enter" && submit()}
                       />
                       <br />
-                      <TextField
-                        sx={{ width: "100%" }}
-                        variant="standard"
+                      <URLTextField
+                    
                         label="Github Link"
                         value={githubLink}
-                        onChange={(e) => handleGithubLinkChange(e.target.value)}
+                        onChange={handleGithubLinkChange}
                         onKeyDown={(e) => e.key === "Enter" && submit()}
                       />
                       <br />

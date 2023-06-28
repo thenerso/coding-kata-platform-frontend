@@ -37,6 +37,7 @@ import {
 } from "@mui/icons-material";
 import ListProblemSetsForUsers from "../pages/user-level/problem-sets/ListProblemSetsForUsers";
 import UpdateUser from "../pages/users/UpdateUser";
+import PublicProfile from "../pages/users/PublicProfile";
 
 export enum UserRoles {
   UNAUTHED,
@@ -84,6 +85,12 @@ const routes: IRouteType[] = [
   /**
    * General
    */
+  {
+    name: "Profile",
+    link: "/candidates/:id",
+    Component: PublicProfile,
+    authed: UserRoles.USER,
+  },
   {
     name: "Dashboard",
     link: "/dashboard",

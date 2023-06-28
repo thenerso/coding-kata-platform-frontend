@@ -27,7 +27,9 @@ export interface IUserProfile {
   fullName?: string;
   githubLink?: string;
   workExperience?: string[];
-  education: string[];
+  education?: string[];
+  preferredRoles?: string[];
+  preferredLocations?: string[];
   bio?: string;
   headshot?: string | null;
   resume?: string | null;
