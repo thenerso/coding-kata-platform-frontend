@@ -141,10 +141,6 @@ const UpdateUser = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    console.log(`headshot image set: ${headshotImage}`);
-  }, [headshotImage]);
-
   const loadHeadshot = async (token: string, id: string) => {
     const blob: File = await userProfileService.getHeadshot(token, id);
     setHeadshotImage(blob);
@@ -273,7 +269,11 @@ const UpdateUser = () => {
               userProfileBody
             );
 
-          await Promise.all([updateUserPromise, updateUserProfilePromise]);
+          let allPromises = [updateUserPromise, updateUserProfilePromise];
+          if(resumeFile) allPromises.push(userProfileService.uploadResume(token, id || "", resumeFile));
+          if(headshotImage) allPromises.push(userProfileService.uploadHeadshot(token, id || "", headshotImage));
+          console.log(allPromises);
+          await Promise.all(allPromises);
 
           enqueueSnackbar(`User updated`, {
             variant: "success",

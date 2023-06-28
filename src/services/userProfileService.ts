@@ -79,7 +79,7 @@ const userProfileService = {
         return res.data;
     },
     getResume: async (token: string, id: string): Promise<File> => {
-        const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}/resume`, {
+        const res = await axios.get(`${GlobalConfig.server_url}/user/profiles/${id}/resume`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -88,7 +88,7 @@ const userProfileService = {
         return new File([res.data], 'resume.pdf', { type: 'application/pdf' });
     },
     getHeadshot: async (token: string, id: string): Promise<File> => {
-        const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}/headshot`, {
+        const res = await axios.get(`${GlobalConfig.server_url}/user/profiles/${id}/headshot`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -101,7 +101,7 @@ const userProfileService = {
         formData.append('file', file);
 
         try {
-            const res = await axios.post(`${GlobalConfig.server_url}/user/users/${id}/headshot`, formData, {
+            const res = await axios.post(`${GlobalConfig.server_url}/user/profiles/${id}/headshot`, formData, {
                 headers: {
                     'Authorization': "Bearer " + token,
                     'Content-Type': 'multipart/form-data'
@@ -110,6 +110,7 @@ const userProfileService = {
             return res.data;
         } catch (error) {
             console.error(error);
+            return error;
         }
     },
     uploadResume: async (token: string, id: string, file: File): Promise<any> => {
@@ -117,7 +118,7 @@ const userProfileService = {
         formData.append('file', file);
 
         try {
-            const res = await axios.post(`${GlobalConfig.server_url}/user/users/${id}/resume`, formData, {
+            const res = await axios.post(`${GlobalConfig.server_url}/user/profiles/${id}/resume`, formData, {
                 headers: {
                     'Authorization': "Bearer " + token,
                     'Content-Type': 'multipart/form-data'
@@ -126,6 +127,7 @@ const userProfileService = {
             return res.data;
         } catch (error) {
             console.error(error);
+            return error;
         }
     },
 };
