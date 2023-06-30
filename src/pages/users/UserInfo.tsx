@@ -7,6 +7,7 @@ import {
   ArrowBack,
   Edit,
   AccountCircle,
+  ArrowForward,
 } from "@mui/icons-material";
 import {
   Typography,
@@ -21,6 +22,7 @@ import {
   Grid,
   styled,
   Fab,
+  Box,
 } from "@mui/material";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -98,6 +100,7 @@ const UserInfo = ({title = "User Info"}) => {
   if (error || !user) return <EmptyState message={error} />;
   return (
     <>
+    <Box display={"flex"} justifyContent={"space-between"}>
       <Button
         color="info"
         component={Link}
@@ -106,6 +109,16 @@ const UserInfo = ({title = "User Info"}) => {
       >
         Back
       </Button>
+      <Button
+        color="info"
+        component={Link}
+        target="_blank"
+        to={"/candidates/" + id}
+        endIcon={<ArrowForward />}
+      >
+        View Public Profile
+      </Button>
+    </Box>
       <TitleWrapper>
         <Typography variant="h1">{title}</Typography>
         <TitleActionWrapper>
@@ -174,18 +187,6 @@ const UserInfo = ({title = "User Info"}) => {
                     secondary="Joined"
                   />
                 </ListItem>
-               <Link to={`/candidates/${id}`}>
-              
-                <ListItem>
-                  <ListItemIcon>
-                    <AccountCircle />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={"View Public Profile"}
-                    secondary="Client Facing"
-                  />
-                </ListItem>
-                </Link>
               </List>
             </CardContent>
           </Card>

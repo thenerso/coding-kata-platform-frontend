@@ -91,7 +91,7 @@ const PublicProfile: React.FC = () => {
         startIcon={<ArrowBack />
       }
       >
-        Back to All
+        All Candidates
       </Button>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
