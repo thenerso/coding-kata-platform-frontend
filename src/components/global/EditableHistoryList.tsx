@@ -99,7 +99,7 @@ const EditableHistoryList: FC<EditableHistoryListProps> = ({
           renderInput={(params: any) => <TextField {...params} />}
         />
       </Box>
-      <StyledButton variant="contained" color="primary" onClick={handleAdd}>
+      <StyledButton variant="outlined" color="primary" onClick={handleAdd}>
         Add
       </StyledButton>
      

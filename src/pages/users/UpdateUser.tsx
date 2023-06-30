@@ -338,7 +338,7 @@ const UpdateUser = () => {
                 <CardHeader title="📝 User Profile" />
                 <StyledCardContent>
                   <Grid container spacing={5}>
-                       <Grid item md={4} xs={12} sm={12}>
+                       <Grid item md={3} xs={12} sm={12}>
                       <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         <HeadshotInput
                           headshot={headshotImage ? headshotImage : null}
@@ -346,7 +346,7 @@ const UpdateUser = () => {
                         />
                       </Box>
                     </Grid>
-                    <Grid item md={8} xs={12} sm={12}>
+                    <Grid item md={9} xs={12} sm={12}>
                       <TextField
                         sx={{ width: "100%" }}
                         variant="standard"
@@ -597,7 +597,7 @@ const UpdateUser = () => {
         <Grid item md={12} xs={12} sm={12}>
           <Box display="flex" justifyContent="flex-end">
             <Button
-              color="secondary"
+              color="primary"
               variant="contained"
               size="large"
               onClick={submit}

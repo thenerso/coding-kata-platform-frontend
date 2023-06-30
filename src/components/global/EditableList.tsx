@@ -1,6 +1,6 @@
 // EditableList.tsx
 import { FC, useState } from "react";
-import {TextField, List, ListItem, IconButton } from "@mui/material";
+import { TextField, List, ListItem, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import StyledButton from "./StyledButton";
 
@@ -20,7 +20,7 @@ const EditableList: FC<EditableListProps> = ({
   const [newItem, setNewItem] = useState("");
 
   const handleAdd = () => {
-    if(!newItem) return;
+    if (!newItem) return;
     onAddItem(newItem);
     setNewItem("");
   };
@@ -31,6 +31,16 @@ const EditableList: FC<EditableListProps> = ({
 
   return (
     <div>
+      <List>
+        {items.map((item, index) => (
+          <ListItem sx={{ width: "100%" }} key={index}>
+            {item}
+            <IconButton edge="end" onClick={() => handleDelete(index)}>
+              <Delete />
+            </IconButton>
+          </ListItem>
+        ))}
+      </List>
       <TextField
         variant="standard"
         label={label}
@@ -39,19 +49,9 @@ const EditableList: FC<EditableListProps> = ({
         onKeyDown={(e) => e.key === "Enter" && handleAdd()}
         fullWidth={true}
       />
-      <StyledButton variant="contained" color="primary" onClick={handleAdd}>
+      <StyledButton variant="outlined" color="primary" onClick={handleAdd}>
         Add
       </StyledButton>
-      <List>
-        {items.map((item, index) => (
-          <ListItem sx={{width: '100%'}} key={index}>
-            {item}
-            <IconButton edge="end" onClick={() => handleDelete(index)}>
-              <Delete />
-            </IconButton>
-          </ListItem>
-        ))}
-      </List>
     </div>
   );
 };
