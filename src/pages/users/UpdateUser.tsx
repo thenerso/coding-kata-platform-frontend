@@ -43,6 +43,7 @@ import EmptyState from "../../components/global/EmptyState";
 import { HeadshotInput } from "../../components/user/HeadshotInput";
 import StyledCard from "../../components/global/StyledCard";
 import URLTextField from "../../components/global/URLTextField";
+import EditableHistoryList from "../../components/global/EditableHistoryList";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -278,8 +279,14 @@ const UpdateUser = () => {
             );
 
           let allPromises = [updateUserPromise, updateUserProfilePromise];
-          if(resumeFile) allPromises.push(userProfileService.uploadResume(token, id || "", resumeFile));
-          if(headshotImage) allPromises.push(userProfileService.uploadHeadshot(token, id || "", headshotImage));
+          if (resumeFile)
+            allPromises.push(
+              userProfileService.uploadResume(token, id || "", resumeFile)
+            );
+          if (headshotImage)
+            allPromises.push(
+              userProfileService.uploadHeadshot(token, id || "", headshotImage)
+            );
           console.log(allPromises);
           await Promise.all(allPromises);
 
@@ -328,9 +335,17 @@ const UpdateUser = () => {
           <Grid container sm={12} md={12} xs={12} spacing={3}>
             <Grid item md={12} xs={12} sm={12}>
               <StyledCard>
-                <CardHeader title="User Profile" />
+                <CardHeader title="📝 User Profile" />
                 <StyledCardContent>
                   <Grid container spacing={5}>
+                       <Grid item md={4} xs={12} sm={12}>
+                      <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                        <HeadshotInput
+                          headshot={headshotImage ? headshotImage : null}
+                          onChange={handleHeadshotChange}
+                        />
+                      </Box>
+                    </Grid>
                     <Grid item md={8} xs={12} sm={12}>
                       <TextField
                         sx={{ width: "100%" }}
@@ -342,7 +357,6 @@ const UpdateUser = () => {
                       />
                       <br />
                       <URLTextField
-                    
                         label="Github Link"
                         value={githubLink}
                         onChange={handleGithubLinkChange}
@@ -353,9 +367,18 @@ const UpdateUser = () => {
                         multiline
                         sx={{ width: "100%", minHeight: "5em" }}
                         variant="standard"
-                        label="Bio"
+                        label="Bio (Max 500 Chars)"
                         value={bio}
-                        onChange={(e) => setBio(e.target.value)}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setBio(
+                            val.substring(
+                              0,
+                              val.length > 500 ? 500 : val.length
+                            )
+                          );
+                        }}
+                        inputProps={{ maxLength: 500 }}
                         // onKeyDown={(e) => e.key === "Enter" && submit()}
                       />
                       {resumeFile && (
@@ -375,13 +398,34 @@ const UpdateUser = () => {
                         accept=".pdf"
                       />
                     </Grid>
-                    <Grid item md={4} xs={12} sm={12}>
-                      <HeadshotInput
-                        headshot={headshotImage ? headshotImage : null}
-                        onChange={handleHeadshotChange}
-                      />
-                    </Grid>
+                 
                   </Grid>
+                </StyledCardContent>
+              </StyledCard>
+            </Grid>
+            <Grid item md={12} xs={12} sm={12}>
+              <StyledCard>
+                <StyledCardContent>
+                  <CardHeader title="🎓 Education & Skills" icon />
+                  <EditableHistoryList
+                    label="Course Title"
+                    items={education}
+                    onAddItem={handleAddEducation}
+                    onDeleteItem={handleDeleteEducation}
+                  />
+                </StyledCardContent>
+              </StyledCard>
+            </Grid>
+            <Grid item md={12} xs={12} sm={12}>
+              <StyledCard>
+                <StyledCardContent>
+                  <CardHeader title="💻 Work Experience" />
+                  <EditableHistoryList
+                    label="Job Title"
+                    items={workExperience}
+                    onAddItem={handleAddWorkHistory}
+                    onDeleteItem={handleDeleteWorkHistory}
+                  />
                 </StyledCardContent>
               </StyledCard>
             </Grid>
@@ -392,25 +436,12 @@ const UpdateUser = () => {
                 <Grid item md={12} xs={12} sm={12}>
                   <StyledCard>
                     <StyledCardContent>
-                      <CardHeader title="Roles of Interest" />
+                      <CardHeader title="💼 Roles of Interest" />
                       <EditableList
                         label="Roles"
                         items={preferredRoles}
                         onAddItem={handleAddJobRole}
                         onDeleteItem={handleDeleteJobRole}
-                      />
-                    </StyledCardContent>
-                  </StyledCard>
-                </Grid>
-                <Grid item md={12} xs={12} sm={12}>
-                  <StyledCard>
-                    <StyledCardContent>
-                      <CardHeader title="Education & Skills" />
-                      <EditableList
-                        label="Education"
-                        items={education}
-                        onAddItem={handleAddEducation}
-                        onDeleteItem={handleDeleteEducation}
                       />
                     </StyledCardContent>
                   </StyledCard>
@@ -423,25 +454,12 @@ const UpdateUser = () => {
                 <Grid item md={12} xs={12} sm={12}>
                   <StyledCard>
                     <StyledCardContent>
-                      <CardHeader title="Preferred Locations" />
+                      <CardHeader title="🗺 Preferred Locations" />
                       <EditableList
                         label="Locations"
                         items={preferredLocations}
                         onAddItem={handleAddLocation}
                         onDeleteItem={handleDeleteLocation}
-                      />
-                    </StyledCardContent>
-                  </StyledCard>
-                </Grid>
-                <Grid item md={12} xs={12} sm={12}>
-                  <StyledCard>
-                    <StyledCardContent>
-                      <CardHeader title="Work Experience" />
-                      <EditableList
-                        label="Work History"
-                        items={workExperience}
-                        onAddItem={handleAddWorkHistory}
-                        onDeleteItem={handleDeleteWorkHistory}
                       />
                     </StyledCardContent>
                   </StyledCard>
@@ -457,7 +475,7 @@ const UpdateUser = () => {
             {/* Basic Credentials */}
             <Grid item sm={12} md={12} xs={12}>
               <StyledCard>
-                <CardHeader title="Basic Credentials" />
+                <CardHeader title="🔐 Basic Credentials" />
                 <StyledCardContent>
                   <TextField
                     variant="standard"

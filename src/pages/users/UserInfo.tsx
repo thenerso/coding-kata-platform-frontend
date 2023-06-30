@@ -6,6 +6,7 @@ import {
   Lock,
   ArrowBack,
   Edit,
+  AccountCircle,
 } from "@mui/icons-material";
 import {
   Typography,
@@ -110,7 +111,7 @@ const UserInfo = ({title = "User Info"}) => {
         <TitleActionWrapper>
           <Fab
             color="primary"
-            aria-label="Edit cohort"
+            aria-label="Edit User Profile"
             component={Link}
             to={`/users/edit/${user.id}`}
           >
@@ -173,6 +174,18 @@ const UserInfo = ({title = "User Info"}) => {
                     secondary="Joined"
                   />
                 </ListItem>
+               <Link to={`/candidates/${id}`}>
+              
+                <ListItem>
+                  <ListItemIcon>
+                    <AccountCircle />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={"View Public Profile"}
+                    secondary="Client Facing"
+                  />
+                </ListItem>
+                </Link>
               </List>
             </CardContent>
           </Card>

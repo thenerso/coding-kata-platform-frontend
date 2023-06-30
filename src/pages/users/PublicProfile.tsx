@@ -1,21 +1,35 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IUserProfile } from "../../interfaces/user";
 import userProfileService from "../../services/userProfileService";
 import authService from "../../services/authService";
 import Loading from "../../components/global/Loading";
-import { Typography, Box, Grid, Card, CardContent, Avatar, List, ListItem, Divider, Chip, ListItemIcon, ListItemText } from "@mui/material";
-import SchoolIcon from '@mui/icons-material/School';
-import WorkIcon from '@mui/icons-material/Work';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import DownloadIcon from '@mui/icons-material/Download';
+import {
+  Typography,
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  Avatar,
+  List,
+  ListItem,
+  Divider,
+  Chip,
+  ListItemIcon,
+  ListItemText,
+  Button,
+} from "@mui/material";
+import SchoolIcon from "@mui/icons-material/School";
+import WorkIcon from "@mui/icons-material/Work";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import DownloadIcon from "@mui/icons-material/Download";
 import EmptyState from "../../components/global/EmptyState";
-
+import { ArrowBack } from "@mui/icons-material";
 
 const PublicProfile: React.FC = () => {
-  const { id } = useParams<{id:string}>();
+  const { id } = useParams<{ id: string }>();
   const [userProfile, setUserProfile] = useState<IUserProfile | null>(null);
   const [resume, setResume] = useState<string | null>(null);
   const [headshot, setHeadshot] = useState<string | null>(null);
@@ -26,22 +40,23 @@ const PublicProfile: React.FC = () => {
     const token = authService.getAccessToken();
 
     const fetchData = async () => {
-        try {
-          const [userProfileData, resumeFile, headshotFile] = await Promise.all([
-            userProfileService.getById(token || "", id || ""),
-            userProfileService.getResume(token || "", id || ""),
-            userProfileService.getHeadshot(token || "", id || ""),
-          ]);
-        
-          setUserProfile(userProfileData);
-          setResume(URL.createObjectURL(resumeFile));
-          setHeadshot(URL.createObjectURL(headshotFile));
-          setLoading(false);
-        } catch (error) {
-          console.error("Error fetching user profile:", error);
-        }
-      };
-      
+      try {
+        const [userProfileData, resumeFile, headshotFile] = await Promise.all([
+          userProfileService.getById(token || "", id || ""),
+          userProfileService.getResume(token || "", id || ""),
+          userProfileService.getHeadshot(token || "", id || ""),
+        ]);
+
+        setUserProfile(userProfileData);
+        setResume(URL.createObjectURL(resumeFile));
+        setHeadshot(URL.createObjectURL(headshotFile));
+        setLoading(false);
+      } catch (error: any) {
+        setError("Error fetching user profile: " + error);
+        setLoading(false);
+        console.error("Error fetching user profile: ", error);
+      }
+    };
 
     fetchData();
   }, [id]);
@@ -64,17 +79,27 @@ const PublicProfile: React.FC = () => {
     githubLink,
   } = userProfile;
 
-  if (loading) return <Loading />;
   if (error) return <EmptyState message={error} />;
+  if (loading) return <Loading />;
   return (
     <Box p={3}>
+      {/* <Typography variant="h1" align="left">Candidate Profile</Typography> */}
+      <Button
+        color="info"
+        component={Link}
+        to="/candidates"
+        startIcon={<ArrowBack />
+      }
+      >
+        Back to All
+      </Button>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card>
             <Box display="flex" justifyContent="center" pt={2}>
               <Avatar
-                sx={{ width: 150, height: 150, fontSize: '3rem' }}
-                src={headshot || ''}
+                sx={{ width: 150, height: 150, fontSize: "3rem" }}
+                src={headshot || ""}
                 alt="Headshot"
               />
             </Box>
@@ -86,104 +111,125 @@ const PublicProfile: React.FC = () => {
                 {bio}
               </Typography>
             </CardContent>
+            <Box display="flex" justifyContent="space-around" p={2}>
+              {resume && (
+                <Chip
+                  label="Download Resume"
+                  clickable
+                  component="a"
+                  href={resume}
+                  download
+                  variant="outlined"
+                  icon={<DownloadIcon />}
+                />
+              )}
+              {githubLink && (
+                <Chip
+                  label="Github"
+                  clickable
+                  component="a"
+                  href={githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="outlined"
+                  icon={<GitHubIcon />}
+                />
+              )}
+            </Box>
           </Card>
         </Grid>
         <Grid item xs={12} md={8}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                <ListItemIcon>
-                  <SchoolIcon />
-                </ListItemIcon>
-                Education
-              </Typography>
-              <Divider />
-              <List>
-                {education && education.map((item, index) => (
-                  <ListItem key={index}>
-                    <ListItemText>{item}</ListItemText>
-                  </ListItem>
-                ))}
-              </List>
-              <Typography variant="h6" gutterBottom>
-                <ListItemIcon>
-                  <WorkIcon />
-                </ListItemIcon>
-                Work Experience
-              </Typography>
-              <Divider />
-              <List>
-                {workExperience && workExperience.map((item, index) => (
-                  <ListItem key={index}>
-                    <ListItemText>{item}</ListItemText>
-                  </ListItem>
-                ))}
-              </List>
-              <Typography variant="h6" gutterBottom>
-                <ListItemIcon>
-                  <LocationOnIcon />
-                </ListItemIcon>
-                Preferred Locations
-              </Typography>
-              <Divider />
-              <List>
-                {preferredLocations && preferredLocations.map((item, index) => (
-                  <ListItem key={index}>
-                    <ListItemText>{item}</ListItemText>
-                  </ListItem>
-                ))}
-              </List>
-              <Typography variant="h6" gutterBottom>
-                <ListItemIcon>
-                  <WorkOutlineIcon />
-                </ListItemIcon>
-                Preferred Roles
-              </Typography>
-              <Divider />
-              <List>
-                {preferredRoles && preferredRoles.map((item, index) => (
-                  <ListItem key={index}>
-                    <ListItemText>{item}</ListItemText>
-                  </ListItem>
-                ))}
-              </List>
-              <Typography variant="h6" gutterBottom>
-                <ListItemIcon>
-                  <GitHubIcon />
-                </ListItemIcon>
-                GitHub Link
-              </Typography>
-              <Divider />
-              <Typography variant="body1">
-                <a href={githubLink} target="_blank" rel="noopener noreferrer">
-                  {githubLink}
-                </a>
-              </Typography>
-            </CardContent>
-          </Card>
+          <Grid container xs={12} md={12} sm={12} spacing={3}>
+            <Grid item xs={12} md={12} sm={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <ListItemIcon>
+                      <SchoolIcon />
+                    </ListItemIcon>
+                    Education
+                  </Typography>
+                  <Divider />
+                  <List>
+                    {education &&
+                      education.map((item, index) => (
+                        <ListItem key={index}>
+                          <ListItemText>{item}</ListItemText>
+                        </ListItem>
+                      ))}
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={12} sm={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <ListItemIcon>
+                      <WorkIcon />
+                    </ListItemIcon>
+                    Work Experience
+                  </Typography>
+                  <Divider />
+                  <List>
+                    {workExperience &&
+                      workExperience.map((item, index) => (
+                        <ListItem key={index}>
+                          <ListItemText>{item}</ListItemText>
+                        </ListItem>
+                      ))}
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} md={6} sm={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <ListItemIcon>
+                      <LocationOnIcon />
+                    </ListItemIcon>
+                    Preferred Locations
+                  </Typography>
+                  <Divider />
+                  <List>
+                    {preferredLocations &&
+                      preferredLocations.map((item, index) => (
+                        <ListItem key={index}>
+                          <ListItemText>{item}</ListItemText>
+                        </ListItem>
+                      ))}
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6} sm={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <ListItemIcon>
+                      <WorkOutlineIcon />
+                    </ListItemIcon>
+                    Preferred Roles
+                  </Typography>
+                  <Divider />
+                  <List>
+                    {preferredRoles &&
+                      preferredRoles.map((item, index) => (
+                        <ListItem key={index}>
+                          <ListItemText>{item}</ListItemText>
+                        </ListItem>
+                      ))}
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
-      {resume && (
-        <Box mt={3}>
-          <Typography variant="h6" gutterBottom>
-            <ListItemIcon>
-              <DownloadIcon />
-            </ListItemIcon>
-            Resume
-          </Typography>
-          <Chip
-            label="Download Resume"
-            clickable
-            component="a"
-            href={resume}
-            download
-            variant="outlined"
-          />
-        </Box>
-      )}
     </Box>
   );
 };
-
 
 export default PublicProfile;
