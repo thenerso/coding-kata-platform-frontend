@@ -33,6 +33,7 @@ export interface IUserProfile {
   bio?: string;
   headshot?: string | null;
   resume?: string | null;
+  available?: boolean;
 }
 
 export interface IUserProgress {

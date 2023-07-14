@@ -38,6 +38,7 @@ import {
 import ListProblemSetsForUsers from "../pages/user-level/problem-sets/ListProblemSetsForUsers";
 import UpdateUser from "../pages/users/UpdateUser";
 import PublicProfile from "../pages/users/PublicProfile";
+import ListPublicProfiles from "../pages/users/ListPublicProfiles";
 
 export enum UserRoles {
   UNAUTHED,
@@ -85,6 +86,12 @@ const routes: IRouteType[] = [
   /**
    * General
    */
+  {
+    name: "Profiles",
+    link: "/candidates",
+    Component: ListPublicProfiles,
+    authed: UserRoles.USER,
+  },
   {
     name: "Profile",
     link: "/candidates/:id",

@@ -80,6 +80,7 @@ const UpdateUser = () => {
   const [hasProfile, setHasProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [available, setAvailable] = useState(true);
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -122,6 +123,7 @@ const UpdateUser = () => {
                   userProfileResult?.preferredLocations || []
                 );
                 setGithubLink(userProfileResult?.githubLink || "");
+                setAvailable(userProfileResult?.available || false);
               })
               .catch((err) => {
                 console.log("Error fetching user profile", err);
@@ -259,6 +261,7 @@ const UpdateUser = () => {
           preferredRoles,
           githubLink,
           user: userBody,
+          available
         };
 
         console.log(userProfileBody);
@@ -543,6 +546,18 @@ const UpdateUser = () => {
                   {cohort ? (
                     <FormGroup>
                       <FormControlLabel
+                        control={<Checkbox checked={available} />}
+                        onChange={() => setAvailable(!available)}
+                        value={available}
+                        label="Available for Hire (Uncheck when placed)"
+                      />
+                    </FormGroup>
+                  ) : (
+                    <br />
+                  )}
+                  {cohort ? (
+                    <FormGroup>
+                      <FormControlLabel
                         control={<Checkbox checked={!customStartDate} />}
                         onChange={() => setCustomStartDate(!customStartDate)}
                         value={customStartDate}
@@ -552,6 +567,7 @@ const UpdateUser = () => {
                   ) : (
                     <br />
                   )}
+                  
 
                   <FormControl>
                     <InputLabel variant="standard" id="role-label">

@@ -40,22 +40,26 @@ const PublicProfile: React.FC = () => {
     const token = authService.getAccessToken();
 
     const fetchData = async () => {
-      try {
-        const [userProfileData, resumeFile, headshotFile] = await Promise.all([
-          userProfileService.getById(token || "", id || ""),
-          userProfileService.getResume(token || "", id || ""),
-          userProfileService.getHeadshot(token || "", id || ""),
-        ]);
+      setLoading(true);
+      const resumeFile = await userProfileService.getResume(token || "", id || "");
+      setResume(URL.createObjectURL(resumeFile));
 
+      const headshotFile = await userProfileService.getHeadshot(token || "", id || "");
+      setHeadshot(URL.createObjectURL(headshotFile));
+      try {
+
+        const userProfileData = await userProfileService.getById(token || "", id || "");
         setUserProfile(userProfileData);
-        setResume(URL.createObjectURL(resumeFile));
-        setHeadshot(URL.createObjectURL(headshotFile));
+
         setLoading(false);
-      } catch (error: any) {
+    } catch (error: any) {
         setError("Error fetching user profile: " + error);
         setLoading(false);
         console.error("Error fetching user profile: ", error);
-      }
+    }
+    console.log(userProfile);
+    console.log(headshot);
+    console.log(resume);
     };
 
     fetchData();
