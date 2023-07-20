@@ -59,7 +59,7 @@ const Login = () => {
         console.log(res);
         if (res.roles && res.roles[0] === "ADMIN") {
           navigate("/admin/dashboard");
-        } else if(res.roles && res.roles[0] == "CLIENT") {
+        } else if(res.roles && res.roles[0] === "CLIENT") {
           navigate("/client/dashboard");
         } else navigate("/dashboard");
       } catch (err: any) {

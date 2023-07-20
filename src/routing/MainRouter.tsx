@@ -4,7 +4,6 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
 import Header from "../components/global/Header";
-import Dashboard from "../pages/StudentDashboard";
 import Home from "../pages/Home";
 import authService from "../services/authService";
 import routes, { UserRoles } from "./routes";
@@ -12,7 +11,6 @@ import { AppContext, IAppContext } from "../context/AppContext";
 import userService from "../services/userService";
 import cohortServices from "../services/cohortService";
 import GlobalConfig from "../config/GlobalConfig";
-import ListPublicProfiles from "../pages/users/ListPublicProfiles";
 import DashboardContainer from "../pages/DashboardContainer";
 
 /**
