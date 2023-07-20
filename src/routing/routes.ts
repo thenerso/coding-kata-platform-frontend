@@ -43,8 +43,8 @@ import ListPublicProfiles from "../pages/users/ListPublicProfiles";
 export enum UserRoles {
   UNAUTHED,
   USER,
-  ADMIN,
-  CLIENT
+  CLIENT,
+  ADMIN
 }
 
 /**
@@ -90,13 +90,21 @@ const routes: IRouteType[] = [
     name: "Profiles",
     link: "/candidates",
     Component: ListPublicProfiles,
-    authed: UserRoles.USER,
+    authed: UserRoles.CLIENT,
   },
   {
     name: "Profile",
     link: "/candidates/:id",
     Component: PublicProfile,
-    authed: UserRoles.USER,
+    authed: UserRoles.CLIENT,
+  },
+  {
+    name: "View Candidates",
+    link: "client/dashboard",
+    Component: ListPublicProfiles,
+    authed: UserRoles.CLIENT,
+    showInMenuFor: UserRoles.CLIENT,
+    icon: Dashboard,
   },
   {
     name: "Dashboard",
@@ -114,6 +122,7 @@ const routes: IRouteType[] = [
     showInMenuFor: UserRoles.ADMIN,
     icon: Dashboard,
   },
+ 
   {
     name: "Profile",
     link: "/profile",

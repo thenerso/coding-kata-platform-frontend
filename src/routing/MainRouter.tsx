@@ -12,6 +12,8 @@ import { AppContext, IAppContext } from "../context/AppContext";
 import userService from "../services/userService";
 import cohortServices from "../services/cohortService";
 import GlobalConfig from "../config/GlobalConfig";
+import ListPublicProfiles from "../pages/users/ListPublicProfiles";
+import DashboardContainer from "../pages/DashboardContainer";
 
 /**
  * Handles Routing for the application
@@ -97,6 +99,7 @@ const MainRouter = (): JSX.Element => {
     );
   };
 
+  //if(role == UserRoles.CLIENT && isAuthed) { navigate('/candidate')}s
   return (
     <>
       <Header
@@ -114,10 +117,11 @@ const MainRouter = (): JSX.Element => {
         <Grid item xs={11} alignSelf={loading ? "center" : "start"}>
           {loading ? (
             <Loading />
-          ) : (
+          ) 
+          : (
             <Suspense fallback={<Loading />}>
               <Routes>
-                <Route path="/" element={isAuthed ? <Dashboard /> : <Home />} />
+               <Route path="/" element={isAuthed ? <DashboardContainer role={role} /> : <Home />} />
 
                 {routes.map(({ link, Component, authed }, i) => {
                   if (authed !== UserRoles.UNAUTHED && !isAuthed) {
@@ -134,7 +138,7 @@ const MainRouter = (): JSX.Element => {
                       "You need user or admin access to view this page. Contact an adminstrator if you do not have an account."
                     );
                   }
-                  if (authed === UserRoles.CLIENT && (role !== UserRoles.CLIENT && role !== UserRoles.ADMIN)) {
+                  if (authed === UserRoles.CLIENT && (role === UserRoles.UNAUTHED || role === UserRoles.USER)) {
                     return displayAuthState(
                       i,
                       link,
