@@ -19,6 +19,7 @@ import DifficultyChip from "../DifficultyChip";
 import Tags from "../Tags";
 import TestCases from "../test-case/TestCases";
 import AttemptOutput from "./AttemptOutput";
+import { renderHTML } from "../../global/Rendering";
 
 /**
  * Injected styles
@@ -116,7 +117,7 @@ const AttemptDetailsWrapper = ({
                 <Typography variant="h1">{problem.title}</Typography>
 
                 <Typography variant="subtitle1">
-                  {problem.description}
+                  <div dangerouslySetInnerHTML={renderHTML(problem.description)} />
                 </Typography>
 
                 <CardHeader title="Test Cases" />
