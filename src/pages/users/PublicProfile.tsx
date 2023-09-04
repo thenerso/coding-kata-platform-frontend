@@ -67,9 +67,12 @@ const PublicProfile: React.FC = () => {
     fetchData();
   }, [id]);
 
+  if (!loading && !userProfile) return <div>User profile not found</div>
   if (!userProfile) {
-    return <Typography variant="h6">User profile not found</Typography>;
+    return <Loading />;
   }
+  if (loading) return <Loading />;
+  if (!resume || !headshot) return <div>Profile incomplete, resume and/or headshot missing.</div>
 
   const {
     fullName,
@@ -81,9 +84,8 @@ const PublicProfile: React.FC = () => {
     githubLink,
   } = userProfile;
 
-  if (error) return <EmptyState message={error} />;
-  if (loading) return <Loading />;
-  if (!resume || !headshot) return <div>Profile incomplete, resume and/or headshot missing.</div>
+  //if (error) return <EmptyState message={error} />;
+
   return (
     <Box p={3}>
       {/* <Typography variant="h1" align="left">Candidate Profile</Typography> */}
