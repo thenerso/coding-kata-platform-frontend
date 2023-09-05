@@ -123,7 +123,7 @@ const AdminDashboard = () => {
                     <ListItemText>No Cohorts added yet</ListItemText>
                   </ListItem>
                 ) : (
-                  cohorts.slice(0, 4).sort((a, b)=> new  Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((cohort) => {
+                  cohorts.sort((a, b)=> new  Date(b.startDate).getTime() - new Date(a.startDate).getTime()).slice(0, 4).map((cohort) => {
                     return (
                       <ListItem key={cohort.id}>
                         <ListItemButton
