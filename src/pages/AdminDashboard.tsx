@@ -107,9 +107,9 @@ const AdminDashboard = () => {
         </Grid>
         <Grid item xs={12} md={8}>
           <Card>
-            <CardHeader title="📊 Solutions by month" />
+            <CardHeader title="📊 Solutions by Week" />
             <CardContent>
-              <SolutionsChart solutions={solutions} />
+              <SolutionsChart solutions={solutions} granularity="week" maxPoints={10}/>
             </CardContent>
           </Card>
         </Grid>
