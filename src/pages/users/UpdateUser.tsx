@@ -86,6 +86,8 @@ const UpdateUser = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
+
   useEffect(() => {
     const token = authService.getAccessToken();
 
@@ -506,7 +508,7 @@ const UpdateUser = () => {
                     onKeyDown={(e) => e.key === "Enter" && submit()}
                   />
                   <br />
-                  <FormControl variant="standard">
+                 {isAdmin &&  <FormControl variant="standard">
                     <InputLabel id="cohort-label">Cohort</InputLabel>
                     <Select
                       variant="standard"
@@ -529,7 +531,7 @@ const UpdateUser = () => {
                         </MenuItem>
                       ))}
                     </Select>
-                  </FormControl>
+                  </FormControl> }
                   <br />
                   
                     <FormGroup>
@@ -542,7 +544,7 @@ const UpdateUser = () => {
                     </FormGroup>
                  
         
-                {authService.getUser()?.roles?.includes("ADMIN") &&  <FormControl>
+                {isAdmin &&  <FormControl>
                     <InputLabel variant="standard" id="role-label">
                       Role
                     </InputLabel>

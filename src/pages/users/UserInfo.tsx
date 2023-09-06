@@ -95,6 +95,8 @@ const UserInfo = ({title = "User Info"}) => {
     { label: "Correctness", field: "correctness", type: "success" },
   ];
 
+  const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
+
   if (loading) return <Loading />;
   if (error || !user) return <EmptyState message={error} />;
   return (
@@ -103,7 +105,7 @@ const UserInfo = ({title = "User Info"}) => {
       <Button
         color="info"
         component={Link}
-        to="/users"
+        to={isAdmin ? "/users" : "/dashboard"}
         startIcon={<ArrowBack />}
       >
         Back
