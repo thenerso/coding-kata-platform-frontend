@@ -17,4 +17,4 @@ const GlobalConfig: IGlobalConfig = {
   ga_id: process.env.REACT_APP_GOOGLE_ANALYTICS,
 };
 
-export default GlobalConfig;
+export default GlobalConfig; 

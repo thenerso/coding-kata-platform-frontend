@@ -25,7 +25,7 @@ export const HeadshotInput = ({
    // if(cropped) return;
     const fileInput = document.createElement("input");
     fileInput.type = "file";
-    fileInput.accept = "image/jpeg";
+    fileInput.accept = "image/jpeg,image/png";
     fileInput.onchange = (e) => {
       const target = e.target as HTMLInputElement;
       const file = target.files ? target.files[0] : null;
