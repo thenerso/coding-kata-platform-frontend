@@ -25,6 +25,7 @@ const ListAllSolutions = () => {
             (updatedSolutions: ISolution[]) => {
               // Update the component's state for each page retrieved
               setSolutions(updatedSolutions);
+              setLoading(false);
             }
           )
           .then(() => {

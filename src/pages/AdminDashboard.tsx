@@ -77,6 +77,7 @@ const AdminDashboard = () => {
             token, 
             (updatedSolutions: ISolution[]) => {
               // Update the component's state for each page retrieved
+              setLoading(false);
               setSolutions(updatedSolutions);
             }
           )
