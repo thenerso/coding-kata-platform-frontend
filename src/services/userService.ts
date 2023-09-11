@@ -3,14 +3,50 @@ import GlobalConfig from "../config/GlobalConfig";
 import { IUser } from "../interfaces/user";
 
 const userService = {
-  getAll: async (token: string) => {
-    const res = await axios.get(GlobalConfig.server_url + "/admin/users/", {
+  getPage: async (token: string, page: number = 0, size: number = 10) => {
+    const url = `${GlobalConfig.server_url}/admin/users?page=${page}&size=${size}`;
+    const response = await axios.get(url, {
       headers: {
         Authorization: "Bearer " + token,
       },
     });
-    return res.data;
+    return response.data;
   },
+
+  getPageContent: async (token: string, page: number = 0, size: number = 10) => {
+    const data = await userService.getPage(token, page, size);
+    return data.content || [];
+  },
+
+  getAll: async (token: string, callback: Function) => {
+    let page = 0;
+    const size = 10; // or whatever default size you prefer
+    let allUsers: IUser[] = [];  // Assuming you have a type named User
+    let isLastPage = false;
+
+    while (!isLastPage) {
+      try {
+        const response = await userService.getPage(token, page, size);
+        const users = response.content;
+
+        if (response.last) {
+          isLastPage = true;
+        }
+
+        allUsers = [...allUsers, ...users];
+
+        // Callback to update the state or any other action you'd like to take
+        callback && callback(allUsers);
+
+        page++;
+      } catch (error) {
+        console.error('Error fetching page:', error);
+        isLastPage = true;  // terminate loop if there's an error
+      }
+    }
+    return allUsers;
+  },
+
   getById: async (token: string, id: string): Promise<IUser> => {
     const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}`, {
       headers: {
@@ -83,7 +119,7 @@ const userService = {
         },
       }
     );
-    return res.data;
+    return res.data.content;
   },
   create: async (token: string, body: IUser) => {
     try {
@@ -111,7 +147,7 @@ const userService = {
       throw new Error("Could not create User");
     }
   },
- 
+
 
 };
 

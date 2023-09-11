@@ -7,9 +7,6 @@ import Header from "../components/global/Header";
 import Home from "../pages/Home";
 import authService from "../services/authService";
 import routes, { UserRoles } from "./routes";
-import { AppContext, IAppContext } from "../context/AppContext";
-import userService from "../services/userService";
-import cohortServices from "../services/cohortService";
 import GlobalConfig from "../config/GlobalConfig";
 import DashboardContainer from "../pages/DashboardContainer";
 
@@ -21,9 +18,9 @@ import DashboardContainer from "../pages/DashboardContainer";
 const MainRouter = (): JSX.Element => {
   const [isAuthed, setIsAuthed] = useState(false);
   const [role, setRole] = useState<UserRoles>(UserRoles.UNAUTHED);
-  const { members, setNewMembers, setNewCohorts } = React.useContext(
-    AppContext
-  ) as IAppContext;
+  // const { members, setNewMembers, setNewCohorts } = React.useContext(
+  //   AppContext
+  // ) as IAppContext;
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -34,15 +31,16 @@ const MainRouter = (): JSX.Element => {
   // Runs when route updates
   useEffect(() => {
     const getUsersAndCohorts = () => {
-      const token = authService.getAccessToken();
-      if (token && members.length === 0) {
-        userService.getAll(token).then((result) => {
-          setNewMembers(result);
-        });
-        cohortServices.getAll(token).then((result) => {
-          setNewCohorts(result);
-        });
-      }
+     // const token = authService.getAccessToken();
+      // if (token && members.length === 0) {
+      //   userService.getAll(token, (allUsers: IUser[]) => {
+      //     setNewMembers(allUsers);
+      //   });
+        
+      //   cohortService.getAll(token, (cohorts:ICohort[])=> {
+      //     setNewCohorts(cohorts);
+      //   })
+      // }
     };
 
     const determineUserRole = (role: string) => {
@@ -78,7 +76,7 @@ const MainRouter = (): JSX.Element => {
       setIsAuthed(() => new Date(user.exp as number) < new Date());
       determineUserRole(user.roles[0]);
     }
-  }, [location, members.length, setNewCohorts, setNewMembers]);
+  }, [location]);
 
   const displayAuthState = (index: number, link: string, message: string) => {
     return (

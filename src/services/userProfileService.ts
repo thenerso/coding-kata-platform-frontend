@@ -15,7 +15,7 @@ const userProfileService = {
     
       getPageContent: async (token: string, page: number = 0, size: number = 10) => {
         const data = await userProfileService.getPage(token, page, size);
-        return data.content;
+        return data.content || [];
       },
     
       getAll: async (token: string, callback: Function) => {

@@ -1,6 +1,6 @@
 import { ArrowBack, Edit } from "@mui/icons-material";
 import { Button, Fab, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import { ICohort } from "../../interfaces/cohort";
@@ -8,8 +8,9 @@ import { ICohort } from "../../interfaces/cohort";
 import styled from "@emotion/styled";
 import DeleteCohort from "../../components/cohort/DeleteCohort";
 import dayjs from "dayjs";
-import { AppContext, IAppContext } from "../../context/AppContext";
 import FilterTable, { ITableFields } from "../../components/global/FilterTable";
+import cohortService from "../../services/cohortService";
+import authService from "../../services/authService";
 
 /**
  * Injected styles
@@ -27,7 +28,6 @@ const TitleActionWrapper = styled("div")`
 `;
 
 const Cohort = () => {
-  const { cohorts } = useContext(AppContext) as IAppContext;
 
   const [cohort, setCohort] = useState<ICohort>();
   const [error, setError] = useState<string>("");
@@ -35,15 +35,13 @@ const Cohort = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const cohort = cohorts.find(
-      (cohort) => cohort.id === parseInt(id as string)
-    );
-    if (cohort) {
-      setCohort(cohort);
-    } else {
-      setError("Could not find cohort");
+    const token = authService.getAccessToken();
+    if(!token) {
+      setError("Authentication failed. Please log in again");
+      return;
     }
-  }, [cohorts, id]);
+    cohortService.getById(token, id || "").then((cohort)=> setCohort(cohort));
+  }, []);
 
   const tableFields: ITableFields[] = [
     { label: "ID", field: "id", type: "index" },

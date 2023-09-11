@@ -11,16 +11,16 @@ const solutionService = {
       },
     });
     return response.data;  // This will return the entire data object now
-},
+  },
 
-getPageContent: async (token: string, page: number, size: number) => {
+  getPageContent: async (token: string, page: number, size: number) => {
     const response = await solutionService.getPage(token, page, size);
-    return response.content;
-},
+    return response.content || [];
+  },
 
-getAll: async (token: string, callback: Function) => {
+  getAll: async (token: string, callback: Function) => {
     let page = 0;
-    const size = 5;  // or whatever default size you prefer
+    const size = 5;  // Adjust this based on your preference
     let allSolutions: ISolution[] = [];
     let isLastPage = false;
 
@@ -34,19 +34,48 @@ getAll: async (token: string, callback: Function) => {
         }
 
         allSolutions = [...allSolutions, ...solutions];
-
-        // Callback to update the state or any other action you'd like to take
         callback && callback(allSolutions);
-
         page++;
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching page:', error);
+
+        // If axios error, we can give a more detailed error response
+        if (error && error.response) {
+          const { status, data } = error.response;
+
+          switch (status) {
+            case 400:
+              console.error('Bad Request:', data);
+              break;
+            case 401:
+              console.error('Unauthorized. Token might be expired or invalid.');
+              break;
+            case 403:
+              console.error('Forbidden. You do not have the necessary permissions.');
+              break;
+            case 404:
+              console.error('Endpoint not found.');
+              break;
+            case 429:
+              console.error('Too many requests. You are being rate limited.');
+              break;
+            case 500:
+              console.error('Internal Server Error:', data);
+              break;
+            default:
+              console.error('An unknown error occurred:', data);
+              break;
+          }
+        } else {
+          // If not an axios error, just print the error message
+          console.error('An unexpected error occurred:', error.message);
+        }
+
         isLastPage = true;  // terminate loop if there's an error
       }
     }
     return allSolutions;
-},
-
+  },
 
   getById: async (token: string, id: string): Promise<ISolution> => {
     const res = await axios.get(

@@ -1,9 +1,18 @@
-import { useContext } from "react";
-import { AppContext, IAppContext } from "../../context/AppContext";
+import { useEffect, useState } from "react";
 import FilterTable, { ITableFields } from "../../components/global/FilterTable";
+import { ICohort } from "../../interfaces/cohort";
+import cohortService from "../../services/cohortService";
+import authService from "../../services/authService";
 
 const ListCohorts = () => {
-  const { cohorts } = useContext(AppContext) as IAppContext;
+  const [cohorts, setCohorts] = useState<ICohort[]>([]);
+
+  useEffect(() => {
+    const token = authService.getAccessToken() || "";
+    cohortService.getAll(token, (cohorts: ICohort[]) => {
+      setCohorts(cohorts);
+    });
+  }, []);
 
   const tableFields: ITableFields[] = [
     { label: "ID", field: "id", type: "string" },

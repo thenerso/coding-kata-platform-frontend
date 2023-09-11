@@ -22,6 +22,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { orange } from "@mui/material/colors";
 
+
 type IStyledRowProps = {
   active: number;
 };
@@ -91,7 +92,7 @@ export interface ITableFields {
     | "index";
 }
 
-interface FilterTableProps {
+export interface FilterTableProps {
   title: string;
   link?: string;
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
@@ -139,7 +140,7 @@ function FilterTableHead(props: FilterTableProps) {
   );
 }
 
-interface IFilterTableProps {
+export interface IFilterTableProps {
   createLink?: string;
   viewLink?: string;
   highlightId?: number;
@@ -155,8 +156,8 @@ const FilterTable = ({
   viewLink,
   highlightId,
   title,
-  rows,
-  fields,
+  rows = [],
+  fields = [],
   defaultOrder,
   defaultOrderBy
 }: IFilterTableProps) => {

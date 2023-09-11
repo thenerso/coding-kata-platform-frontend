@@ -1,10 +1,20 @@
-import { useContext } from "react";
-// import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import FilterTable, { ITableFields } from "../../components/global/FilterTable";
-import { AppContext, IAppContext } from "../../context/AppContext";
+import userService from "../../services/userService";
+import { IUser } from "../../interfaces/user";
+import authService from "../../services/authService";
 
 const ListUsers = () => {
-  const { members } = useContext(AppContext) as IAppContext;
+  const [users, setUsers] = useState<IUser[]>([]);
+
+  useEffect(() => {
+    const token = authService.getAccessToken();
+    if (!token) return;
+    // The callback function provided to getAll will set the fetched users to our state
+    userService.getAll(token, (fetchedUsers: IUser[]) => {
+      setUsers(fetchedUsers);
+    });
+  }, []);
 
   const tableFields: ITableFields[] = [
     { label: "ID", field: "id", type: "string" },
@@ -14,13 +24,11 @@ const ListUsers = () => {
     { label: "Score", field: "score", type: "string" },
   ];
 
-  // const navigate = useNavigate();
-
   return (
     <FilterTable
       title="Users"
       viewLink={"/users/"}
-      rows={members}
+      rows={users}
       fields={tableFields}
       createLink={`/users/new`}
     />
