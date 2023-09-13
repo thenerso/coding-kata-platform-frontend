@@ -24,6 +24,7 @@ const ListPublicProfiles = () => {
         token, 
         (updatedProfiles: IUserProfile[]) => {
           // Update the component's state for each page retrieved
+          console.log("profiles: ", updatedProfiles);
           setLoading(false);
           setProfiles(updatedProfiles);
         }
@@ -45,7 +46,7 @@ const ListPublicProfiles = () => {
     { label: "Available Locations", field: "preferredLocations", type: "tags" },
     // { label: "Education", field: "education", type: "tags" },
     // { label: "Start Date", field: "user.startDate", type: "date" },
-    { label: "Kata Score", field: "user.score", type: "string" }
+    // { label: "Kata Score", field: "user.score", type: "string" }
   ];
 
   // const navigate = useNavigate();

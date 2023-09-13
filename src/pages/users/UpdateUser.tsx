@@ -281,7 +281,8 @@ const UpdateUser = () => {
           else
             updateUserProfilePromise = userProfileService.create(
               token,
-              userProfileBody
+              userProfileBody,
+              id || ""
             );
 
           let allPromises = [updateUserPromise, updateUserProfilePromise];

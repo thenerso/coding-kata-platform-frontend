@@ -56,10 +56,10 @@ const userProfileService = {
         });
         return res.data;
     },
-    create: async (token: string, body: IUserProfile) => {
+    create: async (token: string, body: IUserProfile, id: string) => {
         try {
             const response = await axios.post(
-                GlobalConfig.server_url + "/user/profiles/",
+                GlobalConfig.server_url + `/user/profiles/${id}`,
                 body,
                 {
                     headers: {
