@@ -3,14 +3,11 @@ import { AccessTime, ArrowBack, Code, Person } from "@mui/icons-material";
 import {
   Button,
   Typography,
-  Fab,
   Divider,
   Grid,
   Card,
   CardHeader,
-  CardContent,
   List,
-  Chip,
   ListItemIcon,
   ListItem,
   ListItemText,
@@ -20,9 +17,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 import DifficultyChip from "../../components/problem/DifficultyChip";
-
-import Tags from "../../components/problem/Tags";
-import TestCases from "../../components/problem/test-case/TestCases";
 
 import authService from "../../services/authService";
 import { ISolutionDTO } from "../../interfaces/solutions";
@@ -37,16 +31,6 @@ import PreviewCodeEditorContainer from "../../components/editor/PreviewCodeEdito
 const TitleWrapper = styled("div")`
   display: flex;
   justify-content: space-between;
-`;
-
-const TitleActionWrapper = styled("div")`
-  a {
-    margin: 0 5px;
-  }
-`;
-
-const StyledChip = styled(Chip)`
-  margin: 10px 0;
 `;
 
 const ChipWrapper = styled("div")`

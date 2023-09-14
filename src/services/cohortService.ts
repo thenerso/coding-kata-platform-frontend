@@ -20,7 +20,7 @@ const cohortService = {
 
   getAll: async (token: string, callback: Function) => {
     let page = 0;
-    const size = 5;  // Adjust this based on your preference
+    const size = 10;  // Adjust this based on your preference
     let allCohorts: ICohort[] = [];
     let isLastPage = false;
 

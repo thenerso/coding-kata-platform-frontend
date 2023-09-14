@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
 import solutionService from "../services/solutionService";
-import { ISolution, ISolutionDTO } from "../interfaces/solutions";
+import { ISolutionDTO } from "../interfaces/solutions";
 import { IJWTUser } from "../interfaces/network";
 import { ListItemIcon } from "@material-ui/core";
 import {
@@ -38,9 +38,7 @@ import SolutionsChart from "../components/SolutionsChart";
 import FilterTable, { ITableFields } from "../components/global/FilterTable";
 import { ICohort } from "../interfaces/cohort";
 import cohortService from "../services/cohortService";
-import PreviewTable from "../components/global/PreviewTable";
 import SuccessChip from "../components/problem/SuccessChip";
-import ListWithColumns from "../components/global/ListWithColumns";
 
 const StyledCardActions = styled(CardActions)`
   justify-content: flex-end;
@@ -90,20 +88,33 @@ const AdminDashboard = () => {
     setError("");
     setLoading(true);
 
+    // solutionService
+    //   .getPageContent(token, 0, 5)
+    //   .then((updatedSolutions: ISolutionDTO[]) => {
+    //     // Update the component's state for each page retrieved
+    //     setLoading(false);
+    //     setSolutions(updatedSolutions);
+    //   })
+    //   .then(() => {
+    //     console.log("Finished fetching all solutions");
+    //   })
+    //   .catch((err) => {
+    //     console.log("Error getting solutions", err);
+    //     setError("Error fetching solutions data");
+    //     setLoading(false);
+    //   });
     solutionService
-      .getPageContent(token, 0, 5)
-      .then((updatedSolutions: ISolutionDTO[]) => {
+      .getAll(token, (updatedSolutions: ISolutionDTO[]) => {
         // Update the component's state for each page retrieved
-        setLoading(false);
         setSolutions(updatedSolutions);
+        setLoading(false);
       })
       .then(() => {
         console.log("Finished fetching all solutions");
       })
       .catch((err) => {
         console.log("Error getting solutions", err);
-        setError("Error fetching solutions data");
-        setLoading(false);
+        setError("Error fetching data");
       });
 
     UserService.getGlobalLeaderboard(token)
@@ -132,11 +143,11 @@ const AdminDashboard = () => {
         </Grid>
         <Grid item xs={12} md={8}>
           <Card>
-            <CardHeader title="📊 Submissions by Day" />
+            <CardHeader title="📊 Submissions by Week" />
             <CardContent>
               <SolutionsChart
                 solutions={solutions}
-                granularity="day"
+                granularity="week"
                 maxPoints={10}
               />
             </CardContent>

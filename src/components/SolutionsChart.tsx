@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { ISolution, ISolutionDTO } from "../interfaces/solutions";
+import {ISolutionDTO } from "../interfaces/solutions";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear"; // for week support
 
