@@ -40,16 +40,10 @@ const ListPublicProfiles = () => {
   }, []);
 
   const tableFields: ITableFields[] = [
-    // { label: "ID", field: "id", type: "string" },
     { label: "Full Name", field: "fullName", type: "string" },
     { label: "Roles of Interest", field: "preferredRoles", type: "tags" },
     { label: "Available Locations", field: "preferredLocations", type: "tags" },
-    // { label: "Education", field: "education", type: "tags" },
-    // { label: "Start Date", field: "user.startDate", type: "date" },
-    // { label: "Kata Score", field: "user.score", type: "string" }
   ];
-
-  // const navigate = useNavigate();
 
   if (loading) return <Loading />;
   if (error) return <EmptyState message={error} />;
