@@ -117,17 +117,7 @@ const Solution = () => {
           Solution for <code>'{solution.title}'</code> (
           {solution.correctness}%)
         </Typography>
-        <TitleActionWrapper>
-          <Fab
-            color={solution.correctness > 70 ? "success" : "error"}
-            aria-label="Correct"
-          >
-            {/* {problem.id && <DeleteProblem id={problem.id} />} */}
-            <Typography>{solution.correctness + "%"}</Typography>
-          </Fab>
-
-          {/* {problem.id && <DeleteProblem id={problem.id} />} */}
-        </TitleActionWrapper>
+       
       </TitleWrapper>
 
       <Typography variant="subtitle1">
@@ -136,7 +126,7 @@ const Solution = () => {
 
       <br />
       <Grid container spacing={5}>
-        <Grid container spacing={2} item xs={12} md={6}>
+        <Grid container spacing={2} item xs={12} md={3}>
           <Grid item xs={12} md={12}>
             <Card>
               <CardHeader title="Submission Details" />
@@ -211,7 +201,7 @@ const Solution = () => {
             </Card> */}
           </Grid>
         </Grid>
-        <Grid item md={6} sm={12} xs={12}>
+        <Grid item md={9} sm={12} xs={12}>
           <PreviewCodeEditorContainer
             code={solution.code}
             inputLanguage={solution.lang}
