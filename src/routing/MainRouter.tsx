@@ -87,7 +87,7 @@ const MainRouter = (): JSX.Element => {
           <EmptyState
             displayIcon
             message={message}
-            action={() => navigate("/login")}
+            action={() => navigate("/")}
             actionLabel={"Login"}
           />
         }
