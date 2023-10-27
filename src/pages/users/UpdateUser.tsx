@@ -28,7 +28,7 @@ import {
 import { useSnackbar } from "notistack";
 // import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 // import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { ICohort } from "../../interfaces/cohort";
+import { ICohort, ICohortDTO } from "../../interfaces/cohort";
 import { UserRoles } from "../../routing/routes";
 import userService from "../../services/userService";
 import userProfileService from "../../services/userProfileService"; // Assuming you have a userProfileService
@@ -51,8 +51,7 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 const UpdateUser = () => {
-  const { cohorts } = useContext(AppContext) as IAppContext;
-
+  const [cohorts, setCohorts] = useState<ICohortDTO[]>([]);
   // const [customStartDate, setCustomStartDate] = useState(true);
 
   const [email, setEmail] = useState("");
