@@ -15,7 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
@@ -27,7 +27,8 @@ import styled from "@emotion/styled";
 
 import UpdateMember from "../../components/cohort/member/UpdateMember";
 import { useSnackbar } from "notistack";
-import { AppContext, IAppContext } from "../../context/AppContext";
+import Loading from "../../components/global/Loading";
+import EmptyState from "../../components/global/EmptyState";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -45,7 +46,7 @@ const UpdateCohort = () => {
 
   const [nameError, setNameError] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -64,6 +65,7 @@ const UpdateCohort = () => {
       } else {
         setError("Could not find cohort");
       }
+      setLoading(false);
     });
 
    
@@ -132,6 +134,8 @@ const UpdateCohort = () => {
     setMembers(members.filter((member, index) => index !== memberIndex));
   };
 
+  if (loading) return <Loading />;
+  //if (error) return <EmptyState message={error} />;
   return (
     <>
       <Button
