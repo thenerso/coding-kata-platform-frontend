@@ -83,9 +83,10 @@ const userService = {
       if (err?.code === "ERR_NETWORK") {
         throw new Error("Server error, please try again later");
       }
-      if (typeof err.response.data === "string") throw new Error(err.response.data);
+     // if (typeof err.response.data === "string") throw new Error(err.response.data);
 
-      throw new Error("Could not update User");
+     // throw new Error("Could not update User");
+     throw new Error(err.response.data || `Could not update User`);
     }
   },
   getUserProgress: async (token: string, id: string) => {
