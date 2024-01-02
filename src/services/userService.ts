@@ -86,6 +86,7 @@ const userService = {
      // if (typeof err.response.data === "string") throw new Error(err.response.data);
 
      // throw new Error("Could not update User");
+     console.log(err.response);
      throw new Error(JSON.stringify(err.response.data) || err.response.data || `Could not update User`);
     }
   },
