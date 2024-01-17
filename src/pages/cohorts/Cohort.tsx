@@ -52,7 +52,7 @@ const Cohort = () => {
         setError(error);
         setLoading(false);
       });
-  }, []);
+  }, [id]);
 
   const tableFields: ITableFields[] = [
     { label: "ID", field: "id", type: "index" },

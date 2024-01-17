@@ -54,16 +54,6 @@ const AdminDashboard = () => {
 
   const [globalBoard, setGlobalBoard] = useState<IUser[]>();
 
-  const solutionTableFields: ITableFields[] = [
-    // { label: "ID", field: "id", type: "string" },
-    { label: "User", field: "user.username", type: "string" },
-    { label: "Problem", field: "problem.title", type: "string" },
-    { label: "Difficulty", field: "problem.difficulty", type: "difficulty" },
-    { label: "Language", field: "lang", type: "string" },
-    { label: "Submission Date", field: "submissionDate", type: "date" },
-    { label: "Correctness", field: "correctness", type: "success" },
-  ];
-
   const leaderboardTableFields: ITableFields[] = [
     { label: "Rank", field: "id", type: "index" },
     { label: "User", field: "username", type: "string" },

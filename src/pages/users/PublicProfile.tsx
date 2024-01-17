@@ -25,6 +25,7 @@ import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import DownloadIcon from "@mui/icons-material/Download";
 import BackArrow from "../../components/global/BackArrow";
+import EmptyState from "../../components/global/EmptyState";
 
 const PublicProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -72,14 +73,10 @@ const PublicProfile: React.FC = () => {
     fetchData();
   }, [id]);
 
+  if (error) return <EmptyState message={error} />;
   if (!loading && !userProfile)
     return (
-      <>
-        <Box p={3}>
-          <BackArrow />
-        </Box>
-        <div>User profile not found</div>
-      </>
+      <EmptyState message="User profile not found" />
     );
   if (!userProfile) {
     return <Loading />;

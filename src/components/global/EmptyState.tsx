@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import BackArrow from "./BackArrow";
 
 /**
  * Componenet Types
@@ -25,16 +26,21 @@ const EmptyState = ({
   displayIcon = false,
 }: IProps) => {
   return (
-    <StyledEmptyStateWrapper>
-      {displayIcon && <Typography variant="h1">🤔</Typography>}
-      <Typography variant="body1">{message}</Typography>
-      <br />
-      {actionLabel && (
-        <Button variant="contained" onClick={action}>
-          {actionLabel}
-        </Button>
-      )}
-    </StyledEmptyStateWrapper>
+    <>
+      <Box p={3}>
+        <BackArrow />
+      </Box>
+      <StyledEmptyStateWrapper>
+        {displayIcon && <Typography variant="h1">🤔</Typography>}
+        <Typography variant="body1">{message}</Typography>
+        <br />
+        {actionLabel && (
+          <Button variant="contained" onClick={action}>
+            {actionLabel}
+          </Button>
+        )}
+      </StyledEmptyStateWrapper>
+    </>
   );
 };
 export default EmptyState;
