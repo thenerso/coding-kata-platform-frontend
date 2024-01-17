@@ -37,7 +37,7 @@ const TestCases = ({
               return (
                 <span key={`${input.value}-${index}`}>
                   <Tooltip style={{ cursor: "pointer" }} title={input.dataType}>
-                    <span style={{color: 'darkorange'}}>
+                    <span style={{padding: '2px', borderRadius: '5px', backgroundColor: 'lightgray'}}>
                       {/* <span>{input.dataType?.includes("ARRAY") ? "[" : ""}</span> */}
                       {input.dataType?.includes("STRING")  && input.dataType?.includes("ARRAY") ? input.value?.split(",").map(word => `"${word.trim()}"`).join(",") : input.value ? input.value : ""}
                       {input.dataType?.includes("ARRAY") ? "]" : ""}
@@ -53,7 +53,7 @@ const TestCases = ({
               title={testCase.output.dataType}
             >
               
-              <span style={{ color: 'green' }}>
+              <span style={{ padding: '2px', color: 'darkgreen', borderRadius: '5px', backgroundColor: 'lightgray' }}>
                 {testCase.output.dataType?.includes("ARRAY") ? "[" : ""}
                 {testCase.output.dataType?.includes("STRING") && testCase.output.dataType.includes("ARRAY") ? testCase.output.value?.split(",").map(word => `"${word.trim()}"`).join(",") : testCase.output.value ? testCase.output.value : ""}
                 {testCase.output.dataType?.includes("ARRAY") ? "]" : ""}
