@@ -1,21 +1,23 @@
-import { useEffect } from "react";
-import { useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
 import authService from "../services/authService";
 import UserInfo from "./users/UserInfo";
 
 const Profile = () => {
-  const navigate = useNavigate();
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const user = authService.getUser();
-    if (user) {
-      // Assuming that 'id' is the property holding the user id
-      const userId = user.userId;
-      navigate(`/users/${userId}`);
+    if (user && user.userId) {
+      setUserId(user.userId.toString()); // Assuming userId is a number
     }
-  }, [navigate]);
+  }, []);
 
-  return <UserInfo title="Profile" />;
+  if (userId === null) {
+    // You might want to handle loading or null user ID appropriately here
+    return <div>Loading...</div>;
+  }
+
+  return <UserInfo userId={userId} title="Profile" />;
 };
 
 export default Profile;

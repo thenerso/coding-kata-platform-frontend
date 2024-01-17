@@ -42,7 +42,7 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
   /**
    * Logout from the application
    */
-  const submit = () => {
+  const logout = () => {
     if (isAuthed) {
       setIsAuthed(false);
       setRole(UserRoles.UNAUTHED);
@@ -146,7 +146,7 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
                   >
                     Profile
                   </MenuItem>
-                  <MenuItem onClick={submit}>Logout</MenuItem>
+                  <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>
               </React.Fragment>
             )}

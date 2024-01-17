@@ -36,7 +36,7 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import SolutionsChart from "../components/SolutionsChart";
 import FilterTable, { ITableFields } from "../components/global/FilterTable";
-import { ICohort, ICohortDTO } from "../interfaces/cohort";
+import { ICohortDTO } from "../interfaces/cohort";
 import cohortService from "../services/cohortService";
 import SuccessChip from "../components/problem/SuccessChip";
 
@@ -88,21 +88,6 @@ const AdminDashboard = () => {
     setError("");
     setLoading(true);
 
-    // solutionService
-    //   .getPageContent(token, 0, 5)
-    //   .then((updatedSolutions: ISolutionDTO[]) => {
-    //     // Update the component's state for each page retrieved
-    //     setLoading(false);
-    //     setSolutions(updatedSolutions);
-    //   })
-    //   .then(() => {
-    //     console.log("Finished fetching all solutions");
-    //   })
-    //   .catch((err) => {
-    //     console.log("Error getting solutions", err);
-    //     setError("Error fetching solutions data");
-    //     setLoading(false);
-    //   });
     solutionService
       .getAll(token, (updatedSolutions: ISolutionDTO[]) => {
         // Update the component's state for each page retrieved

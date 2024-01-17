@@ -5,6 +5,7 @@ import theme from "./theme";
 import MainRouter from "./routing/MainRouter";
 import { SnackbarProvider } from "notistack";
 import AppProvider from "./context/AppContext";
+import { HistoryProvider } from "./components/global/HistoryProvider";
 
 /**
  * Entry point for the application
@@ -14,15 +15,16 @@ import AppProvider from "./context/AppContext";
 const App = (): JSX.Element => {
   return (
     <>
-    
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <SnackbarProvider maxSnack={6}>
-            <AppProvider>
-              <MainRouter />
-            </AppProvider>
-          </SnackbarProvider>
-        </ThemeProvider>
+        <HistoryProvider>
+          <ThemeProvider theme={theme}>
+            <SnackbarProvider maxSnack={6}>
+              <AppProvider>
+                <MainRouter />
+              </AppProvider>
+            </SnackbarProvider>
+          </ThemeProvider>
+        </HistoryProvider>
       </BrowserRouter>
     </>
   );

@@ -143,7 +143,7 @@ const routes: IRouteType[] = [
   },
   {
     name: "User",
-    link: "/users/:id",
+    link: "/users/:paramId",
     Component: UserInfo,
     authed: UserRoles.USER,
   },

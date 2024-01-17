@@ -54,14 +54,16 @@ const TitleActionWrapper = styled("div")`
 
 dayjs.extend(relativeTime);
 
-const UserInfo = ({title = "User Info"}) => {
+const UserInfo = ({title = "User Info", userId = null}: {title?: string, userId?: string | null} ) => {
   const [user, setUser] = useState<IUser>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  const { id } = useParams();
-
+  const { paramId } = useParams();
   const token = authService.getAccessToken();
+  const id = userId || paramId;
+  console.log("user id: " + id, "param id: " + paramId);
+
 
   useEffect(() => {
     if (token) {
@@ -84,7 +86,7 @@ const UserInfo = ({title = "User Info"}) => {
       setError("Authentication error, please log in again");
       setLoading(false);
     }
-  }, [user, id, token]);
+  }, [id, user, token]);
 
   const solutionTableFields: ITableFields[] = [
     { label: "ID", field: "id", type: "string" },
@@ -95,13 +97,21 @@ const UserInfo = ({title = "User Info"}) => {
     { label: "Correctness", field: "correctness", type: "success" },
   ];
 
-  const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
+  // const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
 
   if (loading) return <Loading />;
   if (error || !user) return <EmptyState message={error} />;
   return (
     <>
     <Box display={"flex"} justifyContent={"space-between"}>
+      {/* <Button
+        color="info"
+        component={Link}
+        to={isAdmin ? "/users" : "/dashboard"}
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button> */}
       <BackArrow />
       <Button
         color="info"

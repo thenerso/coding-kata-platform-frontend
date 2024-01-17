@@ -30,24 +30,11 @@ const MainRouter = (): JSX.Element => {
 
   // Runs when route updates
   useEffect(() => {
-    const getUsersAndCohorts = () => {
-     // const token = authService.getAccessToken();
-      // if (token && members.length === 0) {
-      //   userService.getAll(token, (allUsers: IUser[]) => {
-      //     setNewMembers(allUsers);
-      //   });
-        
-      //   cohortService.getAll(token, (cohorts:ICohort[])=> {
-      //     setNewCohorts(cohorts);
-      //   })
-      // }
-    };
 
     const determineUserRole = (role: string) => {
       switch (role) {
         case "ADMIN":
           setRole(UserRoles.ADMIN);
-          getUsersAndCohorts();
           break;
         case "USER":
           setRole(UserRoles.USER);
@@ -61,14 +48,6 @@ const MainRouter = (): JSX.Element => {
       }
       setLoading(false);
     };
-    // check if the user is authenticated
-
-    /**
-     * trying to use access token instead of user in session storage
-     * so it's more secure, not implemented yet
-     */
-    // const token = authService.getAccessToken();
-    // const user = authService.parseJwt(token ? token : null);
 
     const user = authService.getUser();
 
