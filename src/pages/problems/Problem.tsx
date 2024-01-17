@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Edit } from "@mui/icons-material";
+import { Edit, PlayArrow } from "@mui/icons-material";
 import {
   Typography,
   Fab,
@@ -111,6 +111,14 @@ const Problem = () => {
           </Fab>
 
           {problem.id && <DeleteProblem id={problem.id} />}
+          <Fab
+            color="primary"
+            aria-label="Edit problem set"
+            component={Link}
+            to={`/problems/attempt/${problem.id}`}
+          >
+            <PlayArrow />
+          </Fab>
         </TitleActionWrapper>
       </TitleWrapper>
 

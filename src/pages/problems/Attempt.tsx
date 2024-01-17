@@ -17,6 +17,7 @@ import { IProblem, StartCode } from "../../interfaces/problemSet";
 import authService from "../../services/authService";
 import EvalService from "../../services/evalService";
 import ProblemService from "../../services/problemService";
+import BackArrow from "../../components/global/BackArrow";
 
 const ControlsWrapper = styled("div")`
   margin-top: 10px;
@@ -118,8 +119,8 @@ const Attempt = () => {
           });
         }
         enqueueSnackbar(`Correctness: ${correctness}%`, {
-         variant: correctness > 70 ? "success" : "error",
-       });
+          variant: correctness > 70 ? "success" : "error",
+        });
 
         setCompiling(false);
       } catch (err: any) {
@@ -222,6 +223,7 @@ const Attempt = () => {
   if (error || !problem) return <EmptyState message={error} />;
   return (
     <>
+      <BackArrow />
       <Grid container spacing={5} alignItems="start" alignSelf="center">
         <AttemptDetailsWrapper
           problem={problem}
@@ -237,27 +239,32 @@ const Attempt = () => {
             setActiveLanguage={setActiveLanguage}
           />
           <ControlsWrapper>
-            {!submitted && <Button
-              variant={nextProblem !== -1 ? "outlined" : "contained"}
-              endIcon={
-                compiling ? <CircularProgress size={18} /> : <PlayCircle />
-              }
-              onClick={test}
-              disabled={compiling}
-            >
-              Attempt
-            </Button>}
-            {correctness >= 70 && !submitted && (<Button
-               style={{ marginLeft: 10 }}
-               color="secondary"
-               variant="contained"
-             endIcon={
-               compiling ? <CircularProgress size={18} /> : <PlayCircle />
-             }
-             onClick={submit}
-             disabled={compiling}>
-              Submit
-            </Button>)}
+            {!submitted && (
+              <Button
+                variant={nextProblem !== -1 ? "outlined" : "contained"}
+                endIcon={
+                  compiling ? <CircularProgress size={18} /> : <PlayCircle />
+                }
+                onClick={test}
+                disabled={compiling}
+              >
+                Attempt
+              </Button>
+            )}
+            {correctness >= 70 && !submitted && (
+              <Button
+                style={{ marginLeft: 10 }}
+                color="secondary"
+                variant="contained"
+                endIcon={
+                  compiling ? <CircularProgress size={18} /> : <PlayCircle />
+                }
+                onClick={submit}
+                disabled={compiling}
+              >
+                Submit
+              </Button>
+            )}
             {nextProblem !== -1 && submitted && (
               <Button
                 style={{ marginLeft: 10 }}
