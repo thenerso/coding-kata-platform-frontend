@@ -7,6 +7,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { Case } from "../../../interfaces/problemSet";
+import TestCaseValue from "./TestCaseValue";
 
 interface ITestCasesProps {
   functionName: string;
@@ -31,13 +32,13 @@ const TestCases = ({
         </ListItemIcon>
         <ListItemText>
           <code>
-            {functionName}(
+            {<span style={{ fontStyle: "italic" }}>{functionName}(</span>}
             {testCase.inputs.map((input, index) => {
               return (
                 <span key={`${input.value}-${index}`}>
                   <Tooltip style={{ cursor: "pointer" }} title={input.dataType}>
-                    <span>
-                      {input.dataType?.includes("ARRAY") ? "[" : ""}
+                    <span style={{color: 'darkorange'}}>
+                      {/* <span>{input.dataType?.includes("ARRAY") ? "[" : ""}</span> */}
                       {input.dataType?.includes("STRING")  && input.dataType?.includes("ARRAY") ? input.value?.split(",").map(word => `"${word.trim()}"`).join(",") : input.value ? input.value : ""}
                       {input.dataType?.includes("ARRAY") ? "]" : ""}
                     </span>
@@ -46,13 +47,13 @@ const TestCases = ({
                 </span>
               );
             })}
-            ) {"=> "}
+            <TestCaseValue>) {"=> "}</TestCaseValue>
             <Tooltip
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer"}}
               title={testCase.output.dataType}
             >
               
-              <span>
+              <span style={{ color: 'green' }}>
                 {testCase.output.dataType?.includes("ARRAY") ? "[" : ""}
                 {testCase.output.dataType?.includes("STRING") && testCase.output.dataType.includes("ARRAY") ? testCase.output.value?.split(",").map(word => `"${word.trim()}"`).join(",") : testCase.output.value ? testCase.output.value : ""}
                 {testCase.output.dataType?.includes("ARRAY") ? "]" : ""}
