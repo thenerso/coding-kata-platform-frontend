@@ -1,5 +1,5 @@
-import { ArrowBack, Edit } from "@mui/icons-material";
-import { Button, Fab, Typography } from "@mui/material";
+import { Edit } from "@mui/icons-material";
+import { Fab, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
@@ -12,6 +12,7 @@ import FilterTable, { ITableFields } from "../../components/global/FilterTable";
 import cohortService from "../../services/cohortService";
 import authService from "../../services/authService";
 import Loading from "../../components/global/Loading";
+import BackArrow from "../../components/global/BackArrow";
 
 /**
  * Injected styles
@@ -66,14 +67,7 @@ const Cohort = () => {
   if (error || !cohort) return <EmptyState message={error} />;
   return (
     <>
-      <Button
-        color="info"
-        component={Link}
-        to="/cohorts"
-        startIcon={<ArrowBack />}
-      >
-        Back
-      </Button>
+      <BackArrow />
       <TitleWrapper>
         <Typography variant="h1">{cohort.name}</Typography>
         <TitleActionWrapper>

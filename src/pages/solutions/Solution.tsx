@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-import { AccessTime, ArrowBack, Code, Person } from "@mui/icons-material";
+import { AccessTime, Code, Person } from "@mui/icons-material";
 import {
-  Button,
   Typography,
   Divider,
   Grid,
@@ -13,7 +12,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 import DifficultyChip from "../../components/problem/DifficultyChip";
@@ -23,6 +22,7 @@ import { ISolutionDTO } from "../../interfaces/solutions";
 import solutionService from "../../services/solutionService";
 import dayjs from "dayjs";
 import PreviewCodeEditorContainer from "../../components/editor/PreviewCodeEditorContainer";
+import BackArrow from "../../components/global/BackArrow";
 
 /**
  * Injected styles
@@ -53,7 +53,6 @@ const Solution = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const { id } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const token = authService.getAccessToken();
@@ -84,13 +83,7 @@ const Solution = () => {
   if (error || !solution) return <EmptyState message={error} />;
   return (
     <>
-      <Button
-        color="info"
-        onClick={() => navigate(-1)}
-        startIcon={<ArrowBack />}
-      >
-        Back
-      </Button>
+      <BackArrow />
       <ChipWrapper>
         <DifficultyChip label={solution.difficulty || ""} />
         <Divider orientation="vertical" flexItem />
@@ -98,15 +91,11 @@ const Solution = () => {
       </ChipWrapper>
       <TitleWrapper>
         <Typography variant="h1">
-          Solution for <code>'{solution.title}'</code> (
-          {solution.correctness}%)
+          Solution for <code>'{solution.title}'</code> ({solution.correctness}%)
         </Typography>
-       
       </TitleWrapper>
 
-      <Typography variant="subtitle1">
-        {solution.description}
-      </Typography>
+      <Typography variant="subtitle1">{solution.description}</Typography>
 
       <br />
       <Grid container spacing={5}>

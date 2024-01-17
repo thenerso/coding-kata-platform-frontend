@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-import { ArrowBack, Edit } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import {
-  Button,
   Typography,
   Fab,
   Divider,
@@ -13,7 +12,7 @@ import {
   Chip,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 // import DeleteProblem from "../../components/problem/DeleteProblem";
@@ -28,6 +27,7 @@ import authService from "../../services/authService";
 import ProblemService from "../../services/problemService";
 import DeleteProblem from "../../components/problem/DeleteProblem";
 import { renderHTML } from "../../components/global/Rendering";
+import BackArrow from "../../components/global/BackArrow";
 
 /**
  * Injected styles
@@ -63,7 +63,6 @@ const Problem = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const { id } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const token = authService.getAccessToken();
@@ -93,13 +92,7 @@ const Problem = () => {
   if (error || !problem) return <EmptyState message={error} />;
   return (
     <>
-      <Button
-        color="info"
-        onClick={() => navigate(-1)}
-        startIcon={<ArrowBack />}
-      >
-        Back
-      </Button>
+      <BackArrow />
       <ChipWrapper>
         <DifficultyChip label={problem.difficulty || ""} />
         <Divider orientation="vertical" flexItem />

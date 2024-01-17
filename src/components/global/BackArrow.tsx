@@ -1,18 +1,22 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import ArrowBack from '@mui/icons-material/ArrowBack';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
+import ArrowBack from "@mui/icons-material/ArrowBack";
+// import {createBrowserHistory} from 'history';
 
 const BackArrow = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    // const history = createBrowserHistory();
 
   const handleBack = () => {
+    // console.log('history', history);
     navigate(-1);
   };
 
   return (
-    <button onClick={handleBack}>
-      <ArrowBack /> Back
-    </button>
+    <Button color="info" onClick={() => handleBack()} startIcon={<ArrowBack />}>
+      Back
+    </Button>
   );
 };
 

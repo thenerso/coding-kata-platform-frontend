@@ -4,7 +4,6 @@ import {
   SportsEsports,
   LockClock,
   Lock,
-  ArrowBack,
   Edit,
   ArrowForward,
 } from "@mui/icons-material";
@@ -36,6 +35,7 @@ import authService from "../../services/authService";
 import userService from "../../services/userService";
 import FilterTable, { ITableFields } from "../../components/global/FilterTable";
 import DeleteUser from "../../components/user/DeleteUser";
+import BackArrow from "../../components/global/BackArrow";
 
 /**
  * Injected styles
@@ -102,18 +102,10 @@ const UserInfo = ({title = "User Info"}) => {
   return (
     <>
     <Box display={"flex"} justifyContent={"space-between"}>
+      <BackArrow />
       <Button
         color="info"
         component={Link}
-        to={isAdmin ? "/users" : "/dashboard"}
-        startIcon={<ArrowBack />}
-      >
-        Back
-      </Button>
-      <Button
-        color="info"
-        component={Link}
-        target="_blank"
         to={"/candidates/" + id}
         endIcon={<ArrowForward />}
       >

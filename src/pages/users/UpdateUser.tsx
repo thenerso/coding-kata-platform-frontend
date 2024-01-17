@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import authService from "../../services/authService";
 
 import styled from "@emotion/styled";
 
 import dayjs, { Dayjs } from "dayjs";
-import { ArrowBack, Check } from "@mui/icons-material";
+import { Check } from "@mui/icons-material";
 import {
   Button,
   Typography,
@@ -44,6 +44,7 @@ import StyledCard from "../../components/global/StyledCard";
 import URLTextField from "../../components/global/URLTextField";
 import EditableHistoryList from "../../components/global/EditableHistoryList";
 import cohortService from "../../services/cohortService";
+import BackArrow from "../../components/global/BackArrow";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -329,14 +330,7 @@ const UpdateUser = () => {
   if (error) return <EmptyState message={error} />;
   return (
     <>
-      <Button
-        color="info"
-        component={Link}
-        to="/users"
-        startIcon={<ArrowBack />}
-      >
-        Back
-      </Button>
+      <BackArrow />
       <Typography variant="h1">Update User</Typography>
       <Grid container spacing={3}>
         {/* left col */}

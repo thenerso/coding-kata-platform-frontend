@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { IUserProfile } from "../../interfaces/user";
 import userProfileService from "../../services/userProfileService";
 import authService from "../../services/authService";
@@ -17,7 +17,6 @@ import {
   Chip,
   ListItemIcon,
   ListItemText,
-  Button,
 } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
 import WorkIcon from "@mui/icons-material/Work";
@@ -25,8 +24,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import DownloadIcon from "@mui/icons-material/Download";
-import EmptyState from "../../components/global/EmptyState";
-import { ArrowBack } from "@mui/icons-material";
+import BackArrow from "../../components/global/BackArrow";
 
 const PublicProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -88,16 +86,7 @@ const PublicProfile: React.FC = () => {
 
   return (
     <Box p={3}>
-      {/* <Typography variant="h1" align="left">Candidate Profile</Typography> */}
-      <Button
-        color="info"
-        component={Link}
-        to="/candidates"
-        startIcon={<ArrowBack />
-      }
-      >
-        All Candidates
-      </Button>
+      <BackArrow />
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card>

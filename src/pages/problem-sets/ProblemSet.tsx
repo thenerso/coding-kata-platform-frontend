@@ -12,6 +12,7 @@ import Tags from "../../components/problem/Tags";
 import { IProblemSet } from "../../interfaces/problemSet";
 import authService from "../../services/authService";
 import problemSetServices from "../../services/problemSetService";
+import BackArrow from "../../components/global/BackArrow";
 
 /**
  * Injected styles
@@ -73,14 +74,7 @@ const ProblemSet = () => {
   if (error || !problemSet) return <EmptyState message={error} />;
   return (
     <>
-      <Button
-        color="info"
-        component={Link}
-        to="/problem-sets"
-        startIcon={<ArrowBack />}
-      >
-        Back
-      </Button>
+      <BackArrow />
       <TitleWrapper>
         <Typography variant="h1">{problemSet.title}</Typography>
         <TitleActionWrapper>
