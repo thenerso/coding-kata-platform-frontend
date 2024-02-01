@@ -151,7 +151,7 @@ const Attempt = () => {
       };
       setCompiling(true);
       try {
-        const response = await EvalService.evaluate(body, token);
+        const response = await EvalService.test(body, token);
         const evalResponse: IEvalResponse = response as IEvalResponse;
         setEvalResponse(response);
         setTabValue(1);
