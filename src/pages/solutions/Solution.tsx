@@ -119,7 +119,7 @@ const Solution = () => {
       <Typography variant="subtitle1">
         <div dangerouslySetInnerHTML={renderHTML(solution.description)} />
       </Typography>
-
+      <br />
       <br />
       <Grid container spacing={5}>
         <Grid container spacing={2} item xs={12} md={3}>
