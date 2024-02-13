@@ -61,7 +61,7 @@ const Solution = () => {
   const { id } = useParams();
 
   const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
-  const userOwnsSolution = () => {
+  const userOwned = () => {
    // for now, disable this
   //  return false;
     if(!authService.getUser()) return false;
@@ -69,7 +69,7 @@ const Solution = () => {
     console.log('reached the check')
     return authService.getUser()?.userId === solution?.userId;
   }
-  const canEdit = () => userOwnsSolution() || isAdmin;
+  const canEdit = () => userOwned() || isAdmin;
 
   useEffect(() => {
     const token = authService.getAccessToken();

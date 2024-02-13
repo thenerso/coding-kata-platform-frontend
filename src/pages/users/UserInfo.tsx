@@ -66,6 +66,7 @@ const UserInfo = ({title = "User Info", userId = null}: {title?: string, userId?
 
 
   useEffect(() => {
+
     if (token) {
       if (!user && id) {
         setError("");
@@ -97,9 +98,21 @@ const UserInfo = ({title = "User Info", userId = null}: {title?: string, userId?
     { label: "Correctness", field: "correctness", type: "success" },
   ];
 
-  // const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
+  const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
+  const userOwned = () => {
+     if(!authService.getUser()) return false;
+     if(!user) return false;
+     return authService.getUser()?.userId === user.id;
+   }
+   const canAccess = () => {
+    const permission = userOwned() || isAdmin;
+    //if(!permission) setError("Permission denied");
+    return permission;
+  };
+
 
   if (loading) return <Loading />;
+  if(!canAccess()) return (<EmptyState message = {"Permission denied"} />);
   if (error || !user) return <EmptyState message={error} />;
   return (
     <>

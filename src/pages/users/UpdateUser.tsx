@@ -326,7 +326,18 @@ const UpdateUser = () => {
     }
   };
 
+  const userOwned = () => {
+     if(!authService.getUser()) return false;
+     return authService.getUser()?.userId?.toString() === id;
+   }
+   const canAccess = () => {
+    const permission = userOwned() || isAdmin;
+    //if(!permission) setError("Permission denied");
+    return permission;
+  };
+
   if (loading) return <Loading />;
+  if(!canAccess()) return (<EmptyState message = {"Permission denied"} />);
   if (error) return <EmptyState message={error} />;
   return (
     <>

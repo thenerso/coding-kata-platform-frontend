@@ -30,11 +30,11 @@ const ListPublicProfiles = () => {
         }
       )
       .then(() => {
-        console.log("Finished fetching all solutions");
+        console.log("Finished fetching all public ");
       })
       .catch((err) => {
-        console.log("Error getting solutions", err);
-        setError("Error fetching data");
+        // console.log("Error getting profiles: ", err);
+        setError("Error getting profiles: " + err.message);
       });
     }
   }, []);

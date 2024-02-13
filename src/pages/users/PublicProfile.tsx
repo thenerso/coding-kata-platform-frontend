@@ -66,13 +66,26 @@ const PublicProfile: React.FC = () => {
       } catch (error: any) {
         setError("Error fetching user profile: " + error);
         setLoading(false);
-        console.error("Error fetching user profile: ", error);
       }
     };
 
     fetchData();
   }, [id]);
 
+  const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
+  const userOwned = () => {
+     if(!authService.getUser()) return false;
+     console.log(`user: ${authService.getUser()?.userId}, provided id: ${id?.toString()}`)
+     console.log(authService.getUser()?.userId === id?.toString())
+     return authService.getUser()?.userId?.toString() === id;
+   }
+   const canAccess = () => {
+    const permission = userOwned() || isAdmin;
+    //if(!permission) setError("Permission denied");
+    return permission;
+  };
+
+  if(!canAccess()) return (<EmptyState message = {"Permission denied"} />);
   if (error) return <EmptyState message={error} />;
   if (!loading && !userProfile)
     return (
