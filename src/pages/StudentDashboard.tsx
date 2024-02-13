@@ -138,7 +138,7 @@ const StudentDashboard = () => {
               rows={user.solutions}
               fields={solutionTableFields}
               viewLink='/solutions/'
-              
+
             />
         </Grid>
         <Grid container item rowSpacing={3} xs={12} md={4} direction="row">
@@ -152,9 +152,8 @@ const StudentDashboard = () => {
                 />
               </CardContent>
             </Card>
-          </Grid>
-          <Grid item xs={12}>
-            <Card sx={{ minHeight: "100%" }}>
+            <br />
+            <Card>
               <CardContent>
                 <Typography variant="h6">🤔 Suggested Task</Typography>
                 <>
