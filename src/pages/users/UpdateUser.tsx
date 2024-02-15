@@ -366,8 +366,10 @@ const UpdateUser = () => {
   if (error) return <EmptyState message={error} />;
   return (
     <>
+    {/* <Box p={3}> */}
       <BackArrow />
       <Typography variant="h1">Update User</Typography>
+    {/* </Box> */}
       <Grid container spacing={3}>
         {/* left col */}
         <Grid item sm={12} md={8} xs={12}>

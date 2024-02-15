@@ -18,6 +18,7 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
+  Fab,
 } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
 import WorkIcon from "@mui/icons-material/Work";
@@ -27,7 +28,8 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import DownloadIcon from "@mui/icons-material/Download";
 import BackArrow from "../../components/global/BackArrow";
 import EmptyState from "../../components/global/EmptyState";
-import { ArrowForward } from "@mui/icons-material";
+import { ArrowForward, Edit } from "@mui/icons-material";
+import { TitleActionWrapper, TitleWrapper } from "./UserInfo";
 
 const PublicProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -76,23 +78,23 @@ const PublicProfile: React.FC = () => {
 
   const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
   const userOwned = () => {
-     if(!authService.getUser()) return false;
-     console.log(`user: ${authService.getUser()?.userId}, provided id: ${id?.toString()}`)
-     console.log(authService.getUser()?.userId === id?.toString())
-     return authService.getUser()?.userId?.toString() === id;
-   }
-   const canAccess = () => {
+    if (!authService.getUser()) return false;
+    console.log(
+      `user: ${authService.getUser()?.userId}, provided id: ${id?.toString()}`
+    );
+    console.log(authService.getUser()?.userId === id?.toString());
+    return authService.getUser()?.userId?.toString() === id;
+  };
+  const canAccess = () => {
     const permission = userOwned() || isAdmin;
     //if(!permission) setError("Permission denied");
     return permission;
   };
 
-  if(!canAccess()) return (<EmptyState message = {"Permission denied"} />);
+  if (!canAccess()) return <EmptyState message={"Permission denied"} />;
   if (error) return <EmptyState message={error} />;
   if (!loading && !userProfile)
-    return (
-      <EmptyState message="User profile not found" />
-    );
+    return <EmptyState message="User profile not found" />;
   if (!userProfile) {
     return <Loading />;
   }
@@ -121,8 +123,8 @@ const PublicProfile: React.FC = () => {
 
   return (
     <Box p={3}>
-       <Box display={"flex"} justifyContent={"space-between"}>
-      {/* <Button
+      <Box display={"flex"} justifyContent={"space-between"}>
+        {/* <Button
         color="info"
         component={Link}
         to={isAdmin ? "/users" : "/dashboard"}
@@ -130,17 +132,27 @@ const PublicProfile: React.FC = () => {
       >
         Back
       </Button> */}
-      <BackArrow />
-      <Button
-        color="info"
-        component={Link}
-        to={"/candidates/anonymised/" + id}
-        endIcon={<ArrowForward />}
-        target="_blank"
-      >
-        View Anonymous Version (New Tab)
-      </Button>
-    </Box>
+        <BackArrow />
+        <Button
+          color="info"
+          component={Link}
+          to={"/candidates/anonymised/" + id}
+          endIcon={<ArrowForward />}
+          target="_blank"
+        >
+          View Anonymous Version (New Tab)
+        </Button>
+      </Box>
+      {isAdmin && <Box display="flex" justifyContent="flex-end" paddingBottom={2}>
+        <Fab
+          color="primary"
+          aria-label="Edit User Profile"
+          component={Link}
+          to={`/users/edit/${id}`}
+        >
+          <Edit />
+        </Fab>
+      </Box>}
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card>

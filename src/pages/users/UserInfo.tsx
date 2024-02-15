@@ -41,12 +41,12 @@ import BackArrow from "../../components/global/BackArrow";
  * Injected styles
  *
  */
-const TitleWrapper = styled("div")`
+export const TitleWrapper = styled("div")`
   display: flex;
   justify-content: space-between;
 `;
 
-const TitleActionWrapper = styled("div")`
+export const TitleActionWrapper = styled("div")`
   a {
     margin: 0 5px;
   }
