@@ -72,7 +72,7 @@ const UpdateUser = () => {
   const [workExperience, setWorkExperience] = useState<string[]>([]);
 
   const [preferredLocations, setPreferredLocations] = useState<string[]>(["UK Wide"]);
-  const locationOptions = ["London", "Edinburgh", "Glasgow", "Liverpool", "Manchester", "Birmingham", "Belfast", "Bristol", "Leeds", "Oxford", "Cardiff"]; // default to UK Wide
+  const locationOptions = ["London", "Edinburgh", "Glasgow", "Liverpool", "Manchester", "Birmingham", "Belfast", "Bristol", "Leeds", "Oxford", "Cardiff"]; 
 
   const [preferredRoles, setPreferredRoles] = useState<string[]>(["All"]);
   const roleOptions = [
