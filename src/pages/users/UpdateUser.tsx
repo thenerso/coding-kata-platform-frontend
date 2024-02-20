@@ -36,7 +36,6 @@ import userProfileService from "../../services/userProfileService"; // Assuming 
 import { IUserProfile, IUser } from "../../interfaces/user";
 // import { IFile } from "../../interfaces/file";
 import FileInput from "../../components/global/FileInput";
-import EditableList from "../../components/global/EditableList";
 import Loading from "../../components/global/Loading";
 import EmptyState from "../../components/global/EmptyState";
 import { HeadshotInput } from "../../components/user/HeadshotInput";
@@ -72,10 +71,10 @@ const UpdateUser = () => {
   const [education, setEducation] = useState<string[]>([]);
   const [workExperience, setWorkExperience] = useState<string[]>([]);
 
-  const [preferredLocations, setPreferredLocations] = useState<string[]>([]);
-  const locationOptions = ["UK Wide", "London Area", "Scotland"];
+  const [preferredLocations, setPreferredLocations] = useState<string[]>(["UK Wide"]);
+  const locationOptions = ["London", "Edinburgh", "Glasgow", "Liverpool", "Manchester", "Birmingham", "Belfast", "Bristol", "Leeds", "Oxford", "Cardiff"]; // default to UK Wide
 
-  const [preferredRoles, setPreferredRoles] = useState<string[]>([]);
+  const [preferredRoles, setPreferredRoles] = useState<string[]>(["All"]);
   const roleOptions = [
     "Front End",
     "Back End",
@@ -137,7 +136,7 @@ const UpdateUser = () => {
                 setPreferredRoles(validRoles);
                 // filter out disallowed values
                 const validLocations = (userProfileResult?.preferredLocations || []).filter(location => locationOptions.includes(location));
-                setPreferredLocations(validLocations);
+                updateLocations(validLocations);
                 setGithubLink(userProfileResult?.githubLink || "");
                 setAvailable(userProfileResult?.available || false);
               })
@@ -190,24 +189,6 @@ const UpdateUser = () => {
     );
   };
 
-  const handleAddLocation = (location: string) => {
-    setPreferredLocations((prevLocations) => [...prevLocations, location]);
-  };
-
-  const handleDeleteLocation = (index: number) => {
-    setPreferredLocations((prevLocations) =>
-      prevLocations.filter((_, i) => i !== index)
-    );
-  };
-
-  const handleAddJobRole = (role: string) => {
-    setPreferredRoles((prevRoles) => [...prevRoles, role]);
-  };
-
-  const handleDeleteJobRole = (index: number) => {
-    setPreferredRoles((prevRoles) => prevRoles.filter((_, i) => i !== index));
-  };
-
   const handleAddWorkHistory = (newWorkHistory: string) => {
     setWorkExperience((prevWorkHistory) => [
       ...prevWorkHistory,
@@ -225,26 +206,45 @@ const UpdateUser = () => {
     setGithubLink(value);
   };
 
+  const updateRoles = (roles: string[]) => {
+    if(!roles || roles.length === 0) {
+      setPreferredRoles(["All"]);
+    } else {
+      if(roles.includes("All")) roles.splice(roles.indexOf("All"), 1);
+      setPreferredRoles(roles);
+    }
+  };
+
+  const updateLocations = (locations: string[]) => {
+    if(!locations || locations.length === 0) {
+      setPreferredLocations(["UK Wide"]);
+    } else {
+      if(locations.includes("UK Wide")) locations.splice(locations.indexOf("UK Wide"), 1);
+      setPreferredLocations(locations);
+    }
+  };
+
   // Handle change in preferredLocations
   const handleLocationChange = (event: any) => {
-    setPreferredLocations(event.target.value);
+    updateLocations(event.target.value);
   };
 
   // Handle change in preferredRoles
   const handleRoleChange = (event: any) => {
-    const {
-      target: { value },
-    } = event;
-    if (value.includes("All")) {
-      setPreferredRoles(["All"]);
-    } else {
-      setPreferredRoles(
-        // On autofill we get a stringified value.
-        typeof value === "string"
-          ? value.split(",")
-          : value.filter((v: any) => v !== "All")
-      );
-    }
+    // const {
+    //   target: { value },
+    // } = event;
+    // if (value.includes("All")) {
+    //   setPreferredRoles(["All"]);
+    // } else {
+    //   setPreferredRoles(
+    //     // On autofill we get a stringified value.
+    //     typeof value === "string"
+    //       ? value.split(",")
+    //       : value.filter((v: any) => v !== "All")
+    //   );
+    // }
+    updateRoles(event.target.value);
   };
 
   const handleValidation = () => {

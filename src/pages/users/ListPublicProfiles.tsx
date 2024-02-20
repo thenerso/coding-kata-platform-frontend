@@ -41,7 +41,7 @@ const ListPublicProfiles = () => {
 
   const tableFields: ITableFields[] = [
     { label: "Full Name", field: "fullName", type: "string" },
-    { label: "Cohort", field: "user.cohort.name", type: "string" },
+    { label: "Cohort", field: "user.cohort.name", type: "string"},
     { label: "Roles of Interest", field: "preferredRoles", type: "tags" },
     { label: "Available Locations", field: "preferredLocations", type: "tags" },
     { label: "Education", field: "education", type: "tags" },

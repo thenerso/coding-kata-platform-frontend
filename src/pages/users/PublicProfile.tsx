@@ -119,8 +119,6 @@ const PublicProfile: React.FC = () => {
     githubLink,
   } = userProfile;
 
-  //if (error) return <EmptyState message={error} />;
-
   return (
     <Box p={3}>
       <Box display={"flex"} justifyContent={"space-between"}>
