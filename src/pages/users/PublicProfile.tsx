@@ -99,15 +99,15 @@ const PublicProfile: React.FC = () => {
     return <Loading />;
   }
   if (loading) return <Loading />;
-  if (!resume || !headshot)
-    return (
-      <>
-        <Box p={3}>
-          <BackArrow />
-        </Box>
-        <div>Profile incomplete, resume and/or headshot missing.</div>
-      </>
-    );
+  // if (!resume || !headshot)
+  //   return (
+  //     <>
+  //       <Box p={3}>
+  //         <BackArrow />
+  //       </Box>
+  //       <div>Profile incomplete, resume and/or headshot missing.</div>
+  //     </>
+  //   );
 
   const {
     fullName,
@@ -155,7 +155,7 @@ const PublicProfile: React.FC = () => {
               <Avatar
                 sx={{ width: 150, height: 150, fontSize: "3rem" }}
                 src={headshot || ""}
-                alt="Headshot"
+                alt="No headshot provided"
               />
             </Box>
             <CardContent>
@@ -167,7 +167,7 @@ const PublicProfile: React.FC = () => {
               </Typography>
             </CardContent>
             <Box display="flex" justifyContent="space-around" p={2}>
-              {resume && (
+              {resume ? (
                 <Chip
                   label="Download Resume"
                   clickable
@@ -177,7 +177,7 @@ const PublicProfile: React.FC = () => {
                   variant="outlined"
                   icon={<DownloadIcon />}
                 />
-              )}
+              ) : <Typography>This candidate has not provided a resume</Typography>}
               {githubLink && (
                 <Chip
                   label="Github"
