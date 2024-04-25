@@ -26,7 +26,7 @@ const ListPublicProfiles = () => {
           // Update the component's state for each page retrieved
           console.log("profiles: ", updatedProfiles);
           setLoading(false);
-          setProfiles(updatedProfiles.filter(profile => profile.fullName && profile.available && profile.education && profile.education.length > 0 && profile.preferredRoles && profile.preferredRoles.length > 0 && profile.preferredLocations && profile.preferredLocations.length > 0 && profile.user && profile.user.cohort && profile.user.cohort.name));
+          setProfiles(updatedProfiles.filter(profile => profile.fullName && profile.available && profile.education && profile.education.length > 0 && profile.preferredRoles && profile.preferredRoles.length > 0 && profile.preferredLocations && profile.preferredLocations.length > 0 && profile.user));
         }
       )
       .then(() => {
