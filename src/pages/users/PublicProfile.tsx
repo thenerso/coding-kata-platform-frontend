@@ -28,7 +28,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import DownloadIcon from "@mui/icons-material/Download";
 import BackArrow from "../../components/global/BackArrow";
 import EmptyState from "../../components/global/EmptyState";
-import { ArrowForward, Edit } from "@mui/icons-material";
+import { ArrowForward, Edit, WorkHistory } from "@mui/icons-material";
 import { TitleActionWrapper, TitleWrapper } from "./UserInfo";
 
 const PublicProfile: React.FC = () => {
@@ -226,7 +226,7 @@ const PublicProfile: React.FC = () => {
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
                     <ListItemIcon>
-                      <WorkIcon />
+                      <WorkHistory />
                     </ListItemIcon>
                     Work Experience
                   </Typography>

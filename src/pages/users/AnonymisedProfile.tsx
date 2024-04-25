@@ -16,6 +16,7 @@ import {
   Chip,
   ListItemIcon,
   ListItemText,
+  Avatar,
 } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
 import WorkIcon from "@mui/icons-material/Work";
@@ -79,6 +80,13 @@ const AnonymisedProfile: React.FC = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card>
+          <Box display="flex" justifyContent="center" pt={2}>
+              <Avatar
+                sx={{ width: 150, height: 150, fontSize: "3rem" }}
+                src={""}
+                alt="No headshot provided"
+              />
+            </Box>
             <CardContent>
               <Typography variant="h5" gutterBottom align="center">
                 [Anonymous] User Bio
@@ -88,7 +96,7 @@ const AnonymisedProfile: React.FC = () => {
               </Typography>
             </CardContent>
             <Box display="flex" justifyContent="space-around" p={2}>
-              {resume && (
+            {resume ? (
                 <Chip
                   label="Download Resume"
                   clickable
@@ -98,7 +106,12 @@ const AnonymisedProfile: React.FC = () => {
                   variant="outlined"
                   icon={<DownloadIcon />}
                 />
-              )}
+              ) : <Chip
+              label="No resume provided"
+              variant="outlined"
+              icon={<DownloadIcon />}
+              color="error"
+            />}
             </Box>
           </Card>
         </Grid>
