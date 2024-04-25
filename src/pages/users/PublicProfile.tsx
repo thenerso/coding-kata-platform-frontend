@@ -177,7 +177,12 @@ const PublicProfile: React.FC = () => {
                   variant="outlined"
                   icon={<DownloadIcon />}
                 />
-              ) : <Typography>This candidate has not provided a resume</Typography>}
+              ) : <Chip
+              label="No resume provided"
+              variant="outlined"
+              icon={<DownloadIcon />}
+              color="error"
+            />}
               {githubLink && (
                 <Chip
                   label="Github"
