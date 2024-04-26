@@ -77,6 +77,7 @@ const PublicProfile: React.FC = () => {
   }, [id]);
 
   const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
+  const isAdminOrClient = isAdmin || authService.getUser()?.roles?.includes("CLIENT");
   const userOwned = () => {
     if (!authService.getUser()) return false;
     console.log(
@@ -86,7 +87,7 @@ const PublicProfile: React.FC = () => {
     return authService.getUser()?.userId?.toString() === id;
   };
   const canAccess = () => {
-    const permission = userOwned() || isAdmin;
+    const permission = userOwned() || isAdminOrClient;
     //if(!permission) setError("Permission denied");
     return permission;
   };
