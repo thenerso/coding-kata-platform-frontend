@@ -76,7 +76,7 @@ const PublicProfile: React.FC = () => {
     fetchData();
   }, [id]);
 
-  const isAdmin = authService.getUser()?.roles?.includes("ADMIN") || authService.getUser()?.roles?.includes("CLIENT");
+  const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
   const userOwned = () => {
     if (!authService.getUser()) return false;
     console.log(
