@@ -266,6 +266,14 @@ const routes: IRouteType[] = [
     icon: Edit,
   },
   {
+    name: "All Problems",
+    link: "/all-problems",
+    Component: ListProblems,
+    authed: UserRoles.USER,
+    showInMenuFor: UserRoles.USER,
+    icon: Edit,
+  },
+  {
     name: "Problem",
     link: "/problems/:id",
     Component: Problem,
