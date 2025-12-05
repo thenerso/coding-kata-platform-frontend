@@ -1,3 +1,4 @@
+![FlowKata](./public/logo.png)
 # Coding LMS Front-end
 
 A React, Material UI front-end for a coding kata SaaS. The backend Java/Spring Boot repo can be found here: https://github.com/RichardSneyd/coding-kata-platform-backend
